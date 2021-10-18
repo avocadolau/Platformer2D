@@ -6,8 +6,11 @@
 #include "Audio.h"
 #include "SceneTitle.h"
 #include "SceneLevel1.h"
+#include "SceneWin.h"
+#include "SceneLose.h"
 #include "Map.h"
 #include "FadeToBlack.h"
+#include "Player.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -27,6 +30,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new Audio();
 	sceneTitle = new SceneTitle();
 	sceneLevel1 = new SceneLevel1();
+	sceneWin = new SceneWin();
+	sceneLose = new SceneLose();
+	player = new Player();
 	map = new Map();
 	fade = new FadeToBlack();
 
@@ -39,6 +45,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneTitle);
 	AddModule(sceneLevel1);
 	AddModule(map);
+	AddModule(player);
 	AddModule(fade);
 
 	// Render last to swap buffer

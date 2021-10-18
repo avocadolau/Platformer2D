@@ -7,6 +7,7 @@
 #include "SceneLevel1.h"
 #include "Map.h"
 #include "FadeToBlack.h"
+#include "Player.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -34,9 +35,9 @@ bool SceneTitle::Awake()
 bool SceneTitle::Start()
 {
 	// L03: DONE: Load map
-	app->map->Draw();
+	/*app->map->Draw();
 	app->map->Load("hello.tmx");
-	
+	*/
 	
 	
 	return true;
@@ -53,14 +54,19 @@ bool SceneTitle::Update(float dt)
 {
 	// Start level 1
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	{
 		app->fade->Fade(app->sceneTitle, app->sceneLevel1, 5000); // in miliseconds
+		app->player->active = true;
+		app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 
-	
-	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
+	}
 
-	// Draw map
-	app->map->Draw();
-	app->render->DrawTexture(img, 380, 100);
+	SString title("Tittle");
+	app->win->SetTitle(title.GetString());
+
+	// Draw map -- se tiene q cambiar al fondo bonito q hara sofia hehe
+	/*app->map->Draw();
+	app->render->DrawTexture(img, 380, 100);*/
 
 	return true;
 }

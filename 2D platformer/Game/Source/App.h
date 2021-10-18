@@ -93,9 +93,9 @@ public:
 	Audio* audio;
 	SceneTitle* sceneTitle;
 	SceneLevel1* sceneLevel1;
-	//SceneWin* sceneWin;
-	//SceneLose* sceneLose;
-	//Player* player;
+	SceneWin* sceneWin;
+	SceneLose* sceneLose;
+	Player* player;
 	Map* map;
 	FadeToBlack* fade;
 

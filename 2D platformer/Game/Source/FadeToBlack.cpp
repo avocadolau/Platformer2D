@@ -41,7 +41,6 @@ bool FadeToBlack::PreUpdate()
 bool FadeToBlack::Update(float dt)
 {
 	// Exit this function if we are not performing a fade
-
 	if (currentStep == Fade_Step::TO_BLACK)
 	{
 		++frameCount;

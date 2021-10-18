@@ -1,16 +1,16 @@
-#ifndef __SCENE_LEVEL1__
-#define __SCENE_LEVEL1__
+#ifndef __SCENE_LOSE__
+#define __SCENE_LOSE__
 
 #include "Module.h"
 
 struct SDL_Texture;
 
-class SceneLevel1 : public Module
+class SceneLose : public Module
 {
 public:
 
-	SceneLevel1();
-	virtual ~SceneLevel1();
+	SceneLose();
+	virtual ~SceneLose();
 
 	bool Awake();
 	bool Start();
@@ -22,6 +22,5 @@ public:
 private:
 	SDL_Texture* img;
 };
-
 
 #endif

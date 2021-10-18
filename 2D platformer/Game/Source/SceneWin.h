@@ -1,16 +1,16 @@
-#ifndef __SCENE_LEVEL1__
-#define __SCENE_LEVEL1__
+#ifndef __SCENE_WIN__
+#define __SCENE_WIN__
 
 #include "Module.h"
 
 struct SDL_Texture;
 
-class SceneLevel1 : public Module
+class SceneWin : public Module
 {
 public:
 
-	SceneLevel1();
-	virtual ~SceneLevel1();
+	SceneWin();
+	virtual ~SceneWin();
 
 	bool Awake();
 	bool Start();
@@ -22,6 +22,5 @@ public:
 private:
 	SDL_Texture* img;
 };
-
 
 #endif

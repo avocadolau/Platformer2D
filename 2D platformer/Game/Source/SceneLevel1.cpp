@@ -6,6 +6,7 @@
 #include "Window.h"
 #include "SceneLevel1.h"
 #include "Map.h"
+#include "Player.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -13,8 +14,6 @@
 SceneLevel1::SceneLevel1() : Module()
 {
 	name.Create("sceneLevel1");
-	active = false;
-
 	LOG("Level 1");
 }
 
@@ -35,8 +34,8 @@ bool SceneLevel1::Awake()
 bool SceneLevel1::Start()
 {
 	// L03: DONE: Load map
+	active = false;
 	app->map->Load("hello.tmx");
-	app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 
 	return true;
 }
@@ -57,17 +56,7 @@ bool SceneLevel1::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
 		app->SaveGameRequest();
 
-	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y -= 1;
-
-	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y += 1;
-
-	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x -= 1;
-
-	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x += 1;
+	
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
@@ -75,11 +64,13 @@ bool SceneLevel1::Update(float dt)
 	app->map->Draw();
 
 	// L03: DONE 7: Set the window title with map/tileset info
-	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
+
+	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 				   app->map->mapData.width, app->map->mapData.height,
 				   app->map->mapData.tileWidth, app->map->mapData.tileHeight,
-				   app->map->mapData.tilesets.count());
+				   app->map->mapData.tilesets.count());*/
 
+	SString title("Level 1");
 	app->win->SetTitle(title.GetString());
 
 	return true;
