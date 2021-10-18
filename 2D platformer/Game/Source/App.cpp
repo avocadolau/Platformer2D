@@ -4,8 +4,10 @@
 #include "Render.h"
 #include "Textures.h"
 #include "Audio.h"
+#include "SceneTitle.h"
 #include "SceneLevel1.h"
 #include "Map.h"
+#include "FadeToBlack.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -23,8 +25,10 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	render = new Render();
 	tex = new Textures();
 	audio = new Audio();
-	scene = new SceneLevel1();
+	sceneTitle = new SceneTitle();
+	sceneLevel1 = new SceneLevel1();
 	map = new Map();
+	fade = new FadeToBlack();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -32,8 +36,10 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
-	AddModule(scene);
+	AddModule(sceneTitle);
+	AddModule(sceneLevel1);
 	AddModule(map);
+	AddModule(fade);
 
 	// Render last to swap buffer
 	AddModule(render);

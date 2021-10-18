@@ -92,10 +92,10 @@ public:
 	Textures* tex;
 	Audio* audio;
 	SceneTitle* sceneTitle;
-	SceneLevel1* scene;
-	SceneWin* sceneWin;
-	SceneLose* sceneLose;
-	Player* player;
+	SceneLevel1* sceneLevel1;
+	//SceneWin* sceneWin;
+	//SceneLose* sceneLose;
+	//Player* player;
 	Map* map;
 	FadeToBlack* fade;
 

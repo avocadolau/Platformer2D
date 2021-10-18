@@ -1,18 +1,18 @@
-#ifndef __SCENE_LEVEL1__
-#define __SCENE_LEVEL1__
+#ifndef __SCENE_TITLE__
+#define __SCENE_TITLE__
 
 #include "Module.h"
 
 struct SDL_Texture;
 
-class SceneLevel1 : public Module
+class SceneTitle : public Module
 {
 public:
 
-	SceneLevel1();
+	SceneTitle();
 
 	// Destructor
-	virtual ~SceneLevel1();
+	virtual ~SceneTitle();
 
 	// Called before render is available
 	bool Awake();
@@ -36,5 +36,4 @@ private:
 	SDL_Texture* img;
 };
 
-
-#endif
+#endif // __SCENE_H__

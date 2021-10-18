@@ -12,7 +12,10 @@
 
 SceneLevel1::SceneLevel1() : Module()
 {
-	name.Create("scene");
+	name.Create("sceneLevel1");
+	active = false;
+
+	LOG("Level 1");
 }
 
 // Destructor

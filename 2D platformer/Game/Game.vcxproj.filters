@@ -16,6 +16,8 @@
     </ClCompile>
     <ClCompile Include="Source\Map.cpp" />
     <ClCompile Include="Source\SceneLevel1.cpp" />
+    <ClCompile Include="Source\SceneTitle.cpp" />
+    <ClCompile Include="Source\FadeToBlack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -51,6 +53,8 @@
     </ClInclude>
     <ClInclude Include="Source\Map.h" />
     <ClInclude Include="Source\SceneLevel1.h" />
+    <ClInclude Include="Source\SceneTitle.h" />
+    <ClInclude Include="Source\FadeToBlack.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

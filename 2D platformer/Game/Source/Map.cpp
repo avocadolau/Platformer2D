@@ -34,9 +34,8 @@ void Map::Draw()
 {
 	if (mapLoaded == false) return;
 
-    // L03: DONE 6: Iterate all tilesets and draw all their 
-    // images in 0,0 (you should have only one tileset for now)
-	/*
+    
+	// Esto hay que borrarlo un poquito
     ListItem<TileSet*>* tileset;
     tileset = mapData.tilesets.start;
 
@@ -45,16 +44,8 @@ void Map::Draw()
         app->render->DrawTexture(tileset->data->texture,0,0);
         tileset = tileset->next;
     }
-	*/
 	
-	// L04: TODO 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
-
-	// L04: TODO 9: Complete the draw function (inside the loop from TODO 5)
-	// Find which tile id is on x, y coordinates 
-	// Find out that Tile’s Rect inside the tileset Image (
-	// Find out where in the World(screen) we have to draw
-	// DrawTexture()
-
+	
 
 }
 
