@@ -1,5 +1,5 @@
-#ifndef __SCENE_WIN__
-#define __SCENE_WIN__
+#ifndef __SCENE_WIN_H__
+#define __SCENE_WIN_H__
 
 #include "Module.h"
 

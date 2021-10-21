@@ -4,23 +4,26 @@
 #include "Audio.h"
 #include "Render.h"
 #include "Window.h"
-#include "Scene.h"
+#include "SceneLevel1.h"
+#include "FadeToBlack.h"
+#include "Player.h"
 #include "Map.h"
 
 #include "Defs.h"
 #include "Log.h"
 
-Scene::Scene() : Module()
+SceneLevel1::SceneLevel1() : Module()
 {
-	name.Create("scene");
+	name.Create("sceneLevel1");
+	LOG("Level 1");
 }
 
 // Destructor
-Scene::~Scene()
+SceneLevel1::~SceneLevel1()
 {}
 
 // Called before render is available
-bool Scene::Awake()
+bool SceneLevel1::Awake()
 {
 	LOG("Loading Scene");
 	bool ret = true;
@@ -29,9 +32,10 @@ bool Scene::Awake()
 }
 
 // Called before the first frame
-bool Scene::Start()
+bool SceneLevel1::Start()
 {
 	// L03: DONE: Load map
+	active = false;
 	app->map->Load("hello.tmx");
 	app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 
@@ -39,13 +43,13 @@ bool Scene::Start()
 }
 
 // Called each loop iteration
-bool Scene::PreUpdate()
+bool SceneLevel1::PreUpdate()
 {
 	return true;
 }
 
 // Called each loop iteration
-bool Scene::Update(float dt)
+bool SceneLevel1::Update(float dt)
 {
     // L02: DONE 3: Request Load / Save when pressing L/S
 	if(app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
@@ -54,7 +58,7 @@ bool Scene::Update(float dt)
 	if(app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
 		app->SaveGameRequest();
 
-	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	/*if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y -= 1;
 
 	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
@@ -64,26 +68,26 @@ bool Scene::Update(float dt)
 		app->render->camera.x -= 1;
 
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x += 1;
+		app->render->camera.x += 1;*/
 
-	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
 	// Draw map
 	app->map->Draw();
 
 	// L03: DONE 7: Set the window title with map/tileset info
-	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
+	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 				   app->map->mapData.width, app->map->mapData.height,
 				   app->map->mapData.tileWidth, app->map->mapData.tileHeight,
-				   app->map->mapData.tilesets.count());
+				   app->map->mapData.tilesets.count());*/
 
+	SString title("Level 1");
 	app->win->SetTitle(title.GetString());
 
 	return true;
 }
 
 // Called each loop iteration
-bool Scene::PostUpdate()
+bool SceneLevel1::PostUpdate()
 {
 	bool ret = true;
 
@@ -93,8 +97,18 @@ bool Scene::PostUpdate()
 	return ret;
 }
 
+bool SceneLevel1::LoadState(pugi::xml_node&)
+{
+	return true;
+}
+
+bool SceneLevel1::SaveState(pugi::xml_node&) const
+{
+	return true;
+}
+
 // Called before quitting
-bool Scene::CleanUp()
+bool SceneLevel1::CleanUp()
 {
 	LOG("Freeing scene");
 

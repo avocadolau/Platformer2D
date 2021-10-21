@@ -1,5 +1,5 @@
-#ifndef __SCENE_TITLE__
-#define __SCENE_TITLE__
+#ifndef __SCENE_TITLE_H__
+#define __SCENE_TITLE_H__
 
 #include "Module.h"
 

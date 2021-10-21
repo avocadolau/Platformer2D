@@ -1,5 +1,12 @@
+#ifndef __PLAYER_H
+#define __PLAYER_H
+
 #pragma once
 #include "Module.h"
+#include "Collider.h"
+
+
+
 class Player :
     public Module
 {
@@ -22,3 +29,4 @@ public:
 
 };
 
+#endif

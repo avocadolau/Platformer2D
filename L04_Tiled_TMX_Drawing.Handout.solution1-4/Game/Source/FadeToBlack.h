@@ -1,3 +1,7 @@
+#ifndef __FADE_TO_BLACK_H__
+#define __FADE_TO_BLACK_H__
+
+
 #pragma once
 #include "Module.h"
 
@@ -47,3 +51,4 @@ private:
 };
 
 
+#endif

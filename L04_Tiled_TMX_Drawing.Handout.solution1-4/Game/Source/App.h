@@ -15,8 +15,14 @@ class Input;
 class Render;
 class Textures;
 class Audio;
-class Scene;
+class SceneTitle;
+class SceneLevel1;
+class SceneWin;
+class SceneLose;
+class FadeToBlack;
+class Player;
 class Map;
+class Collisions;
 
 class App
 {
@@ -86,7 +92,13 @@ public:
 	Render* render;
 	Textures* tex;
 	Audio* audio;
-	Scene* scene;
+	SceneTitle* sceneTitle;
+	SceneLevel1* sceneLevel1;
+	SceneWin* sceneWin;
+	SceneLose* sceneLose;
+	FadeToBlack* fade;
+	Player* player;
+	Collisions* collisions;
 	Map* map;
 
 private:

@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="Source\Window.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
-    <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Render.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Input.cpp" />
@@ -16,11 +15,16 @@
       <Filter>External\PugiXml</Filter>
     </ClCompile>
     <ClCompile Include="Source\Map.cpp" />
+    <ClCompile Include="Source\SceneLevel1.cpp" />
+    <ClCompile Include="Source\SceneWin.cpp" />
+    <ClCompile Include="Source\FadeToBlack.cpp" />
+    <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\SceneLose.cpp" />
+    <ClCompile Include="Source\SceneTitle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\Textures.h" />
-    <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Render.h" />
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\Input.h" />
@@ -51,6 +55,12 @@
       <Filter>External\PugiXml</Filter>
     </ClInclude>
     <ClInclude Include="Source\Map.h" />
+    <ClInclude Include="Source\SceneLevel1.h" />
+    <ClInclude Include="Source\SceneWin.h" />
+    <ClInclude Include="Source\FadeToBlack.h" />
+    <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\SceneLose.h" />
+    <ClInclude Include="Source\SceneTitle.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

@@ -4,7 +4,13 @@
 #include "Render.h"
 #include "Textures.h"
 #include "Audio.h"
-#include "Scene.h"
+#include "SceneTitle.h"
+#include "SceneLevel1.h"
+#include "SceneWin.h"
+#include "SceneLose.h"
+#include "FadeToBlack.h"
+#include "Player.h"
+#include "Collisions.h"
 #include "Map.h"
 
 #include "Defs.h"
@@ -23,7 +29,13 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	render = new Render();
 	tex = new Textures();
 	audio = new Audio();
-	scene = new Scene();
+	sceneTitle = new SceneTitle();
+	sceneLevel1 = new SceneLevel1();
+	sceneWin = new SceneWin();
+	sceneLose = new SceneLose();
+	fade = new FadeToBlack();
+	player = new Player();
+	collisions = new Collisions();
 	map = new Map();
 
 	// Ordered for awake / Start / Update
@@ -32,7 +44,12 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
-	AddModule(scene);
+	AddModule(sceneTitle);
+	AddModule(sceneLevel1);
+	AddModule(sceneWin);
+	AddModule(sceneLose);
+	AddModule(fade);
+	AddModule(player);
 	AddModule(map);
 
 	// Render last to swap buffer

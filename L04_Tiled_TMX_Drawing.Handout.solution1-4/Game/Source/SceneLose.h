@@ -1,5 +1,5 @@
-#ifndef __SCENE_LOSE__
-#define __SCENE_LOSE__
+#ifndef __SCENE_LOSE_H__
+#define __SCENE_LOSE_H__
 
 #include "Module.h"
 
@@ -22,5 +22,7 @@ public:
 private:
 	SDL_Texture* img;
 };
+
+
 
 #endif
