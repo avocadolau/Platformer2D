@@ -5,6 +5,8 @@
 #include "Render.h"
 #include "Window.h"
 #include "SceneLevel1.h"
+#include "Collisions.h"
+#include "Collider.h"
 #include "Map.h"
 #include "Player.h"
 
@@ -13,8 +15,7 @@
 
 SceneLevel1::SceneLevel1() : Module()
 {
-	name.Create("sceneLevel1");
-	LOG("Level 1");
+	name.Create("Level1");
 }
 
 // Destructor
@@ -35,7 +36,15 @@ bool SceneLevel1::Start()
 {
 	// L03: DONE: Load map
 	active = false;
-	app->map->Load("hello.tmx");
+	//app->map->Load("hello.tmx");
+	app->map->Load("iso_walk.tmx");
+	app->player->active = true;
+
+
+	ground = app->collisions->AddCollider({ 0,500,500,50 }, Collider::Type::GROUND, this);
+	none = app->collisions->AddCollider({ 0,0,500,500 }, Collider::Type::NONE, this);
+	// Load music
+	app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 
 	return true;
 }
@@ -43,6 +52,7 @@ bool SceneLevel1::Start()
 // Called each loop iteration
 bool SceneLevel1::PreUpdate()
 {
+	app->player->active = true;
 	return true;
 }
 
@@ -64,13 +74,11 @@ bool SceneLevel1::Update(float dt)
 	app->map->Draw();
 
 	// L03: DONE 7: Set the window title with map/tileset info
-
-	/*SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
+	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
 				   app->map->mapData.width, app->map->mapData.height,
 				   app->map->mapData.tileWidth, app->map->mapData.tileHeight,
-				   app->map->mapData.tilesets.count());*/
+				   app->map->mapData.tilesets.count());
 
-	SString title("Level 1");
 	app->win->SetTitle(title.GetString());
 
 	return true;

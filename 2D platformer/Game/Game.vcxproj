@@ -44,10 +44,10 @@
     <IntDir>$(SolutionDir)Build\$(Configuration)\Obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)Build\$(Configuration)</OutDir>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)Build\$(Configuration)</OutDir>
+    <OutDir>$(SolutionDir)Build\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Build\$(Configuration)\Obj\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -89,6 +89,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Collider.cpp" />
+    <ClCompile Include="Source\Collisions.cpp" />
     <ClCompile Include="Source\FadeToBlack.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\App.cpp" />
@@ -99,12 +101,16 @@
     <ClCompile Include="Source\SceneLevel1.cpp" />
     <ClCompile Include="Source\Render.cpp" />
     <ClCompile Include="Source\SceneLose.cpp" />
-    <ClCompile Include="Source\SceneTitle.cpp" />
+    <ClCompile Include="Source\SceneStart.cpp" />
     <ClCompile Include="Source\SceneWin.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
     <ClCompile Include="Source\Window.cpp" />
+    <ClInclude Include="Source\Collider.h" />
+    <ClInclude Include="Source\Collisions.h" />
     <ClInclude Include="Source\FadeToBlack.h" />
+    <ClInclude Include="Source\Clock.h" />
     <ClInclude Include="Source\Map.h" />
+    <ClInclude Include="Source\Platform.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\SceneLevel1.h" />
     <ClInclude Include="Source\Audio.h" />
@@ -113,7 +119,7 @@
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\Render.h" />
     <ClInclude Include="Source\SceneLose.h" />
-    <ClInclude Include="Source\SceneTitle.h" />
+    <ClInclude Include="Source\SceneStart.h" />
     <ClInclude Include="Source\SceneWin.h" />
     <ClInclude Include="Source\Textures.h" />
     <ClInclude Include="Source\Window.h" />

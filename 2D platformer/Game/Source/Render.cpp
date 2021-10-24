@@ -70,6 +70,7 @@ bool Render::PreUpdate()
 
 bool Render::Update(float dt)
 {
+
 	return true;
 }
 
@@ -77,6 +78,8 @@ bool Render::PostUpdate()
 {
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
+
+
 	return true;
 }
 
@@ -94,6 +97,7 @@ bool Render::LoadState(pugi::xml_node& data)
 {
 	camera.x = data.child("camera").attribute("x").as_int();
 	camera.y = data.child("camera").attribute("y").as_int();
+
 	return true;
 }
 
@@ -102,8 +106,10 @@ bool Render::LoadState(pugi::xml_node& data)
 bool Render::SaveState(pugi::xml_node& data) const
 {
 	pugi::xml_node cam = data.append_child("camera");
-	cam.append_attribute("x").set_value(camera.x);
-	cam.append_attribute("y").set_value(camera.y);
+
+	cam.append_attribute("x") = camera.x;
+	cam.append_attribute("y") = camera.y;
+
 	return true;
 }
 

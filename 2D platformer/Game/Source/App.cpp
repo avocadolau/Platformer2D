@@ -4,16 +4,18 @@
 #include "Render.h"
 #include "Textures.h"
 #include "Audio.h"
-#include "SceneTitle.h"
+#include "SceneStart.h"
 #include "SceneLevel1.h"
 #include "SceneWin.h"
 #include "SceneLose.h"
-#include "Map.h"
 #include "FadeToBlack.h"
+#include "Map.h"
+#include "Collisions.h"
 #include "Player.h"
 
 #include "Defs.h"
 #include "Log.h"
+#include "Clock.h"
 
 #include <iostream>
 #include <sstream>
@@ -28,13 +30,14 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	render = new Render();
 	tex = new Textures();
 	audio = new Audio();
-	sceneTitle = new SceneTitle();
+	sceneStart = new SceneStart();
 	sceneLevel1 = new SceneLevel1();
 	sceneWin = new SceneWin();
 	sceneLose = new SceneLose();
-	player = new Player();
-	map = new Map();
 	fade = new FadeToBlack();
+	map = new Map();
+	collisions = new Collisions();
+	player = new Player();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -42,11 +45,14 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
-	AddModule(sceneTitle);
+	AddModule(sceneStart);
 	AddModule(sceneLevel1);
-	AddModule(map);
-	AddModule(player);
+	AddModule(sceneWin);
+	AddModule(sceneLose);
 	AddModule(fade);
+	AddModule(map);
+	AddModule(collisions);
+	AddModule(player);
 
 	// Render last to swap buffer
 	AddModule(render);
@@ -169,6 +175,8 @@ pugi::xml_node App::LoadConfig(pugi::xml_document& configFile) const
 // ---------------------------------------------
 void App::PrepareUpdate()
 {
+	clock.tick();
+	dt = (float)clock.delta/1000; 
 }
 
 // ---------------------------------------------
@@ -183,8 +191,8 @@ void App::FinishUpdate()
 bool App::PreUpdate()
 {
 	bool ret = true;
+
 	ListItem<Module*>* item;
-	item = modules.start;
 	Module* pModule = NULL;
 
 	for(item = modules.start; item != NULL && ret == true; item = item->next)
@@ -302,57 +310,25 @@ void App::SaveGameRequest() const
 }
 
 // ---------------------------------------
-// L02: DONE 5: Create a method to actually load an xml file
+// L02: TODO 5: Create a method to actually load an xml file
 // then call all the modules to load themselves
 bool App::LoadGame()
 {
-	bool ret = true;
+	bool ret = false;
 
-	pugi::xml_document gameStateFile;
-	pugi::xml_parse_result result = gameStateFile.load_file("savegame.xml");
-
-	if (result == NULL)
-	{
-		LOG("Could not load xml file savegame.xml. pugi error: %s", result.description());
-		ret = false;
-	}
-	else
-	{
-		ListItem<Module*>* item;
-		item = modules.start;
-
-		while (item != NULL && ret == true)
-		{
-			ret = item->data->LoadState(gameStateFile.child("save_state").child(item->data->name.GetString()));
-			item = item->next;
-		}
-	}
+	//...
 
 	loadGameRequested = false;
 
 	return ret;
 }
 
-// L02: DONE 7: Implement the xml save method for current state
+// L02: TODO 7: Implement the xml save method for current state
 bool App::SaveGame() const
 {
 	bool ret = true;
 
-	pugi::xml_document* saveDoc = new pugi::xml_document();
-	pugi::xml_node saveStateNode = saveDoc->append_child("save_state");
-
-	ListItem<Module*>* item;
-	item = modules.start;
-
-	while (item != NULL)
-	{
-		ret = item->data->SaveState(saveStateNode.append_child(item->data->name.GetString()));
-		item = item->next;
-	}
-
-	ret = saveDoc->save_file("savegame.xml");
-
-	saveGameRequested = false;
+	//...
 
 	saveGameRequested = false;
 

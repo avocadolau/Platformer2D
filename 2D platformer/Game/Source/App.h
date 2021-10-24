@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "List.h"
+#include "Clock.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
@@ -15,13 +16,15 @@ class Input;
 class Render;
 class Textures;
 class Audio;
-class SceneTitle;
+class SceneStart;
 class SceneLevel1;
 class SceneWin;
 class SceneLose;
-class Player;
-class Map;
 class FadeToBlack;
+class Map;
+class Collisions;
+class Physics;
+class Player;
 
 class App
 {
@@ -91,14 +94,15 @@ public:
 	Render* render;
 	Textures* tex;
 	Audio* audio;
-	SceneTitle* sceneTitle;
+	SceneStart* sceneStart;
 	SceneLevel1* sceneLevel1;
 	SceneWin* sceneWin;
 	SceneLose* sceneLose;
-	Player* player;
-	Map* map;
 	FadeToBlack* fade;
-
+	Map* map;
+	Collisions* collisions;
+	Physics* physics;
+	Player* player;
 
 private:
 
@@ -115,14 +119,16 @@ private:
 	//pugi::xml_node config;
 	//pugi::xml_node configApp;
 
+	Clock clock;
 	uint frames;
 	float dt;
 
-	// L02: DONE 1: Create variables to control when to execute the request load / save
 	mutable bool saveGameRequested;
 	bool loadGameRequested;
 };
 
 extern App* app;
+
+
 
 #endif	// __APP_H__

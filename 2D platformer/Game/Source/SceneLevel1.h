@@ -1,7 +1,9 @@
-#ifndef __SCENE_LEVEL1__
-#define __SCENE_LEVEL1__
+#ifndef __SCENE_H__
+#define __SCENE_H__
 
 #include "Module.h"
+#include "List.h"
+#include "Platform.h"
 
 struct SDL_Texture;
 
@@ -17,11 +19,16 @@ public:
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();
+
+	// Called before quitting
 	bool CleanUp();
 
 private:
 	SDL_Texture* img;
+	Collider* ground;
+	Collider* none;
+	List<Platform*> platforms;
+
 };
 
-
-#endif
+#endif // __SCENE_H__
