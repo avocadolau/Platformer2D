@@ -37,7 +37,7 @@ bool SceneLevel1::Start()
 	// L03: DONE: Load map
 	active = false;
 	//app->map->Load("hello.tmx");
-	app->map->Load("iso_walk.tmx");
+	app->map->Load("hello.tmx");
 	app->player->active = true;
 
 
