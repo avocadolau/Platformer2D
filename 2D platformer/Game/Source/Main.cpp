@@ -1,4 +1,5 @@
 #include "App.h"
+#include "Render.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -31,9 +32,12 @@ int main(int argc, char* args[])
 
 	MainState state = CREATE;
 	int result = EXIT_FAILURE;
+	int startTick;
+	int rate = 1000 / 60;
 
 	while(state != EXIT)
 	{
+		startTick = SDL_GetTicks();
 		switch(state)
 		{
 			// Allocate the engine --------------------------------------------
@@ -104,6 +108,16 @@ int main(int argc, char* args[])
 			state = EXIT;
 			break;
 		}
+
+
+		if (rate > SDL_GetTicks() - startTick)
+		{
+			SDL_Delay((1000/60) - (SDL_GetTicks() - startTick));
+		}
+		float FPS = (SDL_GetTicks() - startTick);
+		if (app!=nullptr) app->dt = 1000 / FPS;
+
+		printf("\nFPS:%f", 1000 / FPS);
 	}
 
 	LOG("... Bye! :)\n");

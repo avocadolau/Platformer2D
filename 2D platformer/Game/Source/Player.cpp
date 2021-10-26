@@ -36,10 +36,10 @@ bool Player::Start()
 {
 	active = false;
 
-	gravity = 1000;
+	gravity = 0.00005f;
 	
-	vel = { 200,0 };
-	maxVel = { 500,400 };
+	vel = { 0.05f,0 };
+	maxVel = { 0.05f,0.1f };
 	pos.x = 50;
 	pos.y = 300;
 	camPos.x = app->render->camera.x;
@@ -72,13 +72,7 @@ bool Player::Update(float dt)
 	// pues todods los controles que menuda pereza
 	if (grounded == true)
 		if (feet->Intersects(lastCol->rect) == false) grounded = false;
-	if (grounded == false)
-	{
-		vel.y += gravity * dt;
-		if (vel.y > maxVel.y) vel.y = maxVel.y;
-		if (vel.y < -maxVel.y)vel.y = -maxVel.y;
-		pos.y += vel.y * dt;
-	}
+	
 
 	// vertical movement
 
@@ -90,6 +84,14 @@ bool Player::Update(float dt)
 			vel.y = -maxVel.y;
 			grounded = false;
 		}
+
+	if (grounded == false)
+	{
+		vel.y += gravity * dt;
+		if (vel.y > maxVel.y) vel.y = maxVel.y;
+		if (vel.y < -maxVel.y)vel.y = -maxVel.y;
+		pos.y += vel.y * dt;
+	}
 	
 
 	// horizontal movement
@@ -155,7 +157,7 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 		pos.y = c1->rect.y - 50;
 	}
 
-	if (c1->type == Collider::Type::PLAYER)
+	/*if (c1->type == Collider::Type::PLAYER)
 	{
 		if (c2->type == Collider::Type::GROUND)
 		{
@@ -180,7 +182,7 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 		}
 
 
-	}
+	}*/
 	
 
 

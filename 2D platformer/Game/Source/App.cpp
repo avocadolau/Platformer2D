@@ -175,8 +175,6 @@ pugi::xml_node App::LoadConfig(pugi::xml_document& configFile) const
 // ---------------------------------------------
 void App::PrepareUpdate()
 {
-	clock.tick();
-	dt = (float)clock.delta/1000; 
 }
 
 // ---------------------------------------------

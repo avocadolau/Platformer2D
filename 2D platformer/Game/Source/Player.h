@@ -36,7 +36,6 @@ public:
 
 	bool isStuck = false;
 	bool grounded;
-	int jumpForce;
 	float gravity;
 	int jumps;
 

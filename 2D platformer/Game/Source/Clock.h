@@ -13,4 +13,15 @@ struct Clock
         delta = tick_time - last_tick_time;
         last_tick_time = tick_time;
     }
+
+    void vsyncTick()
+    {
+        uint64_t tick_time = SDL_GetTicks();
+        
+        //while ((tick_time - last_tick_time)<)
+        
+
+        delta = tick_time - last_tick_time;
+        last_tick_time = tick_time;
+    }
 };

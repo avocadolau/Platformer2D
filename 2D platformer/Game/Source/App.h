@@ -104,6 +104,9 @@ public:
 	Physics* physics;
 	Player* player;
 
+	float dt;
+
+
 private:
 
 	int argc;
@@ -119,10 +122,7 @@ private:
 	//pugi::xml_node config;
 	//pugi::xml_node configApp;
 
-	Clock clock;
 	uint frames;
-	float dt;
-
 	mutable bool saveGameRequested;
 	bool loadGameRequested;
 };
