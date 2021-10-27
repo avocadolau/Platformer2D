@@ -9,6 +9,7 @@
 #include "Collisions.h"
 #include "Collider.h"
 #include "Map.h"
+#include "Animation.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -47,14 +48,37 @@ bool Player::Start()
 
 	grounded = false;
 	
-	SDL_Rect rec = { (int)pos.x,(int)pos.y,50,50 };
-	SDL_Rect feetOfset = { (float)pos.x + 1,(int)pos.y + 50,48,1 };
+	SDL_Rect rec = { (int)pos.x,(int)pos.y,64,64 };
+	SDL_Rect feetOfset = { (float)pos.x + 1,(int)pos.y + 64,64-2,1 };
 	lastCol = nullptr;
 
 	collider = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
 	feet = app->collisions->AddCollider(feetOfset, Collider::Type::LISTENER, this);
 
 	app->collisions->debug = true;
+
+
+	//----------------------------------------------------------------------------------
+	sprites = app->tex->Load("Assets/Textures/playerSprites.png");
+	
+	for (int i = 0; i < 20; i++)
+		idle.PushBack({ 35*i,0,35,64 });
+	idle.loop = true;
+	idle.mustFlip = false;
+	idle.speed = 0.1f;
+
+	for (int i = 0; i < 20; i++)
+		run.PushBack({ 38 * i,64,38,64 });
+	run.loop = true;
+	run.mustFlip = false;
+	run.speed = 0.1f;
+
+	for (int i = 0; i < 20; i++)
+		jump.PushBack({ 37 * i,128,37,64 });
+	run.loop = false;
+	run.mustFlip = false;
+	run.speed = 0.1f;
+
 
 	// load assets
 	
@@ -69,6 +93,8 @@ bool Player::PreUpdate()
 
 bool Player::Update(float dt)
 {
+	app->render->DrawTexture(sprites, 0, 0, NULL);
+
 	// pues todods los controles que menuda pereza
 	if (grounded == true)
 		if (feet->Intersects(lastCol->rect) == false) grounded = false;
@@ -120,7 +146,10 @@ bool Player::Update(float dt)
 bool Player::PostUpdate()
 {
 
-
+	/*if (currentAnim != nullptr) {
+		if (currentAnim->mustFlip == false) app->render->Blit(texture, position.x + drawOffset.x, position.y + drawOffset.y, &(currentAnim->GetCurrentFrame()));
+		else app->render->Blit(texture, position.x + drawOffset.x, position.y + drawOffset.y, &(currentAnim->GetCurrentFrame()), 1.0f, true, Horizontal);
+	}*/
 
 	return true;
 }

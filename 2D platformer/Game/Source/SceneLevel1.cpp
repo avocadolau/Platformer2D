@@ -42,7 +42,7 @@ bool SceneLevel1::Start()
 
 
 	ground = app->collisions->AddCollider({ 0,500,500,50 }, Collider::Type::GROUND, this);
-	none = app->collisions->AddCollider({ 0,0,500,500 }, Collider::Type::NONE, this);
+
 	// Load music
 	app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 

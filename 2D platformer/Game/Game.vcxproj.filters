@@ -105,6 +105,7 @@
       <Filter>Physics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Animations.h" />
+    <ClInclude Include="Source\Animation.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

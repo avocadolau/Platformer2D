@@ -58,28 +58,45 @@ void Map::Draw()
 
 		if (mapLayerItem->data->properties.GetProperty("Draw") == 1) {
 
-			for (int x = 0; x < mapLayerItem->data->width; x++)
+			//for (int x = 0; x < mapLayerItem->data->width; x++)
+			//{
+			//	for (int y = 0; y < mapLayerItem->data->height; y++)
+			//	{
+			//		// L04: DONE 9: Complete the draw function
+			//		int gid = mapLayerItem->data->Get(x, y);
+
+			//		if (gid > 0) {
+
+			//			//L06: TODO 4: Obtain the tile set using GetTilesetFromTileId
+			//			//now we always use the firt tileset in the list
+			//			//TileSet* tileset = mapData.tilesets.start->data;
+			//			TileSet* tileset = GetTilesetFromTileId(gid);
+
+			//			SDL_Rect r = tileset->GetTileRect(gid);
+			//			iPoint pos = MapToWorld(x, y);
+
+			//			app->render->DrawTexture(tileset->texture,
+			//				pos.x,
+			//				pos.y,
+			//				&r);
+			//		}
+
+			//	}
+			//}
+
+			for (int x = 0; x < mapData.layers.start->data->width; x++)
 			{
-				for (int y = 0; y < mapLayerItem->data->height; y++)
+				for (int y = 0; y < mapData.layers.start->data->height; y++)
 				{
-					// L04: DONE 9: Complete the draw function
-					int gid = mapLayerItem->data->Get(x, y);
-
-					if (gid > 0) {
-
-						//L06: TODO 4: Obtain the tile set using GetTilesetFromTileId
-						//now we always use the firt tileset in the list
-						//TileSet* tileset = mapData.tilesets.start->data;
-						TileSet* tileset = GetTilesetFromTileId(gid);
-
-						SDL_Rect r = tileset->GetTileRect(gid);
-						iPoint pos = MapToWorld(x, y);
-
-						app->render->DrawTexture(tileset->texture,
-							pos.x,
-							pos.y,
-							&r);
-					}
+					// L04: TODO 9: Complete the draw function (inside the loop from TODO 5)
+					// Find which tile id is on x, y coordinates 
+					// Find out that Tile’s Rect inside the tileset Image (
+					// Find out where in the World(screen) we have to draw
+					// DrawTexture()
+					int id = mapData.layers.start->data->Get(x, y);
+					SDL_Rect rect = mapData.tilesets.start->data->GetTileRect(id);
+					iPoint p = MapToWorld(x, y);
+					app->render->DrawTexture(mapData.tilesets.start->data->texture, p.x, p.y, &rect);
 
 				}
 			}
@@ -171,6 +188,7 @@ SDL_Rect TileSet::GetTileRect(int id) const
 	int relativeId = id - firstgid;
 	rect.w = tileWidth;
 	rect.h = tileHeight;
+
 	rect.x = margin + ((rect.w + spacing) * (relativeId % columns));
 	rect.y = margin + ((rect.h + spacing) * (relativeId / columns));
 	

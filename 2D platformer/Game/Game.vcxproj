@@ -106,6 +106,7 @@
     <ClCompile Include="Source\SceneWin.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
     <ClCompile Include="Source\Window.cpp" />
+    <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\Animations.h" />
     <ClInclude Include="Source\Collider.h" />
     <ClInclude Include="Source\Collisions.h" />

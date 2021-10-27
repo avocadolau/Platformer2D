@@ -4,6 +4,18 @@
 #pragma once
 #include "Module.h"
 #include "Collider.h"
+#include "Animation.h"
+#include "Textures.h"
+
+enum State
+{
+	IDLE,
+	RUN,
+	JUMP,
+	DEATH
+};
+
+
 
 class Player :
     public Module
@@ -34,11 +46,25 @@ public:
 	Collider* lastCol;
 	//PhysBody* body;
 
+	State state;
+
+	Collider* colUp;
+	Collider* colDown;
+	Collider* right;
+	Collider* left;
+	bool detected[4];
+
 	bool isStuck = false;
 	bool grounded;
 	float gravity;
 	int jumps;
 
+
+private:
+	SDL_Texture* sprites;
+	iPoint dimension = { 64,64 };
+	Animation idle, run, jump, death;
+	Animation* currentAnim;
 };
 
 #endif
