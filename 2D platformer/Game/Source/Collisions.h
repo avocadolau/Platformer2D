@@ -1,10 +1,11 @@
 #ifndef __MODULE_COLLISIONS_H__
 #define __MODULE_COLLISIONS_H__
 
-#define MAX_COLLIDERS 350
+#define MAX_COLLIDERS 500
 
 #include "Module.h"
 #include "Collider.h"
+#include "List.h"
 
 class Collisions : public Module
 {
@@ -26,6 +27,7 @@ public:
 
 public:
 
+	List<Collider*> collidersList;
 	Collider* colliders[MAX_COLLIDERS] = { nullptr };
 	bool matrix[Collider::Type::MAX][Collider::Type::MAX];
 	bool debug = false;

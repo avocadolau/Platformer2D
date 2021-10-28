@@ -39,7 +39,6 @@
     <ClCompile Include="Source\SceneStart.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Animations.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -98,13 +97,9 @@
     <ClInclude Include="Source\SceneStart.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Clock.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Platform.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Animations.h" />
     <ClInclude Include="Source\Animation.h" />
   </ItemGroup>
   <ItemGroup>

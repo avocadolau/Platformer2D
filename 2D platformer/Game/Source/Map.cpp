@@ -3,6 +3,10 @@
 #include "Render.h"
 #include "Textures.h"
 #include "Map.h"
+#include "Collisions.h"
+#include "Collider.h"
+#include "Player.h"
+#include "SceneLevel1.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -53,50 +57,30 @@ void Map::Draw()
 	ListItem<MapLayer*>* mapLayerItem;
 	mapLayerItem = mapData.layers.start;
 
-	// L06: TODO 4: Make sure we draw all the layers and not just the first one
+	// L06: TODO 4: Make sure we draw all the layers and not just the first one.
 	while (mapLayerItem != NULL) {
 
 		if (mapLayerItem->data->properties.GetProperty("Draw") == 1) {
 
-			//for (int x = 0; x < mapLayerItem->data->width; x++)
-			//{
-			//	for (int y = 0; y < mapLayerItem->data->height; y++)
-			//	{
-			//		// L04: DONE 9: Complete the draw function
-			//		int gid = mapLayerItem->data->Get(x, y);
-
-			//		if (gid > 0) {
-
-			//			//L06: TODO 4: Obtain the tile set using GetTilesetFromTileId
-			//			//now we always use the firt tileset in the list
-			//			//TileSet* tileset = mapData.tilesets.start->data;
-			//			TileSet* tileset = GetTilesetFromTileId(gid);
-
-			//			SDL_Rect r = tileset->GetTileRect(gid);
-			//			iPoint pos = MapToWorld(x, y);
-
-			//			app->render->DrawTexture(tileset->texture,
-			//				pos.x,
-			//				pos.y,
-			//				&r);
-			//		}
-
-			//	}
-			//}
-
-			for (int x = 0; x < mapData.layers.start->data->width; x++)
+			for (int x = 0; x < mapLayerItem->data->width; x++)
 			{
-				for (int y = 0; y < mapData.layers.start->data->height; y++)
+				for (int y = 0; y < mapLayerItem->data->height; y++)
 				{
-					// L04: TODO 9: Complete the draw function (inside the loop from TODO 5)
-					// Find which tile id is on x, y coordinates 
-					// Find out that Tile’s Rect inside the tileset Image (
-					// Find out where in the World(screen) we have to draw
-					// DrawTexture()
-					int id = mapData.layers.start->data->Get(x, y);
-					SDL_Rect rect = mapData.tilesets.start->data->GetTileRect(id);
-					iPoint p = MapToWorld(x, y);
-					app->render->DrawTexture(mapData.tilesets.start->data->texture, p.x, p.y, &rect);
+					// L04: DONE 9: Complete the draw function
+					int gid = mapLayerItem->data->Get(x, y);
+
+					if (gid > 0) {
+
+						TileSet* tileset = GetTilesetFromTileId(gid);
+
+						SDL_Rect r = tileset->GetTileRect(gid);
+						iPoint pos = MapToWorld(x, y);
+
+						app->render->DrawTexture(tileset->texture,
+							pos.x,
+							pos.y,
+							&r);
+					}
 
 				}
 			}
@@ -104,9 +88,9 @@ void Map::Draw()
 
 		mapLayerItem = mapLayerItem->next;
 	}
+		
 }
 
-// L04: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
 iPoint Map::MapToWorld(int x, int y) const
 {
 	iPoint ret;
@@ -131,7 +115,6 @@ iPoint Map::MapToWorld(int x, int y) const
 	return ret;
 }
 
-// L05: DON 2: Add orthographic world to map coordinates
 iPoint Map::WorldToMap(int x, int y) const
 {
 	iPoint ret(0, 0);
@@ -159,7 +142,6 @@ iPoint Map::WorldToMap(int x, int y) const
 	return ret;
 }
 
-// L06: TODO 3: Pick the right Tileset based on a tile id
 TileSet* Map::GetTilesetFromTileId(int id) const
 {
 	ListItem<TileSet*>* item = mapData.tilesets.start;
@@ -179,7 +161,6 @@ TileSet* Map::GetTilesetFromTileId(int id) const
 	return set;
 }
 
-// Get relative Tile rectangle
 SDL_Rect TileSet::GetTileRect(int id) const
 {
 	SDL_Rect rect = { 0 };
@@ -195,7 +176,6 @@ SDL_Rect TileSet::GetTileRect(int id) const
 	return rect;
 }
 
-// Called before quitting
 bool Map::CleanUp()
 {
     LOG("Unloading map");
@@ -227,7 +207,6 @@ bool Map::CleanUp()
     return true;
 }
 
-// Load new map
 bool Map::Load(const char* filename)
 {
     bool ret = true;
@@ -262,7 +241,12 @@ bool Map::Load(const char* filename)
 	{
 		ret = LoadAllLayers(mapFile.child("map"));
 	}
-    
+
+	if (ret == true)
+	{
+		ret = LoadCollisions(mapFile.child("map"));
+	}
+
     if(ret == true)
     {
         // L03: TODO 5: LOG all the data loaded iterate all tilesets and LOG everything
@@ -270,12 +254,13 @@ bool Map::Load(const char* filename)
 		// L04: TODO 4: LOG the info for each loaded layer
     }
 
+	
+
     mapLoaded = ret;
 
     return ret;
 }
 
-// L03: TODO: Load map general properties
 bool Map::LoadMap(pugi::xml_node mapFile)
 {
 	bool ret = true;
@@ -309,7 +294,6 @@ bool Map::LoadMap(pugi::xml_node mapFile)
 	return ret;
 }
 
-// L03: DONE 4: Implement the LoadTileSet function to load the tileset properties
 bool Map::LoadTileSets(pugi::xml_node mapFile) {
 
 	bool ret = true;
@@ -326,7 +310,6 @@ bool Map::LoadTileSets(pugi::xml_node mapFile) {
 	return ret;
 }
 
-// L03: DONE 4: Load Tileset attributes
 bool Map::LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set)
 {
 	bool ret = true;
@@ -344,7 +327,6 @@ bool Map::LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set)
 	return ret;
 }
 
-// L03: DONE 4: Load Tileset image
 bool Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 {
 	bool ret = true;
@@ -365,7 +347,6 @@ bool Map::LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set)
 	return ret;
 }
 
-// L04: DONE 3: Implement a function that loads a single layer layer
 bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 {
 	bool ret = true;
@@ -374,6 +355,8 @@ bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	layer->name = node.attribute("name").as_string();
 	layer->width = node.attribute("width").as_int();
 	layer->height = node.attribute("height").as_int();
+	layer->offset.x = node.attribute("offsetx").as_int();
+	layer->offset.y = node.attribute("offsety").as_int();
 
 	//L06: TODO 6 Call Load Propoerties
 	LoadProperties(node, layer->properties);
@@ -394,7 +377,6 @@ bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	return ret;
 }
 
-// L04: DONE 4: Iterate all layers and load each of them
 bool Map::LoadAllLayers(pugi::xml_node mapNode) {
 	bool ret = true;
 	for (pugi::xml_node layerNode = mapNode.child("layer"); layerNode && ret; layerNode = layerNode.next_sibling("layer"))
@@ -410,19 +392,56 @@ bool Map::LoadAllLayers(pugi::xml_node mapNode) {
 	return ret;
 }
 
-// L06: TODO 6: Load a group of properties from a node and fill a list with it
 bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
 	bool ret = false;
 
 	for (pugi::xml_node propertieNode = node.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
 	{
-		Properties::Property *p = new Properties::Property();
+		Properties::Property* p = new Properties::Property();
 		p->name = propertieNode.attribute("name").as_string();
 		p->value = propertieNode.attribute("value").as_int();
 
 		properties.list.add(p);
 	}
-	
+
 	return ret;
+}
+
+bool Map::LoadCollisions(pugi::xml_node mapNode)
+{
+	//if (mapLoaded == false) return false;
+
+	// L04: DONE 5: Prepare the loop to draw all tilesets + DrawTexture()
+	ListItem<MapLayer*>* mapLayerItem;
+	mapLayerItem = mapData.layers.start;
+
+	// L06: TODO 4: Make sure we draw all the layers and not just the first one.
+	while (mapLayerItem != NULL) {
+
+		if (mapLayerItem->data->name=="Collisions") {
+
+			for (int x = 0; x < mapLayerItem->data->width; x++)
+			{
+				for (int y = 0; y < mapLayerItem->data->height; y++)
+				{
+					if (mapLayerItem->data->Get(x, y) == NULL)continue;
+
+					iPoint p = MapToWorld(x, y);
+					SDL_Rect rect = { p.x + mapLayerItem->data->offset.x,p.y + mapLayerItem->data->offset.y,mapData.tileWidth,mapData.tileHeight };
+
+					if (app->player->level == 1)
+					{
+						Collider* newCol = app->collisions->AddCollider(rect, Collider::Type::GROUND, app->sceneLevel1);
+						ListItem<Collider*>* colItem = app->collisions->collidersList.end;
+					}
+					//app->render->DrawTexture(mapData.tilesets.start->data->texture, p.x, p.y, &rect);
+				}
+			}
+		}
+
+		mapLayerItem = mapLayerItem->next;
+	}
+
+	return true;
 }

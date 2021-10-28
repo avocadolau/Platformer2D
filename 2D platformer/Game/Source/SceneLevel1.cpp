@@ -37,14 +37,14 @@ bool SceneLevel1::Start()
 	// L03: DONE: Load map
 	active = false;
 	//app->map->Load("hello.tmx");
-	app->map->Load("hello.tmx");
+	app->map->Load("finalMap.tmx");
 	app->player->active = true;
 
 
-	ground = app->collisions->AddCollider({ 0,500,500,50 }, Collider::Type::GROUND, this);
+	ground = app->collisions->AddCollider({ 0,400,500,50 }, Collider::Type::GROUND, this);
 
 	// Load music
-	app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
+	//app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 
 	return true;
 }
@@ -98,6 +98,16 @@ bool SceneLevel1::PostUpdate()
 // Called before quitting
 bool SceneLevel1::CleanUp()
 {
+	platforms.clear();
+
+	ListItem<Collider*>* item = app->collisions->collidersList.start;
+	while (item != NULL)
+	{
+		ListItem<Collider*>* next = item->next;
+		if (item->data->listeners[0] == this)app->collisions->collidersList.del(item);
+		item = next;
+	}
+
 	LOG("Freeing scene");
 
 	return true;

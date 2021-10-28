@@ -93,7 +93,7 @@ bool Player::PreUpdate()
 
 bool Player::Update(float dt)
 {
-	app->render->DrawTexture(sprites, 0, 0, NULL);
+	app->render->DrawTexture(sprites, 0, 500, NULL);
 
 	// pues todods los controles que menuda pereza
 	if (grounded == true)
@@ -117,6 +117,7 @@ bool Player::Update(float dt)
 		if (vel.y > maxVel.y) vel.y = maxVel.y;
 		if (vel.y < -maxVel.y)vel.y = -maxVel.y;
 		pos.y += vel.y * dt;
+		camPos.y -= vel.y * dt;
 	}
 	
 
@@ -137,6 +138,7 @@ bool Player::Update(float dt)
 	feet->rect.x = collider->rect.x + 1;
 	feet->rect.y = collider->rect.y + 50;
 	app->render->camera.x = camPos.x;
+	app->render->camera.y = camPos.y;
 
 
 
@@ -146,10 +148,26 @@ bool Player::Update(float dt)
 bool Player::PostUpdate()
 {
 
-	/*if (currentAnim != nullptr) {
-		if (currentAnim->mustFlip == false) app->render->Blit(texture, position.x + drawOffset.x, position.y + drawOffset.y, &(currentAnim->GetCurrentFrame()));
-		else app->render->Blit(texture, position.x + drawOffset.x, position.y + drawOffset.y, &(currentAnim->GetCurrentFrame()), 1.0f, true, Horizontal);
-	}*/
+	if (currentAnim == nullptr) currentAnim = &idle;
+	switch (state)
+	{
+	case IDLE:
+		currentAnim = &idle;
+		break;
+	case RUN:
+		currentAnim = &run;
+		break;
+	case JUMP:
+		currentAnim = &jump;
+		break;
+	case DEATH:
+		currentAnim = &death;
+		break;
+	default:
+		break;
+	}
+
+	
 
 	return true;
 }

@@ -59,10 +59,12 @@ public:
 	float gravity;
 	int jumps;
 
+	int level;
+
 
 private:
 	SDL_Texture* sprites;
-	iPoint dimension = { 64,64 };
+	iPoint dim = { 35,64 };
 	Animation idle, run, jump, death;
 	Animation* currentAnim;
 };

@@ -19,8 +19,7 @@ struct Platform
 	}
 	~Platform()
 	{
-		app->collisions->RemoveCollider(col);
-		app->collisions->RemoveCollider(down);
+
 	}
 
 	void AddTile()
@@ -29,7 +28,6 @@ struct Platform
 	}
 
 	Collider* col;
-	Collider* down;
 	bool canFall;
 	int timeToFall = FALLING_TIME;
 	int tiles;

@@ -75,6 +75,7 @@ struct MapLayer
 	SString	name;
 	int width;
 	int height;
+	iPoint offset = { 0,0 };
 	uint* data;
 
 	// L06: DONE 1: Support custom properties
@@ -148,6 +149,8 @@ private:
 	// L04
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadAllLayers(pugi::xml_node mapNode);
+
+	bool LoadCollisions(pugi::xml_node mapNode);
 
 	// L06: TODO 6: Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);

@@ -23,11 +23,14 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+public:
+	List<Platform*> platforms;
+
 private:
 	SDL_Texture* img;
 	Collider* ground;
 	Collider* none;
-	List<Platform*> platforms;
+	
 
 };
 

@@ -117,7 +117,7 @@ int main(int argc, char* args[])
 		float FPS = (SDL_GetTicks() - startTick);
 		if (app!=nullptr) app->dt = 1000 / FPS;
 
-		printf("\nFPS:%f", 1000 / FPS);
+		//printf("\nFPS:%f", 1000 / FPS);
 	}
 
 	LOG("... Bye! :)\n");

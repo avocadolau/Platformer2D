@@ -15,7 +15,6 @@
 
 #include "Defs.h"
 #include "Log.h"
-#include "Clock.h"
 
 #include <iostream>
 #include <sstream>
