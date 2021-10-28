@@ -247,6 +247,11 @@ bool Map::Load(const char* filename)
 		ret = LoadCollisions(mapFile.child("map"));
 	}
 
+	if (ret == true)
+	{
+		ret = LoadFallingPlatforms(mapFile.child("map"));
+	}
+
     if(ret == true)
     {
         // L03: TODO 5: LOG all the data loaded iterate all tilesets and LOG everything
@@ -416,19 +421,22 @@ bool Map::LoadCollisions(pugi::xml_node mapNode)
 	ListItem<MapLayer*>* mapLayerItem;
 	mapLayerItem = mapData.layers.start;
 
+	iPoint dim = MapToWorld(mapData.width, mapData.height);
+	SDL_Rect rec = { 0,0,dim.x,dim.y };
+	Collider* col = app->collisions->AddCollider(rec, Collider::Type::NONE, app->collisions);
+
 	// L06: TODO 4: Make sure we draw all the layers and not just the first one.
 	while (mapLayerItem != NULL) {
 
-		if (mapLayerItem->data->name=="Collisions") {
+		if (mapLayerItem->data->properties.GetProperty("Navigation")==1) {
 
 			for (int x = 0; x < mapLayerItem->data->width; x++)
 			{
 				for (int y = 0; y < mapLayerItem->data->height; y++)
 				{
 					if (mapLayerItem->data->Get(x, y) == NULL)continue;
-
 					iPoint p = MapToWorld(x, y);
-					SDL_Rect rect = { p.x + mapLayerItem->data->offset.x,p.y + mapLayerItem->data->offset.y,mapData.tileWidth,mapData.tileHeight };
+					SDL_Rect rect = { (p.x + mapLayerItem->data->offset.x) - 16,(p.y + mapLayerItem->data->offset.y) - 16,mapData.tileWidth + 32,mapData.tileHeight + 32 };
 
 					if (app->player->level == 1)
 					{
@@ -445,3 +453,29 @@ bool Map::LoadCollisions(pugi::xml_node mapNode)
 
 	return true;
 }
+
+bool Map::LoadFallingPlatforms(pugi::xml_node mapnode)
+{
+	ListItem<MapLayer*>* mapLayerItem;
+	mapLayerItem = mapData.layers.start;
+
+	while (mapLayerItem != NULL) {
+
+		if (mapLayerItem->data->properties.GetProperty("Navigation") == 2) {
+
+			for (int x = 0; x < mapLayerItem->data->width; x++)
+			{
+				for (int y = 0; y < mapLayerItem->data->height; y++)
+				{
+					
+					
+				}
+			}
+		}
+
+		mapLayerItem = mapLayerItem->next;
+	}
+
+	return true;
+}
+

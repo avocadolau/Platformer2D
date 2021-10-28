@@ -15,31 +15,31 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::LISTENER][Collider::Type::GROUND] = true;
 	matrix[Collider::Type::LISTENER][Collider::Type::PLAYER] = false;
 	matrix[Collider::Type::LISTENER][Collider::Type::WIN] = false;
-	matrix[Collider::Type::LISTENER][Collider::Type::DIE] = false;
+	matrix[Collider::Type::LISTENER][Collider::Type::NONE] = true;
 
 	matrix[Collider::Type::GROUND][Collider::Type::LISTENER] = true;
 	matrix[Collider::Type::GROUND][Collider::Type::GROUND] = true;
 	matrix[Collider::Type::GROUND][Collider::Type::PLAYER] = true;
 	matrix[Collider::Type::GROUND][Collider::Type::WIN] = false;
-	matrix[Collider::Type::GROUND][Collider::Type::DIE] = false;
+	matrix[Collider::Type::GROUND][Collider::Type::NONE] = false;
 
 	matrix[Collider::Type::PLAYER][Collider::Type::LISTENER] = false;
 	matrix[Collider::Type::PLAYER][Collider::Type::GROUND] = true;
 	matrix[Collider::Type::PLAYER][Collider::Type::PLAYER] = false;
 	matrix[Collider::Type::PLAYER][Collider::Type::WIN] = true;
-	matrix[Collider::Type::PLAYER][Collider::Type::DIE] = true;
+	matrix[Collider::Type::PLAYER][Collider::Type::NONE] = true;
 
 	matrix[Collider::Type::WIN][Collider::Type::LISTENER] = false;
 	matrix[Collider::Type::WIN][Collider::Type::GROUND] = false;
 	matrix[Collider::Type::WIN][Collider::Type::PLAYER] = true;
 	matrix[Collider::Type::WIN][Collider::Type::WIN] = false;
-	matrix[Collider::Type::WIN][Collider::Type::DIE] = false;
+	matrix[Collider::Type::WIN][Collider::Type::NONE] = false;
 
-	matrix[Collider::Type::DIE][Collider::Type::LISTENER] = false;
-	matrix[Collider::Type::DIE][Collider::Type::GROUND] = false;
-	matrix[Collider::Type::DIE][Collider::Type::PLAYER] = true;
-	matrix[Collider::Type::DIE][Collider::Type::WIN] = false;
-	matrix[Collider::Type::DIE][Collider::Type::DIE] = false;
+	matrix[Collider::Type::NONE][Collider::Type::LISTENER] = true;
+	matrix[Collider::Type::NONE][Collider::Type::GROUND] = false;
+	matrix[Collider::Type::NONE][Collider::Type::PLAYER] = true;
+	matrix[Collider::Type::NONE][Collider::Type::WIN] = false;
+	matrix[Collider::Type::NONE][Collider::Type::NONE] = false;
 
 }
 

@@ -13,7 +13,7 @@
 
 struct Platform
 {
-	Platform(SDL_Rect rec, bool canFall, int tileWidth)
+	Platform(SDL_Rect rec, bool fall, int tileWidth)
 	{
 		
 	}
@@ -28,7 +28,7 @@ struct Platform
 	}
 
 	Collider* col;
-	bool canFall;
+	bool fall;
 	int timeToFall = FALLING_TIME;
 	int tiles;
 	int tileWidth;

@@ -151,6 +151,7 @@ private:
 	bool LoadAllLayers(pugi::xml_node mapNode);
 
 	bool LoadCollisions(pugi::xml_node mapNode);
+	bool LoadFallingPlatforms(pugi::xml_node mapnode);
 
 	// L06: TODO 6: Load a group of properties 
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);

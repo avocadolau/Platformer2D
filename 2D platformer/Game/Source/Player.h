@@ -15,8 +15,6 @@ enum State
 	DEATH
 };
 
-
-
 class Player :
     public Module
 {
@@ -42,29 +40,29 @@ public:
 	fPoint vel;
 	fPoint maxVel;
 	Collider* collider;
-	Collider* feet;
-	Collider* lastCol;
 	//PhysBody* body;
 
 	State state;
 
 	Collider* colUp;
 	Collider* colDown;
-	Collider* right;
-	Collider* left;
-	bool detected[4];
+	Collider* colRight;
+	Collider* colLeft;
+	bool up = true;
+	bool down = true;
+	bool left = true;
+	bool right = true;
 
-	bool isStuck = false;
-	bool grounded;
 	float gravity;
 	int jumps;
 
 	int level;
 
+	iPoint dim = { 35,64 };
+
 
 private:
 	SDL_Texture* sprites;
-	iPoint dim = { 35,64 };
 	Animation idle, run, jump, death;
 	Animation* currentAnim;
 };

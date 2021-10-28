@@ -37,23 +37,37 @@ bool Player::Start()
 {
 	active = false;
 
-	gravity = 0.00005f;
+	gravity = 0.00015f;
 	
 	vel = { 0.05f,0 };
-	maxVel = { 0.05f,0.1f };
+	maxVel = { 0.05f,0.2f };
 	pos.x = 50;
-	pos.y = 300;
-	camPos.x = app->render->camera.x;
-	camPos.y = app->render->camera.y;
+	pos.y = 1408;
 
-	grounded = false;
-	
-	SDL_Rect rec = { (int)pos.x,(int)pos.y,64,64 };
-	SDL_Rect feetOfset = { (float)pos.x + 1,(int)pos.y + 64,64-2,1 };
-	lastCol = nullptr;
+		
+	SDL_Rect rec;
 
+
+
+	//up
+	rec = { 5,-1,dim.x - 8,1 };
+	colUp = app->collisions->AddCollider(rec, Collider::Type::LISTENER, this);
+
+	//down
+	rec = { 5,dim.y,dim.x - 8,1 };
+	colDown = app->collisions->AddCollider(rec, Collider::Type::LISTENER, this);
+
+	//left
+	rec = { -1,1,3,dim.y-2 };
+	colLeft = app->collisions->AddCollider(rec, Collider::Type::LISTENER, this);
+
+	//right
+	rec = { dim.x-4,1,5,dim.y-2 };
+	colRight = app->collisions->AddCollider(rec, Collider::Type::LISTENER, this);
+
+
+	rec = { 0,0,dim.x,dim.y };
 	collider = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
-	feet = app->collisions->AddCollider(feetOfset, Collider::Type::LISTENER, this);
 
 	app->collisions->debug = true;
 
@@ -96,8 +110,7 @@ bool Player::Update(float dt)
 	app->render->DrawTexture(sprites, 0, 500, NULL);
 
 	// pues todods los controles que menuda pereza
-	if (grounded == true)
-		if (feet->Intersects(lastCol->rect) == false) grounded = false;
+	
 	
 
 	// vertical movement
@@ -108,35 +121,36 @@ bool Player::Update(float dt)
 			pos.y--;
 			jumps--;
 			vel.y = -maxVel.y;
-			grounded = false;
+			down = true;
 		}
 
-	if (grounded == false)
+	if (down == true)
 	{
 		vel.y += gravity * dt;
 		if (vel.y > maxVel.y) vel.y = maxVel.y;
 		if (vel.y < -maxVel.y)vel.y = -maxVel.y;
 		pos.y += vel.y * dt;
-		camPos.y -= vel.y * dt;
 	}
 	
 
 	// horizontal movement
-	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-	{
+	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && left == true)
 		pos.x -= vel.x * dt;
-		camPos.x += vel.x * dt;
-	}
-	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-	{
-		pos.x += vel.x * dt;
-		camPos.x -= vel.x * dt;
-	}
 
-	collider->rect.x = pos.x;
-	collider->rect.y = pos.y;
-	feet->rect.x = collider->rect.x + 1;
-	feet->rect.y = collider->rect.y + 50;
+	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT && right == true)
+		pos.x += vel.x * dt;
+
+
+
+	colUp->SetPos((int)pos.x+4, (int)pos.y - 1);
+	colDown->SetPos((int)pos.x+4, (int)pos.y + dim.y);
+	colLeft->SetPos((int)pos.x - 1, (int)pos.y+1);
+	colRight->SetPos((int)pos.x + dim.x-4, (int)pos.y+1);
+	collider->SetPos((int)pos.x, (int)pos.y);
+
+	camPos.x = (0 - pos.x) + 640;
+	camPos.y = (0 - pos.y) + 360;
+
 	app->render->camera.x = camPos.x;
 	app->render->camera.y = camPos.y;
 
@@ -192,46 +206,69 @@ bool Player::SaveState(pugi::xml_node&)
 
 void Player::OnCollision(Collider* c1, Collider* c2)
 {
-	if (c1->type == Collider::Type::LISTENER)
+	if (c1 == colDown)
 	{
-		grounded = true;
-		jumps = 2;
-		vel.y = 0;
-		lastCol = c2;
-
-		c1->rect.y = c2->rect.y;
-		collider->rect.y = c1->rect.y - 50;
-		pos.y = c1->rect.y - 50;
-	}
-
-	/*if (c1->type == Collider::Type::PLAYER)
-	{
+		down == true;
 		if (c2->type == Collider::Type::GROUND)
 		{
-			if (grounded==false) while (c1->Intersects(c2->rect))
-			{
-				if (c1->rect.x < c2->rect.x && c1->rect.x + c1->rect.w > c2->rect.x)
-				{
-					c1->rect.x--;
-					pos.x = c1->rect.x;
-					feet->rect.x = c1->rect.x + 1;
-					camPos.x += 1;
-				}
-				if (c1->rect.x > c2->rect.x && c1->rect.x < c2->rect.x + c2->rect.w)
-				{
-					c1->rect.x++;
-					pos.x = c1->rect.x;
-					feet->rect.x = c1->rect.x + 1;
-					camPos.x += 1;
-				}
-			}
-			
+			down = false;
+			jumps = 2;
+			vel.y = 0;
+
+			pos.y = c2->rect.y - dim.y;
+			colUp->rect.y = pos.y--;
+			colDown->rect.y = pos.y + dim.y;
+			colRight->rect.y = pos.y + 1;
+			colLeft->rect.y = pos.y + 1;
 		}
+	}
 
+	if (c1==colUp)
+	{
+		up = true;
+		if (c2->type == Collider::Type::GROUND)
+		{
+			
+			vel.y = 0;
 
-	}*/
+			pos.y = (c2->rect.y + c2->rect.h)+2;
+			colUp->rect.y = pos.y--;
+			colDown->rect.y = pos.y + dim.y;
+			colRight->rect.y = pos.y + 1;
+			colLeft->rect.y = pos.y + 1;
+		}
+	}
+
 	
+	if (c1 == colLeft)
+	{
+		left = true;
+		if (c2->type == Collider::Type::GROUND)
+		{
+			left = false;
 
+			pos.x = c2->rect.x + c2->rect.w;
+			colUp->rect.x = pos.x + 4;
+			colDown->rect.x = pos.x + 4;
+			colLeft->rect.x = pos.x - 1;
+			colRight->rect.x = pos.x + dim.x-4;
+		}
+	}
+
+	if (c1 == colRight)
+	{
+		right = true;
+		if (c2->type == Collider::Type::GROUND)
+		{
+			right = false;
+
+			pos.x = c2->rect.x - dim.x;
+			colUp->rect.x = pos.x + 4;
+			colDown->rect.x = pos.x + 4;
+			colLeft->rect.x = pos.x - 1;
+			colRight->rect.x = pos.x + dim.x - 4;
+		}
+	}
 
 
 }
