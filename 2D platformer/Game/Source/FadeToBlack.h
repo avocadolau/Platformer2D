@@ -12,7 +12,7 @@
 class FadeToBlack : public Module
 {
 public:
-	int frames=60;
+	int frames=120;
 
 public:
 	//Constructor

@@ -30,6 +30,7 @@ struct Collider
 	iPoint GetPos() { return iPoint{ rect.x,rect.y }; }
 
 	bool Intersects(const SDL_Rect& r) const;
+	bool Inside(const SDL_Rect& r) const;
 
 	void AddListener(Module* listener);
 
@@ -38,6 +39,7 @@ struct Collider
 	bool pendingToDelete = false;
 	Type type;
 	Module* listeners[MAX_LISTENERS] = { nullptr };
+	int level;
 };
 
 #endif // !__COLLIDER_H__

@@ -48,10 +48,10 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneLevel1);
 	AddModule(sceneWin);
 	AddModule(sceneLose);
-	AddModule(fade);
 	AddModule(map);
 	AddModule(collisions);
 	AddModule(player);
+	AddModule(fade);
 
 	// Render last to swap buffer
 	AddModule(render);

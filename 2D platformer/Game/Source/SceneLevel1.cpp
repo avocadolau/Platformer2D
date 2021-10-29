@@ -27,7 +27,7 @@ bool SceneLevel1::Awake()
 {
 	LOG("Loading Scene");
 	bool ret = true;
-
+	
 	return ret;
 }
 
@@ -39,9 +39,18 @@ bool SceneLevel1::Start()
 	//app->map->Load("hello.tmx");
 	app->map->Load("finalMap.tmx");
 	app->player->active = true;
+	platformImg = app->tex->Load("Assets/Textures/platform.png");
+	
+	ListItem<Platform*>* item = platforms.start;
+	while (item != NULL)
+	{
+		item->data->col->listeners[0] = this;
+
+		item = item->next;
+	}
 
 
-	ground = app->collisions->AddCollider({ 0,400,500,50 }, Collider::Type::GROUND, this);
+	//ground = app->collisions->AddCollider({ 0,400,500,50 }, Collider::Type::GROUND, this);
 
 	// Load music
 	//app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
@@ -59,6 +68,7 @@ bool SceneLevel1::PreUpdate()
 // Called each loop iteration
 bool SceneLevel1::Update(float dt)
 {
+
     // L02: DONE 3: Request Load / Save when pressing L/S
 	if(app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		app->LoadGameRequest();
@@ -72,6 +82,16 @@ bool SceneLevel1::Update(float dt)
 
 	// Draw map
 	app->map->Draw();
+	
+	ListItem<Platform*>* item = platforms.start;
+	while (item != NULL)
+	{
+		item->data->Update(dt);
+		app->render->DrawTexture(platformImg, item->data->pos.x, item->data->pos.y, NULL);
+
+		item = item->next;
+	}
+
 
 	// L03: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",

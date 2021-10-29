@@ -7,6 +7,7 @@
 #include "Collider.h"
 #include "Player.h"
 #include "SceneLevel1.h"
+#include "Platform.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -429,15 +430,14 @@ bool Map::LoadCollisions(pugi::xml_node mapNode)
 	while (mapLayerItem != NULL) {
 
 		if (mapLayerItem->data->properties.GetProperty("Navigation")==1) {
-
+			int offset = mapLayerItem->data->properties.GetProperty("sizeOffset");
 			for (int x = 0; x < mapLayerItem->data->width; x++)
 			{
 				for (int y = 0; y < mapLayerItem->data->height; y++)
 				{
 					if (mapLayerItem->data->Get(x, y) == NULL)continue;
 					iPoint p = MapToWorld(x, y);
-					SDL_Rect rect = { (p.x + mapLayerItem->data->offset.x) - 16,(p.y + mapLayerItem->data->offset.y) - 16,mapData.tileWidth + 32,mapData.tileHeight + 32 };
-
+					SDL_Rect rect = { (p.x + mapLayerItem->data->offset.x) - offset,(p.y + mapLayerItem->data->offset.y) - offset,mapData.tileWidth + (offset * 2),mapData.tileHeight + (offset * 2) };
 					if (app->player->level == 1)
 					{
 						Collider* newCol = app->collisions->AddCollider(rect, Collider::Type::GROUND, app->sceneLevel1);
@@ -467,7 +467,13 @@ bool Map::LoadFallingPlatforms(pugi::xml_node mapnode)
 			{
 				for (int y = 0; y < mapLayerItem->data->height; y++)
 				{
-					
+					if (mapLayerItem->data->Get(x, y) == NULL)continue;
+					iPoint p = MapToWorld(x, y);
+					if (app->player->level == 1)
+					{
+						Platform* newPlatform = new Platform(p);
+						app->sceneLevel1->platforms.add(newPlatform);
+					}
 					
 				}
 			}

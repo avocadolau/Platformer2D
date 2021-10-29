@@ -48,6 +48,7 @@ public:
 	Collider* colDown;
 	Collider* colRight;
 	Collider* colLeft;
+	Collider* lastGround;
 	bool up = true;
 	bool down = true;
 	bool left = true;

@@ -111,6 +111,12 @@ bool Player::Update(float dt)
 
 	// pues todods los controles que menuda pereza
 	
+	if (down == false)
+	{
+		if (colDown->Intersects(lastGround->rect) == false)
+			down = true;
+
+	}
 	
 
 	// vertical movement
@@ -215,11 +221,12 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 			jumps = 2;
 			vel.y = 0;
 
-			pos.y = c2->rect.y - dim.y;
+			pos.y = c2->rect.y - dim.y+1;
 			colUp->rect.y = pos.y--;
 			colDown->rect.y = pos.y + dim.y;
 			colRight->rect.y = pos.y + 1;
 			colLeft->rect.y = pos.y + 1;
+			lastGround = c2;
 		}
 	}
 

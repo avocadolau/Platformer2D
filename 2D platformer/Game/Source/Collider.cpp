@@ -9,6 +9,7 @@ Collider::Collider(SDL_Rect rectangle, Type type, Module* listener) : rect(recta
 {
 	listeners[0] = listener;
 	rect = rectangle;
+	level = 0;
 }
 
 void Collider::SetPos(int x, int y)
@@ -23,6 +24,16 @@ bool Collider::Intersects(const SDL_Rect& r) const
 		rect.x + rect.w > r.x &&
 		rect.y < r.y + r.h &&
 		rect.h + rect.y > r.y);
+}
+
+bool Collider::Inside(const SDL_Rect& r) const
+{
+	bool ret = false;
+	if (rect.x >= r.x && rect.x < r.x + r.w)
+		if (rect.y >= r.y && rect.y < r.y + r.h)
+			ret = true;
+
+	return ret;
 }
 
 void Collider::AddListener(Module* listener)

@@ -19,14 +19,18 @@ public:
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();
-
+	
 	// Called before quitting
 	bool CleanUp();
 
 public:
 	List<Platform*> platforms;
+	SDL_Texture* platformImg;
+	
 
 private:
+
+	bool mapLoaded = false;
 	SDL_Texture* img;
 	Collider* ground;
 	Collider* none;

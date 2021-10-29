@@ -6,20 +6,54 @@
 #include "Collider.h"
 #include "Collisions.h"
 #include "App.h"
+#include "Player.h"
+#include "Point.h"
+#include "Window.h"
+#include "Module.h"
+#include "SceneLevel1.h"
+#include "Render.h"
 
 #include "SDL/include/SDL_Rect.h"
 
-#define FALLING_TIME 5
+#define FALLING_TIME 15
 
 struct Platform
 {
-	Platform(SDL_Rect rec, bool fall, int tileWidth)
+	Platform(iPoint pos)
 	{
-		
+		this->pos = { (float)pos.x,(float)pos.y };
+		SDL_Rect rec = { pos.x + 16,pos.y + 16,64 + 32,64 + 32 };
+		if (app->player->level == 1)
+			col = app->collisions->AddCollider(rec, Collider::Type::GROUND, nullptr);
 	}
 	~Platform()
 	{
 
+	}
+
+	void Update(float dt)
+	{
+		if (fall == false)
+		{
+			fall = col->Intersects(app->player->colDown->rect);
+		}
+		if (fall == true)
+		{
+			
+			if (timeToFall > 0)timeToFall--;
+			else
+			{
+				vel += app->player->gravity * dt;
+				if (vel > app->player->maxVel.y) vel = app->player->maxVel.y;
+				pos.y += vel * dt;
+				col->rect.y += vel * dt;
+
+				uint winx;
+				uint winy;
+				app->win->GetWindowSize(winx, winy);
+				if (pos.y < winy * 1.5f)active = false;
+			}
+		}
 	}
 
 	void AddTile()
@@ -28,10 +62,13 @@ struct Platform
 	}
 
 	Collider* col;
-	bool fall;
+	bool fall = false;
+	bool active = true;
 	int timeToFall = FALLING_TIME;
 	int tiles;
 	int tileWidth;
+	float vel = 0;
+	fPoint pos;
 };
 
 #endif // !__PLATFORM_H__
