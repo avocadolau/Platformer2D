@@ -44,11 +44,12 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
+	AddModule(map);
+
 	AddModule(sceneStart);
 	AddModule(sceneLevel1);
 	AddModule(sceneWin);
 	AddModule(sceneLose);
-	AddModule(map);
 	AddModule(collisions);
 	AddModule(player);
 	AddModule(fade);

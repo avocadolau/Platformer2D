@@ -56,39 +56,44 @@ void Map::Draw()
 
 	// L04: DONE 5: Prepare the loop to draw all tilesets + DrawTexture()
 	ListItem<MapLayer*>* mapLayerItem;
-	mapLayerItem = mapData.layers.start;
 
 	// L06: TODO 4: Make sure we draw all the layers and not just the first one.
-	while (mapLayerItem != NULL) {
+	for (int i = 1; i < mapData.layers.count(); i++)
+	{
+		mapLayerItem = mapData.layers.start;
 
-		if (mapLayerItem->data->properties.GetProperty("Draw") == 1) {
+		while (mapLayerItem != NULL) {
 
-			for (int x = 0; x < mapLayerItem->data->width; x++)
-			{
-				for (int y = 0; y < mapLayerItem->data->height; y++)
+			if (mapLayerItem->data->properties.GetProperty("Draw") == i) {
+
+				for (int x = 0; x < mapLayerItem->data->width; x++)
 				{
-					// L04: DONE 9: Complete the draw function
-					int gid = mapLayerItem->data->Get(x, y);
+					for (int y = 0; y < mapLayerItem->data->height; y++)
+					{
+						// L04: DONE 9: Complete the draw function
+						int gid = mapLayerItem->data->Get(x, y);
 
-					if (gid > 0) {
+						if (gid > 0) {
 
-						TileSet* tileset = GetTilesetFromTileId(gid);
+							TileSet* tileset = GetTilesetFromTileId(gid);
 
-						SDL_Rect r = tileset->GetTileRect(gid);
-						iPoint pos = MapToWorld(x, y);
+							SDL_Rect r = tileset->GetTileRect(gid);
+							iPoint pos = MapToWorld(x, y);
 
-						app->render->DrawTexture(tileset->texture,
-							pos.x,
-							pos.y,
-							&r);
+							app->render->DrawTexture(tileset->texture,
+								pos.x,
+								pos.y,
+								&r);
+						}
+
 					}
-
 				}
 			}
-		}
 
-		mapLayerItem = mapLayerItem->next;
+			mapLayerItem = mapLayerItem->next;
+		}
 	}
+	
 		
 }
 
@@ -285,6 +290,8 @@ bool Map::LoadMap(pugi::xml_node mapFile)
 		mapData.tileHeight = map.attribute("tileheight").as_int();
 		mapData.tileWidth = map.attribute("tilewidth").as_int();
 
+		LoadMapProperties(map, mapData.properties);
+
 		// L05: DONE 1: Add formula to go from isometric map to world coordinates
 		mapData.type = MAPTYPE_UNKNOWN;
 		if (strcmp(map.attribute("orientation").as_string(), "isometric") == 0)
@@ -365,7 +372,7 @@ bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 	layer->offset.y = node.attribute("offsety").as_int();
 
 	//L06: TODO 6 Call Load Propoerties
-	LoadProperties(node, layer->properties);
+	LoadLayerProperties(node, layer->properties);
 
 	//Reserve the memory for the tile array
 	layer->data = new uint[layer->width * layer->height];
@@ -398,7 +405,7 @@ bool Map::LoadAllLayers(pugi::xml_node mapNode) {
 	return ret;
 }
 
-bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
+bool Map::LoadLayerProperties(pugi::xml_node& node, Properties& properties)
 {
 	bool ret = false;
 
@@ -410,6 +417,35 @@ bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 
 		properties.list.add(p);
 	}
+
+	return ret;
+}
+
+bool Map::LoadMapProperties(pugi::xml_node& node, Properties& properties)
+{
+	bool ret = false;
+
+	for (pugi::xml_node propertieNode = node.child("properties").child("property"); propertieNode; propertieNode = propertieNode.next_sibling("property"))
+	{
+		Properties::Property* p = new Properties::Property();
+		p->name = propertieNode.attribute("name").as_string();
+		p->value = propertieNode.attribute("value").as_int() * mapData.tileWidth;
+
+		properties.list.add(p);
+	}
+
+	app->player->pos.x = mapData.properties.GetProperty("playerx");
+	app->player->pos.y = mapData.properties.GetProperty("playery");
+	SDL_Rect rect;
+	rect.x = mapData.properties.GetProperty("winx");
+	rect.y = mapData.properties.GetProperty("winy");
+	rect.w = mapData.tileWidth;
+	rect.h = mapData.tileHeight;
+
+	if (app->player->level==1)
+		Collider* newCol = app->collisions->AddCollider(rect, Collider::Type::WIN, app->sceneLevel1);
+
+
 
 	return ret;
 }
@@ -441,7 +477,6 @@ bool Map::LoadCollisions(pugi::xml_node mapNode)
 					if (app->player->level == 1)
 					{
 						Collider* newCol = app->collisions->AddCollider(rect, Collider::Type::GROUND, app->sceneLevel1);
-						ListItem<Collider*>* colItem = app->collisions->collidersList.end;
 					}
 					//app->render->DrawTexture(mapData.tilesets.start->data->texture, p.x, p.y, &rect);
 				}
@@ -468,7 +503,7 @@ bool Map::LoadFallingPlatforms(pugi::xml_node mapnode)
 				for (int y = 0; y < mapLayerItem->data->height; y++)
 				{
 					if (mapLayerItem->data->Get(x, y) == NULL)continue;
-					iPoint p = MapToWorld(x, y);
+					iPoint p = MapToWorld(x - 1, y);
 					if (app->player->level == 1)
 					{
 						Platform* newPlatform = new Platform(p);

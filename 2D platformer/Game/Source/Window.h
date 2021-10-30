@@ -16,7 +16,7 @@ public:
 	virtual ~Window();
 
 	// Called before render is available
-	bool Awake(pugi::xml_node&);
+	bool Awake(pugi::xml_node& config);
 
 	// Called before quitting
 	bool CleanUp();
@@ -29,6 +29,8 @@ public:
 
 	// Retrieve window scale
 	uint GetScale() const;
+	uint GetWidth() const;
+	uint GetHeight() const;
 
 public:
 	// The window we'll be rendering to

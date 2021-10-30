@@ -15,7 +15,7 @@
 
 SceneLevel1::SceneLevel1() : Module()
 {
-	name.Create("Level1");
+	name.Create("level1");
 }
 
 // Destructor
@@ -23,11 +23,13 @@ SceneLevel1::~SceneLevel1()
 {}
 
 // Called before render is available
-bool SceneLevel1::Awake()
+bool SceneLevel1::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
 	
+	platformPath = config.attribute("platformPath").as_string();
+
 	return ret;
 }
 
@@ -39,8 +41,8 @@ bool SceneLevel1::Start()
 	//app->map->Load("hello.tmx");
 	app->map->Load("finalMap.tmx");
 	app->player->active = true;
-	platformImg = app->tex->Load("Assets/Textures/platform.png");
-	
+	platformImg = app->tex->Load(platformPath.GetString());
+
 	ListItem<Platform*>* item = platforms.start;
 	while (item != NULL)
 	{

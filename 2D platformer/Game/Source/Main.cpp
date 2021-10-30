@@ -109,15 +109,14 @@ int main(int argc, char* args[])
 			break;
 		}
 
+		if(app!=NULL) if (app->render->vsync==true)
+			if (rate > SDL_GetTicks() - startTick)
+				SDL_Delay((1000 / 60) - (SDL_GetTicks() - startTick));
 
-		if (rate > SDL_GetTicks() - startTick)
-		{
-			SDL_Delay((1000/60) - (SDL_GetTicks() - startTick));
-		}
 		float FPS = (SDL_GetTicks() - startTick);
 		if (app!=nullptr) app->dt = 1000 / FPS;
 
-		//printf("\nFPS:%f", 1000 / FPS);
+		printf("\nFPS:%f", 1000 / FPS);
 	}
 
 	LOG("... Bye! :)\n");

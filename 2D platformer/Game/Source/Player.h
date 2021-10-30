@@ -23,7 +23,7 @@ public:
 	Player();
 	~Player();
 
-	bool Awake();
+	bool Awake(pugi::xml_node& config);
 	bool Start();
 	bool PreUpdate();
 	bool Update(float dt);
@@ -36,11 +36,14 @@ public:
 public:
 
 	fPoint pos;
-	fPoint camPos;
 	fPoint vel;
 	fPoint maxVel;
 	Collider* collider;
-	//PhysBody* body;
+	iPoint dim = { 35,64 };
+
+	float gravity;
+	int jumps;
+	int level;
 
 	State state;
 
@@ -54,18 +57,12 @@ public:
 	bool left = true;
 	bool right = true;
 
-	float gravity;
-	int jumps;
-
-	int level;
-
-	iPoint dim = { 35,64 };
-
-
 private:
 	SDL_Texture* sprites;
+	SString spritesPath;
 	Animation idle, run, jump, death;
 	Animation* currentAnim;
+	float animSpeed;
 };
 
 #endif

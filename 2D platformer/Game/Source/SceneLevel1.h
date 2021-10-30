@@ -14,7 +14,7 @@ public:
 	SceneLevel1();
 	virtual ~SceneLevel1();
 
-	bool Awake();
+	bool Awake(pugi::xml_node& config);
 	bool Start();
 	bool PreUpdate();
 	bool Update(float dt);
@@ -26,14 +26,12 @@ public:
 public:
 	List<Platform*> platforms;
 	SDL_Texture* platformImg;
-	
+	SString platformPath;
 
 private:
 
 	bool mapLoaded = false;
 	SDL_Texture* img;
-	Collider* ground;
-	Collider* none;
 	
 
 };

@@ -10,7 +10,7 @@
 
 FadeToBlack::FadeToBlack() : Module()
 {
-	name.Create("fadeToBlack");
+	name.Create("fade");
 	active = true;
 }
 
@@ -19,8 +19,9 @@ FadeToBlack::~FadeToBlack()
 
 }
 
-bool FadeToBlack::Awake()
+bool FadeToBlack::Awake(pugi::xml_node& config)
 {
+	time = config.attribute("time").as_int();
 	return true;
 }
 

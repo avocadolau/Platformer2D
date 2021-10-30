@@ -56,7 +56,7 @@ bool SceneStart::Update(float dt)
 	if ((app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 		|| (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN))
 	{
-		app->fade->Fade(app->sceneStart, app->sceneLevel1, app->fade->frames);
+		app->fade->Fade(app->sceneStart, app->sceneLevel1, app->fade->time/dt);
 		//app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 	}
 

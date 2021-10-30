@@ -1,26 +1,40 @@
 <!-- Config file for the game -->
 <!-- L01: DONE 1: Create configuration file-->
 <config>
-  <app>
-    <title>Game Development Testbed</title>
-    <organization>UPC</organization>
-  </app>
+    <app>
+        <title>Game Development Testbed</title>
+        <organization>UPC</organization>
+    </app>
 
-  <renderer>
-    <vsync value="false"/>
-  </renderer>
+    <renderer>
+        <vsync value="true"/>
+    </renderer>
 
-  <window>
-    <resolution width="1280" height="720" scale="1"/>
-    <fullscreen value="false"/>
-    <borderless value="false"/>
-    <resizable value="false"/>
-    <fullscreen_window value="false"/>
-  </window>
+    <window>
+        <resolution width="1280" height="720" scale="1"/>
+        <fullscreen value="false"/>
+        <borderless value="false"/>
+        <resizable value="false"/>
+        <fullscreen_window value="false"/>
+    </window>
+
+    <player>
+		<physics maxVelX="0.05f" maxVelY="0.2f" gravity="0.00015f"/>
+		<dimensions x="35" y="64"/>
+		<animations speed="0.15" path="Assets/Textures/playerSprites.png">
+			<idle width="35" height="64" sprites="20"/>
+			<run width="38" height="64" sprites="20"/>
+			<jump width="37" height="64" sprites="8"/>
+			<death width="0" height="64" sprites="0"/>
+		</animations>
+	</player>
+
+	<fade time="6000"/>
+
+	<level1 platformPath="Assets/Textures/platform.png"/>
 	
-
-  <!-- L03: Added maps folder as config option -->
-  <map>
-    <folder>Assets/maps/</folder>
-  </map>
+    <!-- L03: Added maps folder as config option -->
+    <map>
+        <folder>Assets/maps/</folder>
+    </map>
 </config>

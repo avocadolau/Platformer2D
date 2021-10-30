@@ -106,6 +106,7 @@ struct MapData
 	SDL_Color backgroundColor;
 	MapTypes type;
 	List<TileSet*> tilesets;
+	Properties properties;
 
 	// L04: DONE 2: Add a list/array of layers to the map
 	List<MapLayer*> layers;
@@ -145,16 +146,17 @@ private:
 	bool LoadTileSets(pugi::xml_node mapFile);
 	bool LoadTilesetDetails(pugi::xml_node& tileset_node, TileSet* set);
 	bool LoadTilesetImage(pugi::xml_node& tileset_node, TileSet* set);
-
-	// L04
+	bool LoadMapProperties(pugi::xml_node& node, Properties& properties);
+	
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadAllLayers(pugi::xml_node mapNode);
+	bool LoadLayerProperties(pugi::xml_node& node, Properties& properties);
 
 	bool LoadCollisions(pugi::xml_node mapNode);
 	bool LoadFallingPlatforms(pugi::xml_node mapnode);
+	bool LoadPositions(pugi::xml_node mapNode);
 
 	// L06: TODO 6: Load a group of properties 
-	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
 	// L06: TODO 3: Pick the right Tileset based on a tile id
 	TileSet* GetTilesetFromTileId(int id) const;

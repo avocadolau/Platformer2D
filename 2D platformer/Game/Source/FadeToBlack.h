@@ -12,7 +12,8 @@
 class FadeToBlack : public Module
 {
 public:
-	int frames=120;
+	//int frames=120;
+	int time;
 
 public:
 	//Constructor
@@ -21,7 +22,7 @@ public:
 	//Destructor
 	virtual ~FadeToBlack();
 
-	bool Awake();
+	bool Awake(pugi::xml_node& config);
 	bool Start();
 	bool PreUpdate();
 	bool Update(float dt);
