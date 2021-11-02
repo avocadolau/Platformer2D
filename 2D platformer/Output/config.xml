@@ -25,7 +25,7 @@
 			<idle width="35" height="64" sprites="20"/>
 			<run width="38" height="64" sprites="20"/>
 			<jump width="37" height="64" sprites="8"/>
-			<death width="0" height="64" sprites="0"/>
+			<death width="64" height="64" sprites="8"/>
 		</animations>
 	</player>
 
