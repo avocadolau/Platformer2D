@@ -29,6 +29,7 @@ bool SceneLevel1::Awake(pugi::xml_node& config)
 	bool ret = true;
 	
 	platformPath = config.attribute("platformPath").as_string();
+	backgroundPath = config.child("background").attribute("path").as_string();
 
 	return ret;
 }
@@ -39,9 +40,10 @@ bool SceneLevel1::Start()
 	// L03: DONE: Load map
 	active = false;
 	//app->map->Load("hello.tmx");
-	app->map->Load("finalMap.tmx");
+	app->map->Load("level1.tmx");
 	app->player->active = true;
 	platformImg = app->tex->Load(platformPath.GetString());
+	background = app->tex->Load(backgroundPath.GetString());
 
 	ListItem<Platform*>* item = platforms.start;
 	while (item != NULL)
@@ -83,6 +85,7 @@ bool SceneLevel1::Update(float dt)
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
 	// Draw map
+
 	app->map->Draw();
 	
 	ListItem<Platform*>* item = platforms.start;
@@ -122,13 +125,8 @@ bool SceneLevel1::CleanUp()
 {
 	platforms.clear();
 
-	ListItem<Collider*>* item = app->collisions->collidersList.start;
-	while (item != NULL)
-	{
-		ListItem<Collider*>* next = item->next;
-		if (item->data->listeners[0] == this)app->collisions->collidersList.del(item);
-		item = next;
-	}
+
+	
 
 	LOG("Freeing scene");
 

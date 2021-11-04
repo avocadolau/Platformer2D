@@ -28,7 +28,7 @@ struct Platform
 	}
 	~Platform()
 	{
-
+		app->collisions->RemoveCollider(col);
 	}
 
 	void Update(float dt)

@@ -26,13 +26,16 @@ public:
 public:
 	List<Platform*> platforms;
 	SDL_Texture* platformImg;
-	SString platformPath;
+	SDL_Texture* background;
+
+	Collider* winCol;
 
 private:
 
 	bool mapLoaded = false;
 	SDL_Texture* img;
-	
+	SString platformPath;
+	SString backgroundPath;
 
 };
 

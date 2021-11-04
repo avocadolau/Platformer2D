@@ -54,6 +54,11 @@ void Map::Draw()
 {
 	if (mapLoaded == false) return;
 
+
+
+	//app->render->DrawTexture(app->sceneLevel1->background, 0, 0, NULL);
+
+
 	// L04: DONE 5: Prepare the loop to draw all tilesets + DrawTexture()
 	ListItem<MapLayer*>* mapLayerItem;
 
@@ -443,7 +448,7 @@ bool Map::LoadMapProperties(pugi::xml_node& node, Properties& properties)
 	rect.h = mapData.tileHeight;
 
 	if (app->player->level==1)
-		Collider* newCol = app->collisions->AddCollider(rect, Collider::Type::WIN, app->sceneLevel1);
+		app->sceneLevel1->winCol = app->collisions->AddCollider(rect, Collider::Type::WIN, app->sceneLevel1);
 
 
 
@@ -461,6 +466,7 @@ bool Map::LoadCollisions(pugi::xml_node mapNode)
 	iPoint dim = MapToWorld(mapData.width, mapData.height);
 	SDL_Rect rec = { 0,0,dim.x,dim.y };
 	Collider* col = app->collisions->AddCollider(rec, Collider::Type::NONE, app->collisions);
+
 
 	// L06: TODO 4: Make sure we draw all the layers and not just the first one.
 	while (mapLayerItem != NULL) {

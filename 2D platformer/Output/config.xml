@@ -31,7 +31,9 @@
 
 	<fade time="6000"/>
 
-	<level1 platformPath="Assets/Textures/platform.png"/>
+	<level1 platformPath="Assets/Textures/platform.png">
+		<background path="Assets/Textures/background.png"/>
+	</level1>
 	
     <!-- L03: Added maps folder as config option -->
     <map>
