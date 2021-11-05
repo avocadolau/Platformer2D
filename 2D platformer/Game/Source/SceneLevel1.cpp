@@ -120,11 +120,21 @@ bool SceneLevel1::PostUpdate()
 	return ret;
 }
 
+bool SceneLevel1::CreateCollisions()
+{
+
+
+	return true;
+}
+
 // Called before quitting
 bool SceneLevel1::CleanUp()
 {
 	platforms.clear();
-
+	app->collisions->RemoveCollider(winCol);
+	winCol = nullptr;
+	app->collisions->RemoveCollider(borders);
+	borders = nullptr;
 
 	
 

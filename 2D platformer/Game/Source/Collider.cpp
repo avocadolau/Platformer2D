@@ -12,6 +12,11 @@ Collider::Collider(SDL_Rect rectangle, Type type, Module* listener) : rect(recta
 	level = 0;
 }
 
+Collider::~Collider()
+{
+	
+}
+
 void Collider::SetPos(int x, int y)
 {
 	rect.x = x;

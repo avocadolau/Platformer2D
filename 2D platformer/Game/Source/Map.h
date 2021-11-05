@@ -139,6 +139,10 @@ public:
 	// L05: DONE 2: Add orthographic world to map coordinates
 	iPoint WorldToMap(int x, int y) const;
 
+	bool LoadCollisions();
+	bool LoadFallingPlatforms();
+	bool LoadPositions();
+
 private:
 
 	// L03: Methods to load all required map data
@@ -152,10 +156,6 @@ private:
 	bool LoadAllLayers(pugi::xml_node mapNode);
 	bool LoadLayerProperties(pugi::xml_node& node, Properties& properties);
 
-	bool LoadCollisions(pugi::xml_node mapNode);
-	bool LoadFallingPlatforms(pugi::xml_node mapnode);
-	bool LoadPositions(pugi::xml_node mapNode);
-
 	// L06: TODO 6: Load a group of properties 
 
 	// L06: TODO 3: Pick the right Tileset based on a tile id
@@ -165,6 +165,7 @@ public:
 
     // L03: DONE 1: Add your struct for map info
 	MapData mapData;
+	//MapData mapData2;
 
 private:
 

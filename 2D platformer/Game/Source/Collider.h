@@ -17,13 +17,15 @@ struct Collider
 		GROUND,
 		PLAYER,
 		WIN,
-		DIE,
+		BORDER,
 		MAX
 	};
 
 	//Methods
 	Collider();
 	Collider(SDL_Rect rectangle, Type type, Module* listener = nullptr);
+
+	~Collider();
 
 	void SetPos(int x, int y);
 

@@ -32,7 +32,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneStart = new SceneStart();
 	sceneLevel1 = new SceneLevel1();
 	sceneWin = new SceneWin();
-	sceneLose = new SceneLose();
+	//sceneLose = new SceneLose();
 	fade = new FadeToBlack();
 	map = new Map();
 	collisions = new Collisions();
@@ -49,7 +49,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneStart);
 	AddModule(sceneLevel1);
 	AddModule(sceneWin);
-	AddModule(sceneLose);
+	//AddModule(sceneLose);
 	AddModule(collisions);
 	AddModule(player);
 	AddModule(fade);
@@ -296,14 +296,14 @@ const char* App::GetOrganization() const
 // Load / Save
 void App::LoadGameRequest()
 {
-	// NOTE: We should check if SAVE_STATE_FILENAME actually exist
-	loadGameRequested = true;
+	if (gameStateFile == NULL) loadGameRequested = false;
+	else loadGameRequested = true;
 }
 
 // ---------------------------------------
 void App::SaveGameRequest() const
 {
-	// NOTE: We should check if SAVE_STATE_FILENAME actually exist and... should we overwriten
+	
 	saveGameRequested = true;
 }
 
@@ -312,9 +312,26 @@ void App::SaveGameRequest() const
 // then call all the modules to load themselves
 bool App::LoadGame()
 {
-	bool ret = false;
+	bool ret = true;
+	pugi::xml_parse_result result = gameStateFile.load_file("savegame.xml");
 
-	//...
+	if (result == NULL)
+	{
+		LOG("Could not load map xml file config.xml. pugi error: %s", result.description());
+		ret = false;
+	}
+
+	ListItem<Module*>* item;
+	item = modules.start;
+
+	while (item != NULL && ret == true)
+	{
+		//pugi::xml_node moduleNode = saveStateNode.child(item->data->name.GetString());
+		ret = item->data->LoadState(gameStateFile.child("game_state").child(item->data->name.GetString()));
+		//ret = item->data->LoadState(moduleNode);
+		item = item->next;
+	}
+
 
 	loadGameRequested = false;
 
@@ -324,9 +341,21 @@ bool App::LoadGame()
 // L02: TODO 7: Implement the xml save method for current state
 bool App::SaveGame() const
 {
-	bool ret = true;
 
-	//...
+	bool ret = false;
+	pugi::xml_document* saveDoc = new pugi::xml_document();
+	pugi::xml_node saveStateNode = saveDoc->append_child("game_state");
+
+	ListItem<Module*>* item;
+	item = modules.start;
+
+	while (item != NULL)
+	{
+		//pugi::xml_node moduleNode = saveStateNode.child(item->data->name.GetString());
+		ret = item->data->SaveState(saveStateNode.append_child(item->data->name.GetString()));
+		item = item->next;
+	}
+	ret = saveDoc->save_file("savegame.xml");
 
 	saveGameRequested = false;
 

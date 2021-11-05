@@ -8,6 +8,8 @@
 
 Collisions::Collisions() :Module()
 {
+	name.Create("collisions");
+
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 		colliders[i] = nullptr;
 
@@ -210,8 +212,8 @@ void Collisions::DebugDraw()
 		case Collider::Type::WIN: // green
 			app->render->DrawRectangle(col->data->rect, 0, 255, 0, alpha, true, true);
 			break;
-		case Collider::Type::DIE: // orange
-			app->render->DrawRectangle(col->data->rect, 255, 122, 0, alpha, true, true);
+		case Collider::Type::BORDER: // orange
+			app->render->DrawRectangle(col->data->rect, 255, 122, 0, alpha, false, true);
 			break;
 		}
 

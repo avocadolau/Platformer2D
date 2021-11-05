@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<game_state>
+	<window />
+	<input />
+	<textures />
+	<audio />
+	<map />
+	<Start />
+	<level1 />
+	<SceneWin />
+	<collisions />
+	<player level="1">
+		<position x="451.820679" y="1421" />
+	</player>
+	<fade />
+	<renderer>
+		<camera x="189" y="-1061" />
+	</renderer>
+</game_state>

@@ -255,12 +255,12 @@ bool Map::Load(const char* filename)
 
 	if (ret == true)
 	{
-		ret = LoadCollisions(mapFile.child("map"));
+		ret = LoadCollisions();
 	}
 
 	if (ret == true)
 	{
-		ret = LoadFallingPlatforms(mapFile.child("map"));
+		ret = LoadFallingPlatforms();
 	}
 
     if(ret == true)
@@ -439,23 +439,12 @@ bool Map::LoadMapProperties(pugi::xml_node& node, Properties& properties)
 		properties.list.add(p);
 	}
 
-	app->player->pos.x = mapData.properties.GetProperty("playerx");
-	app->player->pos.y = mapData.properties.GetProperty("playery");
-	SDL_Rect rect;
-	rect.x = mapData.properties.GetProperty("winx");
-	rect.y = mapData.properties.GetProperty("winy");
-	rect.w = mapData.tileWidth;
-	rect.h = mapData.tileHeight;
-
-	if (app->player->level==1)
-		app->sceneLevel1->winCol = app->collisions->AddCollider(rect, Collider::Type::WIN, app->sceneLevel1);
-
-
+	LoadPositions();
 
 	return ret;
 }
 
-bool Map::LoadCollisions(pugi::xml_node mapNode)
+bool Map::LoadCollisions()
 {
 	//if (mapLoaded == false) return false;
 
@@ -465,9 +454,11 @@ bool Map::LoadCollisions(pugi::xml_node mapNode)
 
 	iPoint dim = MapToWorld(mapData.width, mapData.height);
 	SDL_Rect rec = { 0,0,dim.x,dim.y };
-	Collider* col = app->collisions->AddCollider(rec, Collider::Type::NONE, app->collisions);
 
+	if (app->sceneLevel1->borders != nullptr) delete app->sceneLevel1->borders;
+	app->sceneLevel1->borders = app->collisions->AddCollider(rec, Collider::Type::BORDER, app->collisions);
 
+	
 	// L06: TODO 4: Make sure we draw all the layers and not just the first one.
 	while (mapLayerItem != NULL) {
 
@@ -492,10 +483,12 @@ bool Map::LoadCollisions(pugi::xml_node mapNode)
 		mapLayerItem = mapLayerItem->next;
 	}
 
+	
+
 	return true;
 }
 
-bool Map::LoadFallingPlatforms(pugi::xml_node mapnode)
+bool Map::LoadFallingPlatforms()
 {
 	ListItem<MapLayer*>* mapLayerItem;
 	mapLayerItem = mapData.layers.start;
@@ -526,3 +519,18 @@ bool Map::LoadFallingPlatforms(pugi::xml_node mapnode)
 	return true;
 }
 
+bool Map::LoadPositions()
+{
+	app->player->pos.x = mapData.properties.GetProperty("playerx");
+	app->player->pos.y = mapData.properties.GetProperty("playery");
+	SDL_Rect rect;
+	rect.x = mapData.properties.GetProperty("winx");
+	rect.y = mapData.properties.GetProperty("winy");
+	rect.w = mapData.tileWidth;
+	rect.h = mapData.tileHeight;
+
+	if (app->player->level == 1)
+		app->sceneLevel1->winCol = app->collisions->AddCollider(rect, Collider::Type::WIN, app->sceneLevel1);
+
+	return true;
+}

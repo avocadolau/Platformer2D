@@ -30,7 +30,7 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 	bool LoadState(pugi::xml_node&);
-	bool SaveState(pugi::xml_node&);
+	bool SaveState(pugi::xml_node&) const;
 	void OnCollision(Collider* c1, Collider* c2);
 
 public:

@@ -121,6 +121,8 @@ private:
 	//pugi::xml_node config;
 	//pugi::xml_node configApp;
 
+	pugi::xml_document gameStateFile;
+
 	uint frames;
 	mutable bool saveGameRequested;
 	bool loadGameRequested;

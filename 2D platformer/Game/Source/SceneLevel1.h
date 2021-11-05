@@ -20,7 +20,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	
-	// Called before quitting
+	bool CreateCollisions();
 	bool CleanUp();
 
 public:
@@ -28,7 +28,8 @@ public:
 	SDL_Texture* platformImg;
 	SDL_Texture* background;
 
-	Collider* winCol;
+	Collider* winCol = nullptr;
+	Collider* borders = nullptr;
 
 private:
 

@@ -225,15 +225,24 @@ bool Player::CleanUp()
 	return true;
 }
 
-bool Player::LoadState(pugi::xml_node&)
+bool Player::LoadState(pugi::xml_node& node)
 {
+
+	pos.x = node.child("position").attribute("x").as_float();
+	pos.y = node.child("position").attribute("y").as_float();
+	level = node.attribute("level").as_int();
 
 	return true;
 }
 
-bool Player::SaveState(pugi::xml_node&)
+bool Player::SaveState(pugi::xml_node& node) const
 {
+	pugi::xml_node position = node.append_child("position");
+	position.append_attribute("x").set_value(pos.x);
+	position.append_attribute("y").set_value(pos.y);
+	node.append_attribute("level").set_value(level);
 
+	
 	return true;
 }
 
