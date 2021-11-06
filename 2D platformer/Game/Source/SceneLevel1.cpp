@@ -29,7 +29,8 @@ bool SceneLevel1::Awake(pugi::xml_node& config)
 	bool ret = true;
 	
 	platformPath = config.attribute("platformPath").as_string();
-	backgroundPath = config.child("background").attribute("path").as_string();
+	backgroundPath = config.attribute("backgroundPath").as_string();
+	parallax = config.attribute("parallax").as_float();
 
 	return ret;
 }
@@ -37,24 +38,12 @@ bool SceneLevel1::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool SceneLevel1::Start()
 {
-	// L03: DONE: Load map
 	active = false;
-	//app->map->Load("hello.tmx");
-	app->map->Load("level1.tmx");
+	app->map1->Load("level1.tmx");
+	//app->map2->Load("level2.tmx");
 	app->player->active = true;
 	platformImg = app->tex->Load(platformPath.GetString());
 	background = app->tex->Load(backgroundPath.GetString());
-
-	ListItem<Platform*>* item = platforms.start;
-	while (item != NULL)
-	{
-		item->data->col->listeners[0] = this;
-
-		item = item->next;
-	}
-
-
-	//ground = app->collisions->AddCollider({ 0,400,500,50 }, Collider::Type::GROUND, this);
 
 	// Load music
 	//app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
@@ -73,20 +62,25 @@ bool SceneLevel1::PreUpdate()
 bool SceneLevel1::Update(float dt)
 {
 
-    // L02: DONE 3: Request Load / Save when pressing L/S
-	if(app->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-		app->LoadGameRequest();
+	iPoint win;
+	win.x = app->win->GetWidth();
+	win.y = app->win->GetHeight();
+	fPoint pos;
+	pos.x = (app->player->pos.x - (win.x / 2)) * parallax;
+	pos.y = (app->player->pos.y - (win.y/ 2)) * parallax;
 
-	if(app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
-		app->SaveGameRequest();
+	app->render->DrawTexture(background, (int)pos.x, (int)pos.y, NULL);
+	currentMap->Draw();
+
+	iPoint map = currentMap->MapToWorld(currentMap->mapData.width,currentMap->mapData.height);
 
 	
+	app->render->DrawRectangle({ -win.x,-win.y,map.x + win.x,win.y }, 0, 0, 0, 255, true, true);
+	app->render->DrawRectangle({ 0,map.y,map.x + win.x,win.y }, 0, 0, 0, 255, true, true);
+	app->render->DrawRectangle({ -win.x,0,win.x ,win.y + map.y }, 0, 0, 0, 255, true, true);
+	app->render->DrawRectangle({ map.x,-win.y,win.x,win.y + map.y }, 0, 0, 0, 255, true, true);
+	
 
-	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
-
-	// Draw map
-
-	app->map->Draw();
 	
 	ListItem<Platform*>* item = platforms.start;
 	while (item != NULL)
@@ -100,9 +94,9 @@ bool SceneLevel1::Update(float dt)
 
 	// L03: DONE 7: Set the window title with map/tileset info
 	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
-				   app->map->mapData.width, app->map->mapData.height,
-				   app->map->mapData.tileWidth, app->map->mapData.tileHeight,
-				   app->map->mapData.tilesets.count());
+				   app->map1->mapData.width, app->map1->mapData.height,
+				   app->map1->mapData.tileWidth, app->map1->mapData.tileHeight,
+				   app->map1->mapData.tilesets.count());
 
 	app->win->SetTitle(title.GetString());
 
@@ -114,8 +108,28 @@ bool SceneLevel1::PostUpdate()
 {
 	bool ret = true;
 
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+		app->player->level = 1;
+		ChangeMap();
+	}
+	/*if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		app->player->level = 2;
+		ChangeMap();
+	}*/
+
+
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) ChangeMap();
+
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->SaveGameRequest();
+
+
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
+
+	
 
 	return ret;
 }
@@ -131,14 +145,33 @@ bool SceneLevel1::CreateCollisions()
 bool SceneLevel1::CleanUp()
 {
 	platforms.clear();
-	app->collisions->RemoveCollider(winCol);
-	winCol = nullptr;
-	app->collisions->RemoveCollider(borders);
-	borders = nullptr;
 
 	
 
 	LOG("Freeing scene");
+
+	return true;
+}
+
+bool SceneLevel1::ChangeMap()
+{
+
+	// clear scene colliders and platforms
+
+	app->collisions->collidersList.clear();
+	platforms.clear();
+
+	if (app->player->level == 1) currentMap = app->map1;
+	//if (app->player->level == 2) currentMap = app->map2;
+
+	app->player->CreateColliders();
+
+	currentMap->LoadPositions();
+	currentMap->LoadCollisions();
+	currentMap->LoadFallingPlatforms();
+
+	borders->listeners[0] = this;
+	winCol->listeners[0] = this;
 
 	return true;
 }

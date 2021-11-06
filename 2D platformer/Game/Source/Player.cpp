@@ -93,23 +93,8 @@ bool Player::Start()
 
 	sprites = app->tex->Load(spritesPath.GetString());
 
-	SDL_Rect rec;
-	//up
-	rec = { 5,-1,dim.x - 8,1 };
-	colUp = app->collisions->AddCollider(rec, Collider::Type::LISTENER, this);
-	//down
-	rec = { 5,dim.y,dim.x - 8,1 };
-	colDown = app->collisions->AddCollider(rec, Collider::Type::LISTENER, this);
-	//left
-	rec = { -1,1,3,dim.y-2 };
-	colLeft = app->collisions->AddCollider(rec, Collider::Type::LISTENER, this);
-	//right
-	rec = { dim.x-4,1,5,dim.y-2 };
-	colRight = app->collisions->AddCollider(rec, Collider::Type::LISTENER, this);
-	//body
-	rec = { 0,0,dim.x,dim.y };
-	collider = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
-
+	CreateColliders();
+	
 	currentAnim = &idle;
 	
 	return true;
@@ -122,38 +107,51 @@ bool Player::PreUpdate()
 
 bool Player::Update(float dt)
 {
-
-	// pues todods los controles que menuda pereza
-
-	if (down == false)
-	{
-		currentAnim = &idle;
-		if (colDown->Intersects(lastGround->rect) == false)
-			down = true;
-
-	}
-	
-
 	// vertical movement
 
-	if (jumps > 0)
-		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (godMode == true)
+	{
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 		{
-			pos.y--;
-			jumps--;
-			vel.y = -maxVel.y;
-			down = true;
+			vel.y = -maxVel.y/2;
 		}
 
-	if (down == true)
-	{
-		vel.y += gravity * dt;
-		if (vel.y > maxVel.y) vel.y = maxVel.y;
+		vel.y += gravity * dt *0.5;
+		if (vel.y > maxVel.y/2) vel.y = maxVel.y/2;
 		if (vel.y < -maxVel.y)vel.y = -maxVel.y;
 		pos.y += vel.y * dt;
 		currentAnim = &jump;
 	}
-	
+
+	if (godMode == false)
+	{
+		if (down == false)
+		{
+			currentAnim = &idle;
+			if (colDown->Intersects(lastGround->rect) == false)
+				down = true;
+
+		}
+
+
+		if (jumps > 0)
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+			{
+				pos.y--;
+				jumps--;
+				vel.y = -maxVel.y;
+				down = true;
+			}
+
+		if (down == true)
+		{
+			vel.y += gravity * dt;
+			if (vel.y > maxVel.y) vel.y = maxVel.y;
+			if (vel.y < -maxVel.y)vel.y = -maxVel.y;
+			pos.y += vel.y * dt;
+			currentAnim = &jump;
+		}
+	}
 
 	// horizontal movement
 	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && left == true) {
@@ -168,7 +166,6 @@ bool Player::Update(float dt)
 		currentAnim->mustFlip = false;
 	}
 
-
 	colUp->SetPos((int)pos.x+4, (int)pos.y - 1);
 	colDown->SetPos((int)pos.x+4, (int)pos.y + dim.y);
 	colLeft->SetPos((int)pos.x - 1, (int)pos.y+1);
@@ -178,7 +175,11 @@ bool Player::Update(float dt)
 	app->render->camera.x = (int)-pos.x+(app->win->GetWidth()/2);
 	app->render->camera.y = (int)-pos.y+(app->win->GetHeight()/2);
 
-	
+	up = true;
+	down = true;
+	right = true;
+	left = true;
+
 	currentAnim->Update();
 
 	return true;
@@ -196,25 +197,8 @@ bool Player::PostUpdate()
 
 
 	if (currentAnim == nullptr) currentAnim = &idle;
-	switch (state)
-	{
-	case IDLE:
-		currentAnim = &idle;
-		break;
-	case RUN:
-		currentAnim = &run;
-		break;
-	case JUMP:
-		currentAnim = &jump;
-		break;
-	case DEATH:
-		currentAnim = &death;
-		break;
-	default:
-		break;
-	}
 
-	
+	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) godMode = !godMode;
 
 	return true;
 }
@@ -227,10 +211,12 @@ bool Player::CleanUp()
 
 bool Player::LoadState(pugi::xml_node& node)
 {
+	level = node.attribute("level").as_int();
+
+	app->sceneLevel1->ChangeMap();
 
 	pos.x = node.child("position").attribute("x").as_float();
 	pos.y = node.child("position").attribute("y").as_float();
-	level = node.attribute("level").as_int();
 
 	return true;
 }
@@ -246,72 +232,149 @@ bool Player::SaveState(pugi::xml_node& node) const
 	return true;
 }
 
+bool Player::CreateColliders()
+{
+	SDL_Rect rec;
+
+	if (colUp != NULL) app->collisions->RemoveCollider(colUp);
+	if (colDown != NULL) app->collisions->RemoveCollider(colDown);
+	if (colLeft != NULL) app->collisions->RemoveCollider(colLeft);
+	if (colRight != NULL) app->collisions->RemoveCollider(colRight);
+	if (collider != NULL) app->collisions->RemoveCollider(collider);
+
+
+	//up
+	rec = { 5,-1,dim.x - 8,1 };
+	colUp = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
+	//down
+	rec = { 5,dim.y,dim.x - 8,1 };
+	colDown = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
+	//left
+	rec = { -1,1,3,dim.y - 2 };
+	colLeft = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
+	//right
+	rec = { dim.x - 4,1,5,dim.y - 2 };
+	colRight = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
+	//body
+	rec = { 0,0,dim.x,dim.y };
+	collider = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
+
+
+
+
+	return true;
+}
+
 void Player::OnCollision(Collider* c1, Collider* c2)
 {
-	if (c1 == colDown)
+	if (c2==app->sceneLevel1->winCol)
 	{
-		down == true;
-		if (c2->type == Collider::Type::GROUND)
-		{
-			down = false;
-			jumps = 2;
-			vel.y = 0;
-
-			pos.y = c2->rect.y - dim.y+1;
-			colUp->rect.y = pos.y--;
-			colDown->rect.y = pos.y + dim.y;
-			colRight->rect.y = pos.y + 1;
-			colLeft->rect.y = pos.y + 1;
-			lastGround = c2;
-		}
+		
 	}
 
-	if (c1==colUp)
+	if (godMode == true)
 	{
-		up = true;
-		if (c2->type == Collider::Type::GROUND)
+		if (c2 == app->sceneLevel1->borders)
 		{
-			
-			vel.y = 0;
+			if (colDown->rect.y>c2->rect.h)
+			{
+				vel.y = -maxVel.y;
+			}
 
-			pos.y = (c2->rect.y + c2->rect.h)+2;
-			colUp->rect.y = pos.y--;
-			colDown->rect.y = pos.y + dim.y;
-			colRight->rect.y = pos.y + 1;
-			colLeft->rect.y = pos.y + 1;
+			if (colLeft->rect.x < c2->rect.x)
+			{
+				pos.x = c2->rect.x + 1;
+				colUp->rect.x = pos.x + 4;
+				colDown->rect.x = pos.x + 4;
+				colLeft->rect.x = pos.x - 1;
+				colRight->rect.x = pos.x + dim.x - 4;
+			}
+
+			if (colRight->rect.x + colRight->rect.w > c2->rect.w)
+			{
+				pos.x = c2->rect.w - dim.x -1;
+				colUp->rect.x = pos.x + 4;
+				colDown->rect.x = pos.x + 4;
+				colLeft->rect.x = pos.x - 1;
+				colRight->rect.x = pos.x + dim.x - 4;
+			}
+		}
+
+	}
+	
+	else
+	{
+		if (app->sceneLevel1->borders)
+			if (colDown->rect.y > app->sceneLevel1->borders->rect.h)
+				app->sceneLevel1->ChangeMap();
+
+		if (c1 == colDown)
+		{
+			down == true;
+			if (c2->type == Collider::Type::GROUND)
+			{
+				down = false;
+				jumps = 2;
+				vel.y = 0;
+
+				pos.y = c2->rect.y - dim.y + 1;
+				colUp->rect.y = pos.y--;
+				colDown->rect.y = pos.y + dim.y;
+				colRight->rect.y = pos.y + 1;
+				colLeft->rect.y = pos.y + 1;
+				lastGround = c2;
+			}
+		}
+
+		if (c1 == colUp)
+		{
+			up = true;
+			if (c2->type == Collider::Type::GROUND)
+			{
+
+				vel.y = 0;
+
+				pos.y = (c2->rect.y + c2->rect.h) + 2;
+				colUp->rect.y = pos.y--;
+				colDown->rect.y = pos.y + dim.y;
+				colRight->rect.y = pos.y + 1;
+				colLeft->rect.y = pos.y + 1;
+			}
+		}
+
+
+		if (c1 == colLeft)
+		{
+			left = true;
+			if (c2->type == Collider::Type::GROUND)
+			{
+				left = false;
+
+				pos.x = c2->rect.x + c2->rect.w;
+				colUp->rect.x = pos.x + 4;
+				colDown->rect.x = pos.x + 4;
+				colLeft->rect.x = pos.x - 1;
+				colRight->rect.x = pos.x + dim.x - 4;
+			}
+		}
+
+		if (c1 == colRight)
+		{
+			right = true;
+			if (c2->type == Collider::Type::GROUND)
+			{
+				right = false;
+
+				pos.x = c2->rect.x - dim.x;
+				colUp->rect.x = pos.x + 4;
+				colDown->rect.x = pos.x + 4;
+				colLeft->rect.x = pos.x - 1;
+				colRight->rect.x = pos.x + dim.x - 4;
+			}
 		}
 	}
 
 	
-	if (c1 == colLeft)
-	{
-		left = true;
-		if (c2->type == Collider::Type::GROUND)
-		{
-			left = false;
-
-			pos.x = c2->rect.x + c2->rect.w;
-			colUp->rect.x = pos.x + 4;
-			colDown->rect.x = pos.x + 4;
-			colLeft->rect.x = pos.x - 1;
-			colRight->rect.x = pos.x + dim.x-4;
-		}
-	}
-
-	if (c1 == colRight)
-	{
-		right = true;
-		if (c2->type == Collider::Type::GROUND)
-		{
-			right = false;
-
-			pos.x = c2->rect.x - dim.x;
-			colUp->rect.x = pos.x + 4;
-			colDown->rect.x = pos.x + 4;
-			colLeft->rect.x = pos.x - 1;
-			colRight->rect.x = pos.x + dim.x - 4;
-		}
-	}
 
 
 }

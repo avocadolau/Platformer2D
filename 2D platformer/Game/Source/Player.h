@@ -31,6 +31,7 @@ public:
 	bool CleanUp();
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&) const;
+	bool CreateColliders();
 	void OnCollision(Collider* c1, Collider* c2);
 
 public:
@@ -56,6 +57,7 @@ public:
 	bool down = true;
 	bool left = true;
 	bool right = true;
+	bool godMode = false;
 
 private:
 	SDL_Texture* sprites;

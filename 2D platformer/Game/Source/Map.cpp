@@ -55,10 +55,6 @@ void Map::Draw()
 	if (mapLoaded == false) return;
 
 
-
-	//app->render->DrawTexture(app->sceneLevel1->background, 0, 0, NULL);
-
-
 	// L04: DONE 5: Prepare the loop to draw all tilesets + DrawTexture()
 	ListItem<MapLayer*>* mapLayerItem;
 
@@ -253,16 +249,6 @@ bool Map::Load(const char* filename)
 		ret = LoadAllLayers(mapFile.child("map"));
 	}
 
-	if (ret == true)
-	{
-		ret = LoadCollisions();
-	}
-
-	if (ret == true)
-	{
-		ret = LoadFallingPlatforms();
-	}
-
     if(ret == true)
     {
         // L03: TODO 5: LOG all the data loaded iterate all tilesets and LOG everything
@@ -439,8 +425,6 @@ bool Map::LoadMapProperties(pugi::xml_node& node, Properties& properties)
 		properties.list.add(p);
 	}
 
-	LoadPositions();
-
 	return ret;
 }
 
@@ -451,13 +435,6 @@ bool Map::LoadCollisions()
 	// L04: DONE 5: Prepare the loop to draw all tilesets + DrawTexture()
 	ListItem<MapLayer*>* mapLayerItem;
 	mapLayerItem = mapData.layers.start;
-
-	iPoint dim = MapToWorld(mapData.width, mapData.height);
-	SDL_Rect rec = { 0,0,dim.x,dim.y };
-
-	if (app->sceneLevel1->borders != nullptr) delete app->sceneLevel1->borders;
-	app->sceneLevel1->borders = app->collisions->AddCollider(rec, Collider::Type::BORDER, app->collisions);
-
 	
 	// L06: TODO 4: Make sure we draw all the layers and not just the first one.
 	while (mapLayerItem != NULL) {
@@ -483,8 +460,6 @@ bool Map::LoadCollisions()
 		mapLayerItem = mapLayerItem->next;
 	}
 
-	
-
 	return true;
 }
 
@@ -506,6 +481,7 @@ bool Map::LoadFallingPlatforms()
 					if (app->player->level == 1)
 					{
 						Platform* newPlatform = new Platform(p);
+						newPlatform->col->listeners[0] = app->sceneLevel1;
 						app->sceneLevel1->platforms.add(newPlatform);
 					}
 					
@@ -523,14 +499,23 @@ bool Map::LoadPositions()
 {
 	app->player->pos.x = mapData.properties.GetProperty("playerx");
 	app->player->pos.y = mapData.properties.GetProperty("playery");
+
+
 	SDL_Rect rect;
 	rect.x = mapData.properties.GetProperty("winx");
 	rect.y = mapData.properties.GetProperty("winy");
 	rect.w = mapData.tileWidth;
 	rect.h = mapData.tileHeight;
 
-	if (app->player->level == 1)
-		app->sceneLevel1->winCol = app->collisions->AddCollider(rect, Collider::Type::WIN, app->sceneLevel1);
+	
+	app->sceneLevel1->winCol = app->collisions->AddCollider(rect, Collider::Type::WIN, NULL);
+
+
+	iPoint dim = MapToWorld(mapData.width, mapData.height);
+	rect = { 0,0,dim.x,dim.y };
+
+	app->sceneLevel1->borders = app->collisions->AddCollider(rect, Collider::Type::BORDER, NULL);
+
 
 	return true;
 }

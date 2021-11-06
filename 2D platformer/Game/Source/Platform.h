@@ -35,7 +35,8 @@ struct Platform
 	{
 		if (fall == false)
 		{
-			fall = col->Intersects(app->player->colDown->rect);
+			if (app->player->godMode==false)
+				fall = col->Intersects(app->player->colDown->rect);
 		}
 		if (fall == true)
 		{

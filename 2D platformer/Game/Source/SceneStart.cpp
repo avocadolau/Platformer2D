@@ -56,11 +56,18 @@ bool SceneStart::Update(float dt)
 	if ((app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 		|| (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN))
 	{
-		app->fade->Fade(app->sceneStart, app->sceneLevel1, app->fade->time/dt);
+		app->player->level = 1;
+		app->fade->Fade(this, app->sceneLevel1, app->fade->time / dt);
+		app->sceneLevel1->ChangeMap();
 		//app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 	}
 
-	
+	/*if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		app->player->level = 2;
+		app->fade->Fade(this, app->sceneLevel1, app->fade->time / dt);
+		app->sceneLevel1->ChangeMap();
+	}*/
 
 
 	SString Start("Tittle");

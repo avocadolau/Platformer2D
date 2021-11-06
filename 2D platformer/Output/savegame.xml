@@ -10,10 +10,10 @@
 	<SceneWin />
 	<collisions />
 	<player level="1">
-		<position x="451.820679" y="1421" />
+		<position x="382.808533" y="1421" />
 	</player>
 	<fade />
 	<renderer>
-		<camera x="189" y="-1061" />
+		<camera x="258" y="-1061" />
 	</renderer>
 </game_state>

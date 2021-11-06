@@ -13,31 +13,31 @@ Collisions::Collisions() :Module()
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 		colliders[i] = nullptr;
 
-	matrix[Collider::Type::LISTENER][Collider::Type::LISTENER] = false;
-	matrix[Collider::Type::LISTENER][Collider::Type::GROUND] = true;
-	matrix[Collider::Type::LISTENER][Collider::Type::PLAYER] = false;
-	matrix[Collider::Type::LISTENER][Collider::Type::WIN] = false;
-	matrix[Collider::Type::LISTENER][Collider::Type::NONE] = true;
+	matrix[Collider::Type::BORDER][Collider::Type::BORDER] = false;
+	matrix[Collider::Type::BORDER][Collider::Type::GROUND] = false;
+	matrix[Collider::Type::BORDER][Collider::Type::PLAYER] = true;
+	matrix[Collider::Type::BORDER][Collider::Type::WIN] = false;
+	matrix[Collider::Type::BORDER][Collider::Type::NONE] = false;
 
-	matrix[Collider::Type::GROUND][Collider::Type::LISTENER] = true;
-	matrix[Collider::Type::GROUND][Collider::Type::GROUND] = true;
+	matrix[Collider::Type::GROUND][Collider::Type::BORDER] = false;
+	matrix[Collider::Type::GROUND][Collider::Type::GROUND] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::PLAYER] = true;
 	matrix[Collider::Type::GROUND][Collider::Type::WIN] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::NONE] = false;
 
-	matrix[Collider::Type::PLAYER][Collider::Type::LISTENER] = false;
+	matrix[Collider::Type::PLAYER][Collider::Type::BORDER] = true;
 	matrix[Collider::Type::PLAYER][Collider::Type::GROUND] = true;
 	matrix[Collider::Type::PLAYER][Collider::Type::PLAYER] = false;
 	matrix[Collider::Type::PLAYER][Collider::Type::WIN] = true;
 	matrix[Collider::Type::PLAYER][Collider::Type::NONE] = true;
 
-	matrix[Collider::Type::WIN][Collider::Type::LISTENER] = false;
+	matrix[Collider::Type::WIN][Collider::Type::BORDER] = false;
 	matrix[Collider::Type::WIN][Collider::Type::GROUND] = false;
 	matrix[Collider::Type::WIN][Collider::Type::PLAYER] = true;
 	matrix[Collider::Type::WIN][Collider::Type::WIN] = false;
 	matrix[Collider::Type::WIN][Collider::Type::NONE] = false;
 
-	matrix[Collider::Type::NONE][Collider::Type::LISTENER] = true;
+	matrix[Collider::Type::NONE][Collider::Type::BORDER] = false;
 	matrix[Collider::Type::NONE][Collider::Type::GROUND] = false;
 	matrix[Collider::Type::NONE][Collider::Type::PLAYER] = true;
 	matrix[Collider::Type::NONE][Collider::Type::WIN] = false;

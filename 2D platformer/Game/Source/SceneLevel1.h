@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "List.h"
 #include "Platform.h"
+#include "Map.h"
 
 struct SDL_Texture;
 
@@ -20,6 +21,7 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	
+	bool ChangeMap();
 	bool CreateCollisions();
 	bool CleanUp();
 
@@ -28,8 +30,11 @@ public:
 	SDL_Texture* platformImg;
 	SDL_Texture* background;
 
-	Collider* winCol = nullptr;
-	Collider* borders = nullptr;
+	Collider* winCol;
+	Collider* borders;
+
+	Map* currentMap = nullptr;
+
 
 private:
 
@@ -38,6 +43,7 @@ private:
 	SString platformPath;
 	SString backgroundPath;
 
+	float parallax;
 };
 
 #endif // __SCENE_H__

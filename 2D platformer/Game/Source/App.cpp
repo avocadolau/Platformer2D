@@ -7,7 +7,6 @@
 #include "SceneStart.h"
 #include "SceneLevel1.h"
 #include "SceneWin.h"
-#include "SceneLose.h"
 #include "FadeToBlack.h"
 #include "Map.h"
 #include "Collisions.h"
@@ -32,9 +31,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneStart = new SceneStart();
 	sceneLevel1 = new SceneLevel1();
 	sceneWin = new SceneWin();
-	//sceneLose = new SceneLose();
 	fade = new FadeToBlack();
-	map = new Map();
+	map1 = new Map();
+	map2 = new Map();
 	collisions = new Collisions();
 	player = new Player();
 
@@ -44,12 +43,11 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
-	AddModule(map);
+	AddModule(map1);
 
 	AddModule(sceneStart);
 	AddModule(sceneLevel1);
 	AddModule(sceneWin);
-	//AddModule(sceneLose);
 	AddModule(collisions);
 	AddModule(player);
 	AddModule(fade);
