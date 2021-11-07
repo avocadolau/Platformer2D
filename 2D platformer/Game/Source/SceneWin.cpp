@@ -42,17 +42,11 @@ bool SceneWin::Start()
 
 bool SceneWin::PreUpdate()
 {
-	if (activeLastFrame == false)
-		if (active == true)
-			app->audio->PlayFx(2);
 	return true;
 }
 
 bool SceneWin::Update(float dt)
 {
-	if (active == true) activeLastFrame = true;
-	else activeLastFrame = false;
-
 	app->player->active = false;
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;

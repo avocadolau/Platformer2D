@@ -22,7 +22,6 @@ public:
 private:
 	SDL_Texture* img;
 	SString imgPath;
-	bool activeLastFrame;
 };
 
 #endif

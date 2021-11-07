@@ -5,6 +5,9 @@
 #include "SceneGame.h"
 #include "Player.h"
 #include "Animation.h"
+#include "SceneLose.h"
+#include "SceneWin.h"
+#include "Audio.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -57,6 +60,8 @@ bool FadeToBlack::Update(float dt)
 				app->player->death.Reset();
 			}
 			moduleToEnable->active=true;
+			if (moduleToEnable == app->sceneLose)app->audio->PlayFx(3);
+			if (moduleToEnable == app->sceneWin)app->audio->PlayFx(2);
 			currentStep = Fade_Step::FROM_BLACK;
 		}
 	}

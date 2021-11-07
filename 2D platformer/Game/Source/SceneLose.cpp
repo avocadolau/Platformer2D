@@ -42,16 +42,11 @@ bool SceneLose::Start()
 
 bool SceneLose::PreUpdate()
 {
-	if (activeLastFrame == false)
-		if (active == true)
-			app->audio->PlayFx(3);
 	return true;
 }
 
 bool SceneLose::Update(float dt)
 {
-	if (active == true) activeLastFrame = true;
-	else activeLastFrame = false;
 
 	app->player->active = false;
 	app->render->camera.x = 0;
