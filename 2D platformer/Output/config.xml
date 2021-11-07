@@ -41,7 +41,7 @@
 	<game platformPath="Assets/Textures/platform.png" backgroundPath="Assets/Textures/background.png"
 			parallax="0.45"/>
 
-	<win img=""/>
+	<win img="Assets/Textures/win.png"/>
 
 	<lose img="Assets/Textures/lose.png"/>
 	
