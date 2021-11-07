@@ -9,7 +9,7 @@ There are many falling platforms
 
 2 levels implemented
 
-Parallax background
+1 background layer of parallax
 
 Soundtrack and some sound effects
 
@@ -39,7 +39,7 @@ F6        Load game state
 
 F9        View colliders (only available during gameplay)
 
-F10       God Mode (only available during gameplay) - mantain space pressed for going up and stop pressing for down
+F10       God Mode (only available during gameplay) - maintain space pressed for going up and stop pressing for down
 
 
 ## Libraries Used
