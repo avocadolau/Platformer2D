@@ -12,10 +12,10 @@
 	<lose />
 	<collisions />
 	<player level="2">
-		<position x="1516.11792" y="973" />
+		<position x="8003.15625" y="333" />
 	</player>
 	<fade />
 	<renderer>
-		<camera x="-876" y="-613" />
+		<camera x="-7363" y="27" />
 	</renderer>
 </game_state>
