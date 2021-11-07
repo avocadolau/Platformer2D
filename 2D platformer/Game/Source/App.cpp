@@ -46,6 +46,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(map1);
+	AddModule(map2);
 
 	AddModule(sceneStart);
 	AddModule(sceneGame);

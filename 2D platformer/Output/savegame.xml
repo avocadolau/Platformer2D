@@ -5,16 +5,17 @@
 	<textures />
 	<audio />
 	<map />
+	<map />
 	<start />
 	<game />
 	<win />
 	<lose />
 	<collisions />
-	<player level="1">
-		<position x="646.284851" y="1421" />
+	<player level="2">
+		<position x="1561.88989" y="973" />
 	</player>
 	<fade />
 	<renderer>
-		<camera x="-6" y="-1061" />
+		<camera x="-921" y="-613" />
 	</renderer>
 </game_state>

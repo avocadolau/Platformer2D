@@ -448,10 +448,7 @@ bool Map::LoadCollisions()
 					if (mapLayerItem->data->Get(x, y) == NULL)continue;
 					iPoint p = MapToWorld(x, y);
 					SDL_Rect rect = { (p.x + mapLayerItem->data->offset.x) - offset,(p.y + mapLayerItem->data->offset.y) - offset,mapData.tileWidth + (offset * 2),mapData.tileHeight + (offset * 2) };
-					if (app->player->level == 1)
-					{
-						Collider* newCol = app->collisions->AddCollider(rect, Collider::Type::GROUND, app->sceneGame);
-					}
+					Collider* newCol = app->collisions->AddCollider(rect, Collider::Type::GROUND, app->sceneGame);
 					//app->render->DrawTexture(mapData.tilesets.start->data->texture, p.x, p.y, &rect);
 				}
 			}
@@ -492,12 +489,9 @@ bool Map::LoadFallingPlatforms()
 				{
 					if (mapLayerItem->data->Get(x, y) == NULL)continue;
 					iPoint p = MapToWorld(x - 1, y);
-					if (app->player->level == 1)
-					{
-						Platform* newPlatform = new Platform(p);
-						newPlatform->col->listeners[0] = app->sceneGame;
-						app->sceneGame->platforms.add(newPlatform);
-					}
+					Platform* newPlatform = new Platform(p);
+					newPlatform->col->listeners[0] = app->sceneGame;
+					app->sceneGame->platforms.add(newPlatform);
 					
 				}
 			}

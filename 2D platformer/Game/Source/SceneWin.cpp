@@ -65,7 +65,12 @@ bool SceneWin::Update(float dt)
 	{
 		app->player->level = 1;
 		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
-		//app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		app->player->level = 2;
+		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)

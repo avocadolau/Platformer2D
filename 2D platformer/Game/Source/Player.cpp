@@ -280,7 +280,12 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 {
 	if (c2==app->sceneGame->winCol)
 	{
-		app->fade->Fade(app->sceneGame, app->sceneWin, app->fade->time / app->dt);
+		if (level == 1)
+		{
+			level = 2;
+			app->fade->Fade(app->sceneGame, app->sceneGame, app->fade->time / app->dt);
+		}
+		if(level==2)app->fade->Fade(app->sceneGame, app->sceneWin, app->fade->time / app->dt);
 	}
 
 	if (godMode == true)

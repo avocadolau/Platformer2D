@@ -68,6 +68,12 @@ bool SceneLose::Update(float dt)
 		app->player->death.Reset();
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		app->player->level = 2;
+		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
+	}
+
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 		app->fade->Fade(this, app->sceneStart, app->fade->time / dt);
 

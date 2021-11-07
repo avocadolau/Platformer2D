@@ -63,15 +63,13 @@ bool SceneStart::Update(float dt)
 	{
 		app->player->level = 1;
 		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
-		//app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 	}
 
-	/*if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		app->player->level = 2;
-		app->fade->Fade(this, app->sceneLevel1, app->fade->time / dt);
-		app->sceneLevel1->ChangeMap();
-	}*/
+		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
+	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
 

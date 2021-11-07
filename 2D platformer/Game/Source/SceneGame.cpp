@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "SceneGame.h"
+#include "FadeToBlack.h"
 #include "Collisions.h"
 #include "Collider.h"
 #include "Map.h"
@@ -40,13 +41,10 @@ bool SceneGame::Start()
 {
 	active = false;
 	app->map1->Load("level1.tmx");
-	//app->map2->Load("level2.tmx");
+	app->map2->Load("level2.tmx");
 	app->player->active = true;
 	platformImg = app->tex->Load(platformPath.GetString());
 	background = app->tex->Load(backgroundPath.GetString());
-
-	// Load music
-	//app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 
 	return true;
 }
@@ -80,8 +78,6 @@ bool SceneGame::Update(float dt)
 	app->render->DrawRectangle({ -win.x,0,win.x ,win.y + map.y }, 0, 0, 0, 255, true, true);
 	app->render->DrawRectangle({ map.x,-win.y,win.x,win.y + map.y }, 0, 0, 0, 255, true, true);
 	
-
-	
 	ListItem<Platform*>* item = platforms.start;
 	while (item != NULL)
 	{
@@ -108,19 +104,20 @@ bool SceneGame::PostUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
 		app->player->level = 1;
-		ChangeMap();
+		app->fade->Fade(this, app->sceneGame, app->fade->time / app->dt);
 	}
-	/*if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		app->player->level = 2;
-		ChangeMap();
-	}*/
+		app->fade->Fade(this, app->sceneGame, app->fade->time / app->dt);
+	}
 
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) ChangeMap();
 
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
-	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->SaveGameRequest();
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->LoadGameRequest();
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->SaveGameRequest();
 
 
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
@@ -158,8 +155,9 @@ bool SceneGame::ChangeMap()
 	app->collisions->collidersList.clear();
 	platforms.clear();
 
+
 	if (app->player->level == 1) currentMap = app->map1;
-	//if (app->player->level == 2) currentMap = app->map2;
+	if (app->player->level == 2) currentMap = app->map2;
 
 	app->player->CreateColliders();
 

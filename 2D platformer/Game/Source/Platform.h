@@ -23,8 +23,8 @@ struct Platform
 	{
 		this->pos = { (float)pos.x,(float)pos.y };
 		SDL_Rect rec = { pos.x + 16,pos.y + 16,64 + 32,64 + 32 };
-		if (app->player->level == 1)
-			col = app->collisions->AddCollider(rec, Collider::Type::GROUND, nullptr);
+		col = app->collisions->AddCollider(rec, Collider::Type::GROUND, nullptr);
+			
 	}
 	~Platform()
 	{
@@ -40,10 +40,10 @@ struct Platform
 		}
 		if (fall == true)
 		{
-			
 			if (timeToFall > 0)timeToFall--;
 			else
 			{
+				col->type = Collider::Type::NONE;
 				vel += app->player->gravity * dt;
 				if (vel > app->player->maxVel.y) vel = app->player->maxVel.y;
 				pos.y += vel * dt;
