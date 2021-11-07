@@ -7,14 +7,6 @@
 #include "Animation.h"
 #include "Textures.h"
 
-enum State
-{
-	IDLE,
-	RUN,
-	JUMP,
-	DEATH
-};
-
 class Player :
     public Module
 {
@@ -45,8 +37,7 @@ public:
 	float gravity;
 	int jumps;
 	int level;
-
-	State state;
+	bool alive = true;
 
 	Collider* colUp;
 	Collider* colDown;
@@ -59,11 +50,10 @@ public:
 	bool right = true;
 	bool godMode = false;
 
-private:
 	SDL_Texture* sprites;
 	SString spritesPath;
-	Animation idle, run, jump, death;
 	Animation* currentAnim;
+	Animation idle, run, jump, death;
 	float animSpeed;
 };
 

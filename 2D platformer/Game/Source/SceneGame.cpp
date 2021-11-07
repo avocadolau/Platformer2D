@@ -4,7 +4,7 @@
 #include "Audio.h"
 #include "Render.h"
 #include "Window.h"
-#include "SceneLevel1.h"
+#include "SceneGame.h"
 #include "Collisions.h"
 #include "Collider.h"
 #include "Map.h"
@@ -13,17 +13,17 @@
 #include "Defs.h"
 #include "Log.h"
 
-SceneLevel1::SceneLevel1() : Module()
+SceneGame::SceneGame() : Module()
 {
-	name.Create("level1");
+	name.Create("game");
 }
 
 // Destructor
-SceneLevel1::~SceneLevel1()
+SceneGame::~SceneGame()
 {}
 
 // Called before render is available
-bool SceneLevel1::Awake(pugi::xml_node& config)
+bool SceneGame::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
@@ -36,7 +36,7 @@ bool SceneLevel1::Awake(pugi::xml_node& config)
 }
 
 // Called before the first frame
-bool SceneLevel1::Start()
+bool SceneGame::Start()
 {
 	active = false;
 	app->map1->Load("level1.tmx");
@@ -52,14 +52,14 @@ bool SceneLevel1::Start()
 }
 
 // Called each loop iteration
-bool SceneLevel1::PreUpdate()
+bool SceneGame::PreUpdate()
 {
 	app->player->active = true;
 	return true;
 }
 
 // Called each loop iteration
-bool SceneLevel1::Update(float dt)
+bool SceneGame::Update(float dt)
 {
 
 	iPoint win;
@@ -93,10 +93,7 @@ bool SceneLevel1::Update(float dt)
 
 
 	// L03: DONE 7: Set the window title with map/tileset info
-	SString title("Map:%dx%d Tiles:%dx%d Tilesets:%d",
-				   app->map1->mapData.width, app->map1->mapData.height,
-				   app->map1->mapData.tileWidth, app->map1->mapData.tileHeight,
-				   app->map1->mapData.tilesets.count());
+	SString title("I see the light");
 
 	app->win->SetTitle(title.GetString());
 
@@ -104,7 +101,7 @@ bool SceneLevel1::Update(float dt)
 }
 
 // Called each loop iteration
-bool SceneLevel1::PostUpdate()
+bool SceneGame::PostUpdate()
 {
 	bool ret = true;
 
@@ -134,7 +131,7 @@ bool SceneLevel1::PostUpdate()
 	return ret;
 }
 
-bool SceneLevel1::CreateCollisions()
+bool SceneGame::CreateCollisions()
 {
 
 
@@ -142,7 +139,7 @@ bool SceneLevel1::CreateCollisions()
 }
 
 // Called before quitting
-bool SceneLevel1::CleanUp()
+bool SceneGame::CleanUp()
 {
 	platforms.clear();
 
@@ -153,7 +150,7 @@ bool SceneLevel1::CleanUp()
 	return true;
 }
 
-bool SceneLevel1::ChangeMap()
+bool SceneGame::ChangeMap()
 {
 
 	// clear scene colliders and platforms
@@ -166,12 +163,14 @@ bool SceneLevel1::ChangeMap()
 
 	app->player->CreateColliders();
 
-	currentMap->LoadPositions();
+	if (app->GetLoadGameRequested() == false)currentMap->LoadPositions();
 	currentMap->LoadCollisions();
 	currentMap->LoadFallingPlatforms();
 
 	borders->listeners[0] = this;
 	winCol->listeners[0] = this;
+
+	app->player->alive = true;
 
 	return true;
 }

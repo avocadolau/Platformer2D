@@ -21,9 +21,6 @@
     <ClCompile Include="Source\Collisions.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneLevel1.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Player.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -34,6 +31,12 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneStart.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneLose.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneGame.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -76,9 +79,6 @@
     <ClInclude Include="Source\Collisions.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneLevel1.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Player.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -95,6 +95,12 @@
       <Filter>Physics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Animation.h" />
+    <ClInclude Include="Source\SceneLose.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneGame.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

@@ -10,7 +10,7 @@
 #include "Point.h"
 #include "Window.h"
 #include "Module.h"
-#include "SceneLevel1.h"
+#include "SceneGame.h"
 #include "Render.h"
 
 #include "SDL/include/SDL_Rect.h"

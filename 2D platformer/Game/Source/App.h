@@ -16,8 +16,9 @@ class Render;
 class Textures;
 class Audio;
 class SceneStart;
-class SceneLevel1;
+class SceneGame;
 class SceneWin;
+class SceneLose;
 class SceneManager;
 class FadeToBlack;
 class Map;
@@ -59,6 +60,7 @@ public:
     // L02: DONE 1: Create methods to request Load / Save
 	void LoadGameRequest();
 	void SaveGameRequest() const;
+	bool GetLoadGameRequested();
 
 private:
 
@@ -94,8 +96,9 @@ public:
 	Textures* tex;
 	Audio* audio;
 	SceneStart* sceneStart;
-	SceneLevel1* sceneLevel1;
+	SceneGame* sceneGame;
 	SceneWin* sceneWin;
+	SceneLose* sceneLose;
 	FadeToBlack* fade;
 	Map* map1;
 	Map* map2;

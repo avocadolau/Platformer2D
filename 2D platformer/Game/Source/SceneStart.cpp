@@ -4,7 +4,7 @@
 #include "Audio.h"
 #include "Render.h"
 #include "Window.h"
-#include "SceneLevel1.h"
+#include "SceneGame.h"
 #include "Map.h"
 #include "FadeToBlack.h"
 #include "Player.h"
@@ -14,7 +14,7 @@
 
 SceneStart::SceneStart() : Module()
 {
-	name.Create("Start");
+	name.Create("start");
 	active = true;
 }
 
@@ -23,8 +23,10 @@ SceneStart::~SceneStart()
 {}
 
 // Called before render is available
-bool SceneStart::Awake()
+bool SceneStart::Awake(pugi::xml_node& config)
 {
+	imgPath = config.attribute("img").as_string();
+	musicPatch = config.attribute("music").as_string();
 	LOG("Loading Scene");
 	bool ret = true;
 
@@ -34,10 +36,8 @@ bool SceneStart::Awake()
 // Called before the first frame
 bool SceneStart::Start()
 {
-	// L03: DONE: Load map
-	/*app->map->Draw();
-	app->map->Load("hello.tmx");
-	*/
+	img= app->tex->Load(imgPath.GetString());
+	app->audio->PlayMusic(musicPatch.GetString());
 	app->player->level = 1;
 	
 	return true;
@@ -52,13 +52,18 @@ bool SceneStart::PreUpdate()
 // Called each loop iteration
 bool SceneStart::Update(float dt)
 {
+	app->player->active = false;
+	app->render->camera.x = 0;
+	app->render->camera.y = 0;
+
+	app->render->DrawTexture(img, 0, 0, NULL);
+
 	// Start level 1
 	if ((app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 		|| (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN))
 	{
 		app->player->level = 1;
-		app->fade->Fade(this, app->sceneLevel1, app->fade->time / dt);
-		app->sceneLevel1->ChangeMap();
+		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
 		//app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 	}
 
@@ -69,6 +74,7 @@ bool SceneStart::Update(float dt)
 		app->sceneLevel1->ChangeMap();
 	}*/
 
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
 
 	SString Start("Tittle");
 	app->win->SetTitle(Start.GetString());

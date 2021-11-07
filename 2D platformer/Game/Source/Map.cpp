@@ -6,7 +6,7 @@
 #include "Collisions.h"
 #include "Collider.h"
 #include "Player.h"
-#include "SceneLevel1.h"
+#include "SceneGame.h"
 #include "Platform.h"
 
 #include "Defs.h"
@@ -450,7 +450,7 @@ bool Map::LoadCollisions()
 					SDL_Rect rect = { (p.x + mapLayerItem->data->offset.x) - offset,(p.y + mapLayerItem->data->offset.y) - offset,mapData.tileWidth + (offset * 2),mapData.tileHeight + (offset * 2) };
 					if (app->player->level == 1)
 					{
-						Collider* newCol = app->collisions->AddCollider(rect, Collider::Type::GROUND, app->sceneLevel1);
+						Collider* newCol = app->collisions->AddCollider(rect, Collider::Type::GROUND, app->sceneGame);
 					}
 					//app->render->DrawTexture(mapData.tilesets.start->data->texture, p.x, p.y, &rect);
 				}
@@ -460,6 +460,20 @@ bool Map::LoadCollisions()
 		mapLayerItem = mapLayerItem->next;
 	}
 
+	SDL_Rect rect;
+	rect.x = mapData.properties.GetProperty("winx");
+	rect.y = mapData.properties.GetProperty("winy");
+	rect.w = mapData.tileWidth;
+	rect.h = mapData.tileHeight;
+
+
+	app->sceneGame->winCol = app->collisions->AddCollider(rect, Collider::Type::WIN, NULL);
+
+
+	iPoint dim = MapToWorld(mapData.width, mapData.height);
+	rect = { 0,0,dim.x,dim.y };
+
+	app->sceneGame->borders = app->collisions->AddCollider(rect, Collider::Type::BORDER, NULL);
 	return true;
 }
 
@@ -481,8 +495,8 @@ bool Map::LoadFallingPlatforms()
 					if (app->player->level == 1)
 					{
 						Platform* newPlatform = new Platform(p);
-						newPlatform->col->listeners[0] = app->sceneLevel1;
-						app->sceneLevel1->platforms.add(newPlatform);
+						newPlatform->col->listeners[0] = app->sceneGame;
+						app->sceneGame->platforms.add(newPlatform);
 					}
 					
 				}
@@ -501,20 +515,7 @@ bool Map::LoadPositions()
 	app->player->pos.y = mapData.properties.GetProperty("playery");
 
 
-	SDL_Rect rect;
-	rect.x = mapData.properties.GetProperty("winx");
-	rect.y = mapData.properties.GetProperty("winy");
-	rect.w = mapData.tileWidth;
-	rect.h = mapData.tileHeight;
-
 	
-	app->sceneLevel1->winCol = app->collisions->AddCollider(rect, Collider::Type::WIN, NULL);
-
-
-	iPoint dim = MapToWorld(mapData.width, mapData.height);
-	rect = { 0,0,dim.x,dim.y };
-
-	app->sceneLevel1->borders = app->collisions->AddCollider(rect, Collider::Type::BORDER, NULL);
 
 
 	return true;

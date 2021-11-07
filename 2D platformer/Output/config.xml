@@ -31,8 +31,14 @@
 
 	<fade time="6000"/>
 
-	<level1 platformPath="Assets/Textures/platform.png" backgroundPath="Assets/Textures/background.png"
+	<start img="Assets/Textures/sceneStart.png" music="Assets/audio/music/icdalight.ogg"/>
+
+	<game platformPath="Assets/Textures/platform.png" backgroundPath="Assets/Textures/background.png"
 			parallax="0.45"/>
+
+	<win img=""/>
+
+	<lose img=""/>
 	
     <!-- L03: Added maps folder as config option -->
     <map>

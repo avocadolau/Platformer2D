@@ -2,6 +2,9 @@
 
 #include "App.h"
 #include "Render.h"
+#include "SceneGame.h"
+#include "Player.h"
+#include "Animation.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -48,8 +51,12 @@ bool FadeToBlack::Update(float dt)
 		if (frameCount >= maxFadeFrames)
 		{
 			moduleToDisable->active = false;
+			if (moduleToEnable == app->sceneGame)
+			{
+				app->sceneGame->ChangeMap();
+				app->player->death.Reset();
+			}
 			moduleToEnable->active=true;
-
 			currentStep = Fade_Step::FROM_BLACK;
 		}
 	}

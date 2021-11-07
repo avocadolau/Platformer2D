@@ -5,8 +5,9 @@
 #include "Textures.h"
 #include "Audio.h"
 #include "SceneStart.h"
-#include "SceneLevel1.h"
+#include "SceneGame.h"
 #include "SceneWin.h"
+#include "SceneLose.h"
 #include "FadeToBlack.h"
 #include "Map.h"
 #include "Collisions.h"
@@ -29,8 +30,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new Textures();
 	audio = new Audio();
 	sceneStart = new SceneStart();
-	sceneLevel1 = new SceneLevel1();
+	sceneGame = new SceneGame();
 	sceneWin = new SceneWin();
+	sceneLose = new SceneLose();
 	fade = new FadeToBlack();
 	map1 = new Map();
 	map2 = new Map();
@@ -46,8 +48,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(map1);
 
 	AddModule(sceneStart);
-	AddModule(sceneLevel1);
+	AddModule(sceneGame);
 	AddModule(sceneWin);
+	AddModule(sceneLose);
 	AddModule(collisions);
 	AddModule(player);
 	AddModule(fade);
@@ -360,5 +363,7 @@ bool App::SaveGame() const
 	return ret;
 }
 
-
-
+bool App::GetLoadGameRequested()
+{
+	return loadGameRequested;
+}

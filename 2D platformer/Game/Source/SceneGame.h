@@ -1,5 +1,5 @@
-#ifndef __SCENE_H__
-#define __SCENE_H__
+#ifndef __SCENE_GAME_H__
+#define __SCENE_GAME_H__
 
 #include "Module.h"
 #include "List.h"
@@ -8,12 +8,12 @@
 
 struct SDL_Texture;
 
-class SceneLevel1 : public Module
+class SceneGame : public Module
 {
 public:
 
-	SceneLevel1();
-	virtual ~SceneLevel1();
+	SceneGame();
+	virtual ~SceneGame();
 
 	bool Awake(pugi::xml_node& config);
 	bool Start();

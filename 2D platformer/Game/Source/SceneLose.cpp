@@ -1,4 +1,4 @@
-#include "SceneWin.h"
+#include "SceneLose.h"
 #include "App.h"
 #include "Input.h"
 #include "Textures.h"
@@ -14,16 +14,16 @@
 #include "Defs.h"
 #include "Log.h"
 
-SceneWin::SceneWin() :Module()
+SceneLose::SceneLose() :Module()
 {
-	name.Create("win");
-	LOG("Win");
+	name.Create("lose");
+	LOG("Lose");
 }
 
-SceneWin::~SceneWin()
+SceneLose::~SceneLose()
 {}
 
-bool SceneWin::Awake(pugi::xml_node& config)
+bool SceneLose::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
 	bool ret = true;
@@ -31,7 +31,7 @@ bool SceneWin::Awake(pugi::xml_node& config)
 	return ret;
 }
 
-bool SceneWin::Start()
+bool SceneLose::Start()
 {
 	// L03: DONE: Load background
 	active = false;
@@ -39,24 +39,26 @@ bool SceneWin::Start()
 	return true;
 }
 
-bool SceneWin::PreUpdate()
+bool SceneLose::PreUpdate()
 {
 	return true;
 }
 
-bool SceneWin::Update(float dt)
+bool SceneLose::Update(float dt)
 {
 	app->player->active = false;
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 
-	app->render->DrawTexture(app->player->sprites, app->win->GetWidth() / 2, app->win->GetHeight() / 2, &app->player->idle.GetCurrentFrame(), NULL);
-
+	app->render->DrawTexture(img, 0, 0, NULL);
+	app->render->DrawTexture(app->player->sprites, app->win->GetWidth() / 2, app->win->GetHeight() / 2, &app->player->death.GetCurrentFrame(), NULL);
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
+		
 		app->player->level = 1;
 		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
+		app->player->death.Reset();
 		//app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 	}
 
@@ -65,12 +67,12 @@ bool SceneWin::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
 
-	SString title("Win");
+	SString title("Lose");
 	app->win->SetTitle(title.GetString());
 	return true;
 }
 
-bool SceneWin::PostUpdate()
+bool SceneLose::PostUpdate()
 {
 	bool ret = true;
 
@@ -80,7 +82,7 @@ bool SceneWin::PostUpdate()
 	return ret;
 }
 
-bool SceneWin::CleanUp()
+bool SceneLose::CleanUp()
 {
 	return true;
 }

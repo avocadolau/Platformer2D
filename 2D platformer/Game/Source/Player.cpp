@@ -5,11 +5,14 @@
 #include "Audio.h"
 #include "Render.h"
 #include "Window.h"
-#include "SceneLevel1.h"
+#include "SceneGame.h"
+#include "SceneWin.h"
+#include "SceneLose.h"
 #include "Collisions.h"
 #include "Collider.h"
 #include "Map.h"
 #include "Animation.h"
+#include "FadeToBlack.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -108,77 +111,88 @@ bool Player::PreUpdate()
 bool Player::Update(float dt)
 {
 	// vertical movement
-
-	if (godMode == true)
+	if (alive == false)
 	{
-		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+		if (currentAnim != &death) currentAnim = &death;
+		if (currentAnim->HasFinished() == true)
 		{
-			vel.y = -maxVel.y/2;
+			app->fade->Fade(app->sceneGame, app->sceneLose, app->fade->time / dt);
 		}
-
-		vel.y += gravity * dt *0.5;
-		if (vel.y > maxVel.y/2) vel.y = maxVel.y/2;
-		if (vel.y < -maxVel.y)vel.y = -maxVel.y;
-		pos.y += vel.y * dt;
-		currentAnim = &jump;
 	}
 
-	if (godMode == false)
+	else
 	{
-		if (down == false)
+		if (godMode == true)
 		{
-			currentAnim = &idle;
-			if (colDown->Intersects(lastGround->rect) == false)
-				down = true;
-
-		}
-
-
-		if (jumps > 0)
-			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
 			{
-				pos.y--;
-				jumps--;
-				vel.y = -maxVel.y;
-				down = true;
+				vel.y = -maxVel.y / 2;
 			}
 
-		if (down == true)
-		{
-			vel.y += gravity * dt;
-			if (vel.y > maxVel.y) vel.y = maxVel.y;
+			vel.y += gravity * dt * 0.5;
+			if (vel.y > maxVel.y / 2) vel.y = maxVel.y / 2;
 			if (vel.y < -maxVel.y)vel.y = -maxVel.y;
 			pos.y += vel.y * dt;
 			currentAnim = &jump;
 		}
+
+		if (godMode == false)
+		{
+			if (down == false)
+			{
+				currentAnim = &idle;
+				if (colDown->Intersects(lastGround->rect) == false)
+					down = true;
+
+			}
+
+
+			if (jumps > 0)
+				if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+				{
+					pos.y--;
+					jumps--;
+					vel.y = -maxVel.y;
+					down = true;
+				}
+
+			if (down == true)
+			{
+				vel.y += gravity * dt;
+				if (vel.y > maxVel.y) vel.y = maxVel.y;
+				if (vel.y < -maxVel.y)vel.y = -maxVel.y;
+				pos.y += vel.y * dt;
+				currentAnim = &jump;
+			}
+		}
+
+		// horizontal movement
+		if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && left == true) {
+			pos.x -= vel.x * dt;
+			if (currentAnim == &idle) currentAnim = &run;
+			currentAnim->mustFlip = true;
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT && right == true) {
+			pos.x += vel.x * dt;
+			if (currentAnim == &idle) currentAnim = &run;
+			currentAnim->mustFlip = false;
+		}
+
+		colUp->SetPos((int)pos.x + 4, (int)pos.y - 1);
+		colDown->SetPos((int)pos.x + 4, (int)pos.y + dim.y);
+		colLeft->SetPos((int)pos.x - 1, (int)pos.y + 1);
+		colRight->SetPos((int)pos.x + dim.x - 4, (int)pos.y + 1);
+		collider->SetPos((int)pos.x, (int)pos.y);
+
+		app->render->camera.x = (int)-pos.x + (app->win->GetWidth() / 2);
+		app->render->camera.y = (int)-pos.y + (app->win->GetHeight() / 2);
+
+		up = true;
+		down = true;
+		right = true;
+		left = true;
 	}
-
-	// horizontal movement
-	if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && left == true) {
-		pos.x -= vel.x * dt;
-		if (currentAnim == &idle) currentAnim = &run;
-		currentAnim->mustFlip = true;
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT && right == true) {
-		pos.x += vel.x * dt;
-		if (currentAnim == &idle) currentAnim = &run;
-		currentAnim->mustFlip = false;
-	}
-
-	colUp->SetPos((int)pos.x+4, (int)pos.y - 1);
-	colDown->SetPos((int)pos.x+4, (int)pos.y + dim.y);
-	colLeft->SetPos((int)pos.x - 1, (int)pos.y+1);
-	colRight->SetPos((int)pos.x + dim.x-4, (int)pos.y+1);
-	collider->SetPos((int)pos.x, (int)pos.y);
-
-	app->render->camera.x = (int)-pos.x+(app->win->GetWidth()/2);
-	app->render->camera.y = (int)-pos.y+(app->win->GetHeight()/2);
-
-	up = true;
-	down = true;
-	right = true;
-	left = true;
 
 	currentAnim->Update();
 
@@ -188,12 +202,8 @@ bool Player::Update(float dt)
 bool Player::PostUpdate()
 {
 
-	if (currentAnim->mustFlip == false)app->render->DrawTexture(sprites, pos.x, pos.y, &currentAnim->GetCurrentFrame());
-	else
-	{
-
-	}
-	bool res= app->render->DrawTexture(sprites, pos.x, pos.y, &currentAnim->GetCurrentFrame(),1.0F,0,-1,NULL);
+	if (currentAnim->mustFlip == false) bool res = app->render->DrawTexture(sprites, pos.x, pos.y, &currentAnim->GetCurrentFrame(), 1.0f, 0, -1, NULL);
+	if (currentAnim->mustFlip == true) bool res = app->render->DrawTexture(sprites, pos.x, pos.y, &currentAnim->GetCurrentFrame(), 1.0f, -1, NULL, SDL_FLIP_HORIZONTAL);
 
 
 	if (currentAnim == nullptr) currentAnim = &idle;
@@ -212,12 +222,10 @@ bool Player::CleanUp()
 bool Player::LoadState(pugi::xml_node& node)
 {
 	level = node.attribute("level").as_int();
-
-	app->sceneLevel1->ChangeMap();
-
 	pos.x = node.child("position").attribute("x").as_float();
 	pos.y = node.child("position").attribute("y").as_float();
 
+	app->sceneGame->ChangeMap();
 	return true;
 }
 
@@ -267,14 +275,14 @@ bool Player::CreateColliders()
 
 void Player::OnCollision(Collider* c1, Collider* c2)
 {
-	if (c2==app->sceneLevel1->winCol)
+	if (c2==app->sceneGame->winCol)
 	{
-		
+		app->fade->Fade(app->sceneGame, app->sceneWin, app->fade->time / app->dt);
 	}
 
 	if (godMode == true)
 	{
-		if (c2 == app->sceneLevel1->borders)
+		if (c2 ==app->sceneGame->borders)
 		{
 			if (colDown->rect.y>c2->rect.h)
 			{
@@ -304,9 +312,9 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 	
 	else
 	{
-		if (app->sceneLevel1->borders)
-			if (colDown->rect.y > app->sceneLevel1->borders->rect.h)
-				app->sceneLevel1->ChangeMap();
+		if (app->sceneGame->borders)
+			if (colDown->rect.y > app->sceneGame->borders->rect.h)
+				alive = false;
 
 		if (c1 == colDown)
 		{

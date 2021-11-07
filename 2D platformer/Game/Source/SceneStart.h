@@ -15,7 +15,7 @@ public:
 	virtual ~SceneStart();
 
 	// Called before render is available
-	bool Awake();
+	bool Awake(pugi::xml_node& config);
 
 	// Called before the first frame
 	bool Start();
@@ -34,6 +34,8 @@ public:
 
 private:
 	SDL_Texture* img;
+	SString imgPath;
+	SString musicPatch;
 };
 
 #endif // __SCENE_H__

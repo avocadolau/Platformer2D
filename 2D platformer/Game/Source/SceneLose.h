@@ -1,16 +1,16 @@
-#ifndef __SCENE_WIN_H__
-#define __SCENE_WIN_H__
+#ifndef __SCENE_LOSE_H__
+#define __SCENE_LOSE_H__
 
 #include "Module.h"
 
 struct SDL_Texture;
 
-class SceneWin : public Module
+class SceneLose : public Module
 {
 public:
 
-	SceneWin();
-	virtual ~SceneWin();
+	SceneLose();
+	virtual ~SceneLose();
 
 	bool Awake(pugi::xml_node& config);
 	bool Start();
