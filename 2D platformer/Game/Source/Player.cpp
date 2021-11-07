@@ -113,6 +113,7 @@ bool Player::Update(float dt)
 	// vertical movement
 	if (alive == false)
 	{
+		death.mustFlip = currentAnim->mustFlip;
 		if (currentAnim != &death) currentAnim = &death;
 		if (currentAnim->HasFinished() == true)
 		{
@@ -133,6 +134,7 @@ bool Player::Update(float dt)
 			if (vel.y > maxVel.y / 2) vel.y = maxVel.y / 2;
 			if (vel.y < -maxVel.y)vel.y = -maxVel.y;
 			pos.y += vel.y * dt;
+			jump.mustFlip = currentAnim->mustFlip;
 			currentAnim = &jump;
 		}
 
@@ -140,6 +142,7 @@ bool Player::Update(float dt)
 		{
 			if (down == false)
 			{
+				idle.mustFlip = currentAnim->mustFlip;
 				currentAnim = &idle;
 				if (colDown->Intersects(lastGround->rect) == false)
 					down = true;
@@ -164,6 +167,7 @@ bool Player::Update(float dt)
 				if (vel.y > maxVel.y) vel.y = maxVel.y;
 				if (vel.y < -maxVel.y)vel.y = -maxVel.y;
 				pos.y += vel.y * dt;
+				jump.mustFlip = currentAnim->mustFlip;
 				currentAnim = &jump;
 			}
 		}

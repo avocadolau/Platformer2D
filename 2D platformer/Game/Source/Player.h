@@ -55,6 +55,7 @@ public:
 	Animation* currentAnim;
 	Animation idle, run, jump, death;
 	float animSpeed;
+
 };
 
 #endif

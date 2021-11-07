@@ -5,6 +5,7 @@
 #include "Render.h"
 #include "Window.h"
 #include "Collider.h"
+#include "SceneGame.h"
 
 Collisions::Collisions() :Module()
 {
@@ -133,6 +134,7 @@ bool Collisions::Update(float dt)
 
 bool Collisions::PostUpdate()
 {
+	if (app->sceneGame->active == false) debug = false;
 	if (debug)
 		DebugDraw();
 
