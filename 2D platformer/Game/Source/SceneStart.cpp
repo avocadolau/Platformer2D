@@ -26,7 +26,6 @@ SceneStart::~SceneStart()
 bool SceneStart::Awake(pugi::xml_node& config)
 {
 	imgPath = config.attribute("img").as_string();
-	musicPatch = config.attribute("music").as_string();
 	LOG("Loading Scene");
 	bool ret = true;
 
@@ -37,7 +36,7 @@ bool SceneStart::Awake(pugi::xml_node& config)
 bool SceneStart::Start()
 {
 	img= app->tex->Load(imgPath.GetString());
-	app->audio->PlayMusic(musicPatch.GetString());
+	app->audio->PlayMusic(app->audio->soundtrack.GetString());
 	app->player->level = 1;
 	
 	return true;

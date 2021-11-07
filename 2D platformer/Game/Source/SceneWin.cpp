@@ -25,6 +25,7 @@ SceneWin::~SceneWin()
 
 bool SceneWin::Awake(pugi::xml_node& config)
 {
+	imgPath = config.attribute("img").as_string();
 	LOG("Loading Scene");
 	bool ret = true;
 
@@ -33,7 +34,7 @@ bool SceneWin::Awake(pugi::xml_node& config)
 
 bool SceneWin::Start()
 {
-	// L03: DONE: Load background
+	img = app->tex->Load(imgPath.GetString());
 	active = false;
 
 	return true;
@@ -41,15 +42,22 @@ bool SceneWin::Start()
 
 bool SceneWin::PreUpdate()
 {
+	if (activeLastFrame == false)
+		if (active == true)
+			app->audio->PlayFx(2);
 	return true;
 }
 
 bool SceneWin::Update(float dt)
 {
+	if (active == true) activeLastFrame = true;
+	else activeLastFrame = false;
+
 	app->player->active = false;
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 
+	app->render->DrawTexture(img, 0, 0, NULL);
 	app->render->DrawTexture(app->player->sprites, app->win->GetWidth() / 2, app->win->GetHeight() / 2, &app->player->idle.GetCurrentFrame(), NULL);
 
 

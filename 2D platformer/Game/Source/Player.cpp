@@ -124,7 +124,7 @@ bool Player::Update(float dt)
 	{
 		if (godMode == true)
 		{
-			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT&&up==true)
 			{
 				vel.y = -maxVel.y / 2;
 			}
@@ -150,6 +150,7 @@ bool Player::Update(float dt)
 			if (jumps > 0)
 				if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 				{
+					app->audio->PlayFx(1,0);
 					pos.y--;
 					jumps--;
 					vel.y = -maxVel.y;
@@ -158,6 +159,7 @@ bool Player::Update(float dt)
 
 			if (down == true)
 			{
+				if (jumps == 2) jumps = 1;
 				vel.y += gravity * dt;
 				if (vel.y > maxVel.y) vel.y = maxVel.y;
 				if (vel.y < -maxVel.y)vel.y = -maxVel.y;
@@ -201,10 +203,7 @@ bool Player::Update(float dt)
 
 bool Player::PostUpdate()
 {
-
-	if (currentAnim->mustFlip == false) bool res = app->render->DrawTexture(sprites, pos.x, pos.y, &currentAnim->GetCurrentFrame(), 1.0f, 0, -1, NULL);
-	if (currentAnim->mustFlip == true) bool res = app->render->DrawTexture(sprites, pos.x, pos.y, &currentAnim->GetCurrentFrame(), 1.0f, -1, NULL, SDL_FLIP_HORIZONTAL);
-
+	app->render->DrawTexture(sprites, pos.x, pos.y, &currentAnim->GetCurrentFrame(), 1.0f, 0, -1, NULL, currentAnim->mustFlip);
 
 	if (currentAnim == nullptr) currentAnim = &idle;
 
@@ -287,6 +286,12 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 			if (colDown->rect.y>c2->rect.h)
 			{
 				vel.y = -maxVel.y;
+			}
+
+			up = true;
+			if (colUp->rect.y < c2->rect.y)
+			{
+				up = false;
 			}
 
 			if (colLeft->rect.x < c2->rect.x)

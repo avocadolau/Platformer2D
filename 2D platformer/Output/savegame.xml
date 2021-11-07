@@ -6,15 +6,15 @@
 	<audio />
 	<map />
 	<start />
-	<level1 />
+	<game />
 	<win />
 	<lose />
 	<collisions />
 	<player level="1">
-		<position x="562.444458" y="1421" />
+		<position x="646.284851" y="1421" />
 	</player>
 	<fade />
 	<renderer>
-		<camera x="78" y="-1061" />
+		<camera x="-6" y="-1061" />
 	</renderer>
 </game_state>

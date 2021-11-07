@@ -25,6 +25,7 @@ SceneLose::~SceneLose()
 
 bool SceneLose::Awake(pugi::xml_node& config)
 {
+	imgPath = config.attribute("img").as_string();
 	LOG("Loading Scene");
 	bool ret = true;
 
@@ -33,7 +34,7 @@ bool SceneLose::Awake(pugi::xml_node& config)
 
 bool SceneLose::Start()
 {
-	// L03: DONE: Load background
+	img = app->tex->Load(imgPath.GetString());
 	active = false;
 
 	return true;
@@ -41,11 +42,17 @@ bool SceneLose::Start()
 
 bool SceneLose::PreUpdate()
 {
+	if (activeLastFrame == false)
+		if (active == true)
+			app->audio->PlayFx(3);
 	return true;
 }
 
 bool SceneLose::Update(float dt)
 {
+	if (active == true) activeLastFrame = true;
+	else activeLastFrame = false;
+
 	app->player->active = false;
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
@@ -59,7 +66,6 @@ bool SceneLose::Update(float dt)
 		app->player->level = 1;
 		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
 		app->player->death.Reset();
-		//app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)

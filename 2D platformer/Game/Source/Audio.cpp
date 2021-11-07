@@ -55,6 +55,13 @@ bool Audio::Awake(pugi::xml_node& config)
 		ret = true;
 	}
 
+	soundtrack = config.child("music").attribute("path").as_string();
+
+	LoadFx(config.child("fx").attribute("jump").as_string());
+	LoadFx(config.child("fx").attribute("win").as_string());
+	LoadFx(config.child("fx").attribute("lose").as_string());
+
+
 	return ret;
 }
 

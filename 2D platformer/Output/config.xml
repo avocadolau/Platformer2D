@@ -18,6 +18,11 @@
         <fullscreen_window value="false"/>
     </window>
 
+	<audio>
+		<music path="Assets/audio/music/icdalight.ogg"/>.
+		<fx jump="Assets/audio/fx/jumpfx.wav" win="Assets/audio/fx/winfx.wav" lose="Assets/audio/fx/losefx.wav"/>
+	</audio>   
+	
     <player>
 		<physics maxVelX="0.05f" maxVelY="0.2f" gravity="0.00015f"/>
 		<dimensions x="35" y="64"/>
@@ -31,14 +36,14 @@
 
 	<fade time="6000"/>
 
-	<start img="Assets/Textures/sceneStart.png" music="Assets/audio/music/icdalight.ogg"/>
+	<start img="Assets/Textures/start.png"/>
 
 	<game platformPath="Assets/Textures/platform.png" backgroundPath="Assets/Textures/background.png"
 			parallax="0.45"/>
 
 	<win img=""/>
 
-	<lose img=""/>
+	<lose img="Assets/Textures/lose.png"/>
 	
     <!-- L03: Added maps folder as config option -->
     <map>

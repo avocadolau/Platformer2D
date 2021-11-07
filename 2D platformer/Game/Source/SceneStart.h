@@ -35,7 +35,6 @@ public:
 private:
 	SDL_Texture* img;
 	SString imgPath;
-	SString musicPatch;
 };
 
 #endif // __SCENE_H__

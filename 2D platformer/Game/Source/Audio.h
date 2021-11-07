@@ -36,6 +36,11 @@ private:
 
 	_Mix_Music* music;
 	List<Mix_Chunk *>	fx;
+public:
+	SString jumpfx;
+	SString winfx;
+	SString losefx;
+	SString soundtrack;
 };
 
 #endif // __AUDIO_H__
