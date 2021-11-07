@@ -58,7 +58,6 @@ bool SceneLose::Update(float dt)
 	app->render->camera.y = 0;
 
 	app->render->DrawTexture(img, 0, 0, NULL);
-	app->render->DrawTexture(app->player->sprites, app->win->GetWidth() / 2, app->win->GetHeight() / 2, &app->player->death.GetCurrentFrame(), NULL);
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
