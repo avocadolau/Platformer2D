@@ -78,7 +78,7 @@ bool SceneLose::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
 
-	SString title("Lose");
+	SString title("I see the light");
 	app->win->SetTitle(title.GetString());
 	return true;
 }

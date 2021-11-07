@@ -136,6 +136,19 @@ bool Player::Update(float dt)
 			pos.y += vel.y * dt;
 			jump.mustFlip = currentAnim->mustFlip;
 			currentAnim = &jump;
+
+			// horizontal movement
+			if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && left == true) {
+				pos.x -= vel.x * dt*2;
+				if (currentAnim == &idle) currentAnim = &run;
+				currentAnim->mustFlip = true;
+			}
+
+			if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT && right == true) {
+				pos.x += vel.x * dt*2;
+				if (currentAnim == &idle) currentAnim = &run;
+				currentAnim->mustFlip = false;
+			}
 		}
 
 		if (godMode == false)
@@ -170,19 +183,19 @@ bool Player::Update(float dt)
 				jump.mustFlip = currentAnim->mustFlip;
 				currentAnim = &jump;
 			}
-		}
 
-		// horizontal movement
-		if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && left == true) {
-			pos.x -= vel.x * dt;
-			if (currentAnim == &idle) currentAnim = &run;
-			currentAnim->mustFlip = true;
-		}
+			// horizontal movement
+			if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && left == true) {
+				pos.x -= vel.x * dt;
+				if (currentAnim == &idle) currentAnim = &run;
+				currentAnim->mustFlip = true;
+			}
 
-		if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT && right == true) {
-			pos.x += vel.x * dt;
-			if (currentAnim == &idle) currentAnim = &run;
-			currentAnim->mustFlip = false;
+			if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT && right == true) {
+				pos.x += vel.x * dt;
+				if (currentAnim == &idle) currentAnim = &run;
+				currentAnim->mustFlip = false;
+			}
 		}
 
 		colUp->SetPos((int)pos.x + 4, (int)pos.y - 1);
