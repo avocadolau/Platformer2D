@@ -4,6 +4,9 @@
 #include "Module.h"
 #include "List.h"
 
+#include "Timer.h"
+#include "PerfTimer.h"
+
 #include "PugiXml/src/pugixml.hpp"
 
 #define CONFIG_FILENAME		"config.xml"
@@ -64,23 +67,12 @@ public:
 
 private:
 
-	// Load config file
-	// NOTE: It receives config document
 	pugi::xml_node LoadConfig(pugi::xml_document&) const;
 
-	// Call modules before each loop iteration
 	void PrepareUpdate();
-
-	// Call modules before each loop iteration
 	void FinishUpdate();
-
-	// Call modules before each loop iteration
 	bool PreUpdate();
-
-	// Call modules on each loop iteration
 	bool DoUpdate();
-
-	// Call modules after each loop iteration
 	bool PostUpdate();
 
 	// Load / Save
@@ -106,7 +98,7 @@ public:
 	Physics* physics;
 	Player* player;
 
-	float dt;
+	float dt = 0.0f;
 
 
 private:
@@ -118,21 +110,22 @@ private:
 
 	List<Module *> modules;
 
-	// L01: DONE 2: Create new variables from pugui namespace
-	// NOTE: Redesigned LoadConfig() to avoid storing this variables
-	//pugi::xml_document configFile;
-	//pugi::xml_node config;
-	//pugi::xml_node configApp;
-
 	pugi::xml_document gameStateFile;
 
 	uint frames;
 	mutable bool saveGameRequested;
 	bool loadGameRequested;
+
+	PerfTimer ptimer;
+	uint64 frameCount = 0;
+
+	Timer startupTime;
+	Timer frameTime;
+	Timer lastFrameTime;
+	uint32 lastSecFrameCount = 0;
+	uint32 prevLastSecFrameCount = 0;
 };
 
 extern App* app;
-
-
 
 #endif	// __APP_H__

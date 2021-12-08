@@ -21,13 +21,7 @@
     <ClCompile Include="Source\Collisions.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Player.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneWin.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\FadeToBlack.cpp">
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneStart.cpp">
@@ -38,6 +32,18 @@
     </ClCompile>
     <ClCompile Include="Source\SceneGame.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Timer.cpp">
+      <Filter>Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PerfTimer.cpp">
+      <Filter>Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FadeToBlack.cpp">
+      <Filter>Time</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,20 +85,11 @@
     <ClInclude Include="Source\Collisions.h">
       <Filter>Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Player.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneWin.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\FadeToBlack.h">
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneStart.h">
       <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Platform.h">
-      <Filter>Physics</Filter>
     </ClInclude>
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\SceneLose.h">
@@ -100,6 +97,21 @@
     </ClInclude>
     <ClInclude Include="Source\SceneGame.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Timer.h">
+      <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PerfTimer.h">
+      <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Platform.h">
+      <Filter>Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FadeToBlack.h">
+      <Filter>Time</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +129,12 @@
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{2cad778a-d356-48b0-9fee-587f1bbb187e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Time">
+      <UniqueIdentifier>{51c59564-e6f2-4d66-9100-4a409343d1e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Elements">
+      <UniqueIdentifier>{5e8dcc73-6da4-47fd-ae71-28f7a7988d61}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

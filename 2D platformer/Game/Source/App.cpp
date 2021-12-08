@@ -182,9 +182,39 @@ void App::PrepareUpdate()
 // ---------------------------------------------
 void App::FinishUpdate()
 {
+	float fps = 0.0f;
 	// L02: DONE 1: This is a good place to call Load / Save methods
 	if (loadGameRequested == true) LoadGame();
 	if (saveGameRequested == true) SaveGame();
+
+	// frame control
+
+	frameCount++;
+
+	if (app->render->vsync == true)
+		while (lastFrameTime.Read() < (1000 / 60)) { }
+
+	dt = lastFrameTime.Read();
+	lastFrameTime.Start();
+
+	fps = 1000 / dt;
+	float averageFps = float(frameCount) / startupTime.ReadSec();
+	uint32 lastFrameMs = frameTime.Read();
+
+	static char title[256];
+
+	if (app->render->vsync == true)
+		sprintf_s(title, 256, "FPS: %.2f  Av.FPS: %.2f  Last Frame Ms: %02u  Vsync: on",
+			fps, averageFps, lastFrameMs);
+	else
+		sprintf_s(title, 256, "FPS: %.2f  Av.FPS: %.2f  Last Frame Ms: %02u  Vsync: off",
+			fps, averageFps, lastFrameMs);
+
+	SString newTitle = title;
+
+	app->win->SetTitle(newTitle.GetString());
+
+	
 }
 
 // Call modules before each loop iteration

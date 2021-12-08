@@ -74,7 +74,7 @@ bool SceneStart::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
 
 	SString Start("I see the light");
-	app->win->SetTitle(Start.GetString());
+	//app->win->SetTitle(Start.GetString());
 
 	// Draw map -- se tiene q cambiar al fondo bonito q hara sofia hehe
 	/*app->map->Draw();

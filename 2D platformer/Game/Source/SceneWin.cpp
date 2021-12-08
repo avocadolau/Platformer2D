@@ -72,7 +72,7 @@ bool SceneWin::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
 
 	SString title("Win");
-	app->win->SetTitle(title.GetString());
+	//app->win->SetTitle(title.GetString());
 	return true;
 }
 

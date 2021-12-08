@@ -91,7 +91,7 @@ bool SceneGame::Update(float dt)
 	// L03: DONE 7: Set the window title with map/tileset info
 	SString title("I see the light");
 
-	app->win->SetTitle(title.GetString());
+	//app->win->SetTitle(title.GetString());
 
 	return true;
 }
