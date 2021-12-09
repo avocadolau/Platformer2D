@@ -91,6 +91,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Collider.cpp" />
     <ClCompile Include="Source\Collisions.cpp" />
+    <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\FadeToBlack.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\App.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="Source\Map.cpp" />
     <ClCompile Include="Source\PerfTimer.cpp" />
     <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\SceneElements.cpp" />
     <ClCompile Include="Source\SceneGame.cpp" />
     <ClCompile Include="Source\Render.cpp" />
     <ClCompile Include="Source\SceneLose.cpp" />
@@ -110,11 +112,13 @@
     <ClInclude Include="Source\Animation.h" />
     <ClInclude Include="Source\Collider.h" />
     <ClInclude Include="Source\Collisions.h" />
+    <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\FadeToBlack.h" />
     <ClInclude Include="Source\Map.h" />
     <ClInclude Include="Source\PerfTimer.h" />
     <ClInclude Include="Source\Platform.h" />
     <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\SceneElements.h" />
     <ClInclude Include="Source\SceneGame.h" />
     <ClInclude Include="Source\Audio.h" />
     <ClInclude Include="Source\Input.h" />

@@ -15,7 +15,7 @@
 
 #include "SDL/include/SDL_Rect.h"
 
-#define FALLING_TIME 15
+#define FALLING_TIME 333
 
 struct Platform
 {
@@ -40,11 +40,12 @@ struct Platform
 		}
 		if (fall == true)
 		{
-			if (timeToFall > 0)timeToFall--;
+			if (timeToFall > 0)timeToFall -= dt;
 			else
 			{
 				col->type = Collider::Type::NONE;
-				vel += app->player->gravity * dt;
+				//vel += app->player->gravity * dt;
+				vel = app->player->maxVel.y;
 				if (vel > app->player->maxVel.y) vel = app->player->maxVel.y;
 				pos.y += vel * dt;
 				col->rect.y += vel * dt;

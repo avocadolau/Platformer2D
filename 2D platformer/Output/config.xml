@@ -24,7 +24,7 @@
 	</audio>   
 	
     <player>
-		<physics maxVelX="0.05f" maxVelY="0.2f" gravity="0.00015f"/>
+		<physics maxVelX="0.18f" maxVelY="0.72f" gravity="0.0017f"/>
 		<dimensions x="35" y="64"/>
 		<animations speed="0.15" path="Assets/Textures/playerSprites.png">
 			<idle width="35" height="64" sprites="20"/>
@@ -34,7 +34,7 @@
 		</animations>
 	</player>
 
-	<fade time="6000"/>
+	<fade time="2000"/>
 
 	<start img="Assets/Textures/start.png"/>
 

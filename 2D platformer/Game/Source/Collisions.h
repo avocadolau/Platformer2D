@@ -28,7 +28,6 @@ public:
 public:
 
 	List<Collider*> collidersList;
-	Collider* colliders[MAX_COLLIDERS] = { nullptr };
 	bool matrix[Collider::Type::MAX][Collider::Type::MAX];
 	bool debug = false;
 

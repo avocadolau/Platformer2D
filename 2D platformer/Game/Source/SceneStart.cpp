@@ -73,6 +73,9 @@ bool SceneStart::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
 
+	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) app->cap30fps = !app->cap30fps;
+
+
 	SString Start("I see the light");
 	//app->win->SetTitle(Start.GetString());
 

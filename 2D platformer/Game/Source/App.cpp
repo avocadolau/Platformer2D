@@ -9,6 +9,7 @@
 #include "SceneWin.h"
 #include "SceneLose.h"
 #include "FadeToBlack.h"
+#include "SceneElements.h"
 #include "Map.h"
 #include "Collisions.h"
 #include "Player.h"
@@ -33,6 +34,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneGame = new SceneGame();
 	sceneWin = new SceneWin();
 	sceneLose = new SceneLose();
+	elements = new SceneElements();
 	fade = new FadeToBlack();
 	map1 = new Map();
 	map2 = new Map();
@@ -52,8 +54,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneGame);
 	AddModule(sceneWin);
 	AddModule(sceneLose);
-	AddModule(collisions);
 	AddModule(player);
+	AddModule(elements);
+	AddModule(collisions);
 	AddModule(fade);
 
 	// Render last to swap buffer
@@ -190,9 +193,10 @@ void App::FinishUpdate()
 	// frame control
 
 	frameCount++;
-
-	if (app->render->vsync == true)
-		while (lastFrameTime.Read() < (1000 / 60)) { }
+	if (cap30fps==true)
+		while (lastFrameTime.Read() < (1000 / 30)) {}
+	else if (app->render->vsync == true)
+		while (lastFrameTime.Read() < (1000 / 60)) {}
 
 	dt = lastFrameTime.Read();
 	lastFrameTime.Start();

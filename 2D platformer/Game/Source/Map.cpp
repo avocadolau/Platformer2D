@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "SceneGame.h"
 #include "Platform.h"
+#include "SceneElements.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -474,7 +475,7 @@ bool Map::LoadCollisions()
 	return true;
 }
 
-bool Map::LoadFallingPlatforms()
+bool Map::LoadElements()
 {
 	ListItem<MapLayer*>* mapLayerItem;
 	mapLayerItem = mapData.layers.start;
@@ -491,7 +492,7 @@ bool Map::LoadFallingPlatforms()
 					iPoint p = MapToWorld(x - 1, y);
 					Platform* newPlatform = new Platform(p);
 					newPlatform->col->listeners[0] = app->sceneGame;
-					app->sceneGame->platforms.add(newPlatform);
+					app->elements->platforms.add(newPlatform);
 					
 				}
 			}

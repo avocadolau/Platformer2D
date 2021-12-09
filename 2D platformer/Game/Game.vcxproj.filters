@@ -45,6 +45,12 @@
     <ClCompile Include="Source\FadeToBlack.cpp">
       <Filter>Time</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneElements.cpp">
+      <Filter>Elements</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy.cpp">
+      <Filter>Elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -112,6 +118,12 @@
     </ClInclude>
     <ClInclude Include="Source\FadeToBlack.h">
       <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneElements.h">
+      <Filter>Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy.h">
+      <Filter>Elements</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

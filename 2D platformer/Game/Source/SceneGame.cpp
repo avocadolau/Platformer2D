@@ -10,6 +10,7 @@
 #include "Collider.h"
 #include "Map.h"
 #include "Player.h"
+#include "SceneElements.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -43,7 +44,6 @@ bool SceneGame::Start()
 	app->map1->Load("level1.tmx");
 	app->map2->Load("level2.tmx");
 	app->player->active = true;
-	platformImg = app->tex->Load(platformPath.GetString());
 	background = app->tex->Load(backgroundPath.GetString());
 
 	return true;
@@ -78,14 +78,7 @@ bool SceneGame::Update(float dt)
 	app->render->DrawRectangle({ -win.x,0,win.x ,win.y + map.y }, 0, 0, 0, 255, true, true);
 	app->render->DrawRectangle({ map.x,-win.y,win.x,win.y + map.y }, 0, 0, 0, 255, true, true);
 	
-	ListItem<Platform*>* item = platforms.start;
-	while (item != NULL)
-	{
-		item->data->Update(dt);
-		app->render->DrawTexture(platformImg, item->data->pos.x, item->data->pos.y, NULL);
-
-		item = item->next;
-	}
+	
 
 
 	// L03: DONE 7: Set the window title with map/tileset info
@@ -119,6 +112,7 @@ bool SceneGame::PostUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->LoadGameRequest();
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->SaveGameRequest();
 
+	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) app->cap30fps = !app->cap30fps;
 
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
@@ -138,7 +132,6 @@ bool SceneGame::CreateCollisions()
 // Called before quitting
 bool SceneGame::CleanUp()
 {
-	platforms.clear();
 
 	
 
@@ -152,9 +145,8 @@ bool SceneGame::ChangeMap()
 
 	// clear scene colliders and platforms
 
+	app->elements->CleanUp();
 	app->collisions->collidersList.clear();
-	platforms.clear();
-
 
 	if (app->player->level == 1) currentMap = app->map1;
 	if (app->player->level == 2) currentMap = app->map2;
@@ -163,7 +155,7 @@ bool SceneGame::ChangeMap()
 
 	if (app->GetLoadGameRequested() == false)currentMap->LoadPositions();
 	currentMap->LoadCollisions();
-	currentMap->LoadFallingPlatforms();
+	currentMap->LoadElements();
 
 	borders->listeners[0] = this;
 	winCol->listeners[0] = this;

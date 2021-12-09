@@ -140,7 +140,7 @@ public:
 	iPoint WorldToMap(int x, int y) const;
 
 	bool LoadCollisions();
-	bool LoadFallingPlatforms();
+	bool LoadElements();
 	bool LoadPositions();
 
 private:

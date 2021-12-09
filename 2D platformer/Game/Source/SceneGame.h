@@ -26,8 +26,7 @@ public:
 	bool CleanUp();
 
 public:
-	List<Platform*> platforms;
-	SDL_Texture* platformImg;
+
 	SDL_Texture* background;
 
 	Collider* winCol;

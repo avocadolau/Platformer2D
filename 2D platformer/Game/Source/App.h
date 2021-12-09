@@ -18,6 +18,7 @@ class Input;
 class Render;
 class Textures;
 class Audio;
+class SceneElements;
 class SceneStart;
 class SceneGame;
 class SceneWin;
@@ -92,6 +93,7 @@ public:
 	SceneWin* sceneWin;
 	SceneLose* sceneLose;
 	FadeToBlack* fade;
+	SceneElements* elements;
 	Map* map1;
 	Map* map2;
 	Collisions* collisions;
@@ -99,7 +101,7 @@ public:
 	Player* player;
 
 	float dt = 0.0f;
-
+	bool cap30fps = false;
 
 private:
 

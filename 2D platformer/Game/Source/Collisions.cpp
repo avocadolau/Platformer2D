@@ -11,9 +11,6 @@ Collisions::Collisions() :Module()
 {
 	name.Create("collisions");
 
-	for (uint i = 0; i < MAX_COLLIDERS; ++i)
-		colliders[i] = nullptr;
-
 	matrix[Collider::Type::BORDER][Collider::Type::BORDER] = false;
 	matrix[Collider::Type::BORDER][Collider::Type::GROUND] = false;
 	matrix[Collider::Type::BORDER][Collider::Type::PLAYER] = true;
@@ -65,36 +62,14 @@ bool Collisions::Start()
 
 bool Collisions::PreUpdate()
 {
-	//Collider* c1;
-	//Collider* c2;
 
-	//for (uint i = 0; i < MAX_COLLIDERS; ++i)
-	//{
-	//	// skip empty colliders
-	//	if (colliders[i] == nullptr)
-	//		continue;
+	return true;
+}
 
-	//	c1 = colliders[i];
-
-	//	// avoid checking collisions already checked
-	//	for (uint k = i + 1; k < MAX_COLLIDERS; ++k)
-	//	{
-	//		// skip empty colliders
-	//		if (colliders[k] == nullptr)
-	//			continue;
-
-	//		c2 = colliders[k];
-
-	//		if (matrix[c1->type][c2->type] && c1->Intersects(c2->rect))
-	//		{
-	//			for (uint i = 0; i < MAX_LISTENERS; ++i)
-	//				if (c1->listeners[i] != nullptr) c1->listeners[i]->OnCollision(c1, c2);
-
-	//			for (uint i = 0; i < MAX_LISTENERS; ++i)
-	//				if (c2->listeners[i] != nullptr) c2->listeners[i]->OnCollision(c2, c1);
-	//		}
-	//	}
-	//}
+bool Collisions::Update(float dt)
+{
+	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
+		debug = !debug;
 
 	if (collidersList.start == NULL) return true;
 
@@ -108,26 +83,19 @@ bool Collisions::PreUpdate()
 
 		while (c2 != NULL)
 		{
-			if (matrix[c1->data->type][c2->data->type] && c1->data->Intersects(c2->data->rect))
-			{
-				for (uint i = 0; i < MAX_LISTENERS; ++i)
-					if (c1->data->listeners[i] != nullptr) c1->data->listeners[i]->OnCollision(c1->data, c2->data);
+			if (matrix[c1->data->type][c2->data->type])
+				if (c1->data->Intersects(c2->data->rect))
+				{
+					for (uint i = 0; i < MAX_LISTENERS; ++i)
+						if (c1->data->listeners[i] != nullptr) c1->data->listeners[i]->OnCollision(c1->data, c2->data);
 
-				for (uint i = 0; i < MAX_LISTENERS; ++i)
-					if (c2->data->listeners[i] != nullptr) c2->data->listeners[i]->OnCollision(c2->data, c1->data);
-			}
+					for (uint i = 0; i < MAX_LISTENERS; ++i)
+						if (c2->data->listeners[i] != nullptr) c2->data->listeners[i]->OnCollision(c2->data, c1->data);
+				}
 			c2 = c2->next;
 		}
 		c1 = c1->next;
 	}
-
-	return true;
-}
-
-bool Collisions::Update(float dt)
-{
-	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
-		debug = !debug;
 
 	return true;
 }
@@ -143,14 +111,6 @@ bool Collisions::PostUpdate()
 
 bool Collisions::CleanUp()
 {
-	for (uint i = 0; i < MAX_COLLIDERS; ++i)
-	{
-		if (colliders[i] != nullptr)
-		{
-			delete colliders[i];
-			colliders[i] = nullptr;
-		}
-	}
 
 	collidersList.clear();
 
