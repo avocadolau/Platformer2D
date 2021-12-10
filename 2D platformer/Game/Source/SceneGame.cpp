@@ -11,6 +11,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "SceneElements.h"
+#include "PathFinding.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -30,7 +31,6 @@ bool SceneGame::Awake(pugi::xml_node& config)
 	LOG("Loading Scene");
 	bool ret = true;
 	
-	platformPath = config.attribute("platformPath").as_string();
 	backgroundPath = config.attribute("backgroundPath").as_string();
 	parallax = config.attribute("parallax").as_float();
 
@@ -85,6 +85,17 @@ bool SceneGame::Update(float dt)
 	SString title("I see the light");
 
 	//app->win->SetTitle(title.GetString());
+
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		int mouseX, mouseY;
+		app->input->GetMousePosition(mouseX, mouseY);
+		iPoint origin = currentMap->WorldToMap(mouseX - app->render->camera.x, mouseY - app->render->camera.y);
+		iPoint destination = currentMap->WorldToMap(app->player->pos.x - app->render->camera.x, app->player->pos.y - app->render->camera.y);
+
+		app->pathfinding->CreatePath(origin, destination, false);
+	}
+	
 
 	return true;
 }
@@ -142,8 +153,6 @@ bool SceneGame::CleanUp()
 
 bool SceneGame::ChangeMap()
 {
-
-	// clear scene colliders and platforms
 
 	app->elements->CleanUp();
 	app->collisions->collidersList.clear();

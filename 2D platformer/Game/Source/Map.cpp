@@ -212,6 +212,10 @@ bool Map::CleanUp()
 	}
 	mapData.layers.clear();
 
+
+	if (walkMap != NULL) RELEASE_ARRAY(walkMap);
+	if (walkMap != NULL) RELEASE_ARRAY(flyMap);
+
     return true;
 }
 
@@ -248,6 +252,12 @@ bool Map::Load(const char* filename)
 	if (ret == true)
 	{
 		ret = LoadAllLayers(mapFile.child("map"));
+	}
+
+	if (ret==true)
+	{
+		ret = CreateWalkabilityMap(&walkMap);
+		ret = CreateFlyabilityMap(&flyMap);
 	}
 
     if(ret == true)
@@ -510,8 +520,89 @@ bool Map::LoadPositions()
 	app->player->pos.y = mapData.properties.GetProperty("playery");
 
 
-	
-
-
 	return true;
+}
+
+// L12b: Create walkability map for pathfinding
+bool Map::CreateWalkabilityMap(uchar** buffer) const
+{
+	bool ret = false;
+	ListItem<MapLayer*>* item;
+	item = mapData.layers.start;
+
+	for (item = mapData.layers.start; item != NULL; item = item->next)
+	{
+		MapLayer* layer = item->data;
+
+		if (layer->properties.GetProperty("Navigation", 0) == 3)
+			continue;
+
+		uchar* map = new uchar[layer->width * layer->height];
+		memset(map, 1, layer->width * layer->height);
+
+		for (int y = 0; y < mapData.height; ++y)
+		{
+			for (int x = 0; x < mapData.width; ++x)
+			{
+				int i = (y * layer->width) + x;
+
+				int tileId = layer->Get(x, y);
+				TileSet* tileset = (tileId > 0) ? GetTilesetFromTileId(tileId) : NULL;
+
+				if (tileset != NULL)
+				{
+					map[i] = (tileId - tileset->firstgid) > 0 ? 0 : 1;
+				}
+			}
+		}
+
+		*buffer = map;
+		ret = true;
+
+		break;
+	}
+
+	return ret;
+}
+
+bool Map::CreateFlyabilityMap(uchar** buffer) const
+{
+	bool ret = false;
+	ListItem<MapLayer*>* mapLayerItem;
+	mapLayerItem = mapData.layers.start;
+
+	while (mapLayerItem != NULL) {
+
+		if (mapLayerItem->data->properties.GetProperty("Navigation",0) == 4) {
+			
+			uchar* map = new uchar[mapLayerItem->data->width * mapLayerItem->data->height];
+			memset(map, 1, mapLayerItem->data->width * mapLayerItem->data->height);
+
+			for (int x = 0; x < mapLayerItem->data->width; x++)
+			{
+				for (int y = 0; y < mapLayerItem->data->height; y++)
+				{
+					if (mapLayerItem->data->Get(x, y) == NULL)continue;
+					else
+					{
+						map[(y * mapLayerItem->data->width) + x] = 0;
+					}
+
+					int tileId = mapLayerItem->data->Get(x, y);
+					TileSet* tileset = (tileId > 0) ? GetTilesetFromTileId(tileId) : NULL;
+					if (tileset == NULL)
+						map[(y * mapLayerItem->data->width) + x] = 1;
+			
+				}
+			}
+			
+			
+			*buffer = map;
+		}
+
+		mapLayerItem = mapLayerItem->next;
+	}
+
+
+	return ret;
 }

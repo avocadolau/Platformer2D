@@ -69,7 +69,7 @@ bool Collisions::PreUpdate()
 bool Collisions::Update(float dt)
 {
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
-		debug = !debug;
+		app->debug = !app->debug;
 
 	if (collidersList.start == NULL) return true;
 
@@ -102,8 +102,8 @@ bool Collisions::Update(float dt)
 
 bool Collisions::PostUpdate()
 {
-	if (app->sceneGame->active == false) debug = false;
-	if (debug)
+	if (app->sceneGame->active == false) app->debug = false;
+	if (app->debug)
 		DebugDraw();
 
 	return true;

@@ -39,7 +39,6 @@ private:
 
 	bool mapLoaded = false;
 	SDL_Texture* img;
-	SString platformPath;
 	SString backgroundPath;
 
 	float parallax;

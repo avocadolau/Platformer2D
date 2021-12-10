@@ -51,6 +51,7 @@
     <ClCompile Include="Source\Enemy.cpp">
       <Filter>Elements</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PathFinding.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -124,6 +125,13 @@
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
       <Filter>Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PathFinding.h" />
+    <ClInclude Include="Source\Queue.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PQueue.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

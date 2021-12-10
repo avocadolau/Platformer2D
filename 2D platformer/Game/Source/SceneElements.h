@@ -21,6 +21,8 @@ public:
 
 	bool CleanUp();
 
+	void DrawPaths();
+
 	void AdFlyingEnemy();
 	void AdWalkingEnemy();
 	void AddPickUp();

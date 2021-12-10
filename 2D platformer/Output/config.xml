@@ -23,7 +23,7 @@
 		<fx jump="Assets/audio/fx/jumpfx.wav" win="Assets/audio/fx/winfx.wav" lose="Assets/audio/fx/losefx.wav"/>
 	</audio>   
 	
-    <player>
+  <player>
 		<physics maxVelX="0.18f" maxVelY="0.72f" gravity="0.0017f"/>
 		<dimensions x="35" y="64"/>
 		<animations speed="0.15" path="Assets/Textures/playerSprites.png">
@@ -34,11 +34,15 @@
 		</animations>
 	</player>
 
+  <elements>
+    <platform platformPath="Assets/Textures/platform.png"/>
+  </elements>
+
 	<fade time="2000"/>
 
 	<start img="Assets/Textures/start.png"/>
 
-	<game platformPath="Assets/Textures/platform.png" backgroundPath="Assets/Textures/background.png"
+	<game backgroundPath="Assets/Textures/background.png"
 			parallax="0.45"/>
 
 	<win img="Assets/Textures/win.png"/>

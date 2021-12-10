@@ -11,6 +11,7 @@
 #include "FadeToBlack.h"
 #include "SceneElements.h"
 #include "Map.h"
+#include "PathFinding.h"
 #include "Collisions.h"
 #include "Player.h"
 
@@ -38,6 +39,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	fade = new FadeToBlack();
 	map1 = new Map();
 	map2 = new Map();
+	pathfinding = new PathFinding();
 	collisions = new Collisions();
 	player = new Player();
 

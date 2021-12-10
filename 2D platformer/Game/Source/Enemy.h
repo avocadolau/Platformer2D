@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Collider.h"
 #include "Point.h"
+#include "DynArray.h"
 
 class Enemy : public Module
 {
@@ -30,6 +31,8 @@ public:
 	Collider* up;
 	Collider* down;
 	Collider* detector;
+
+	DynArray<iPoint> path;
 };
 
 #endif // !__ENEMY_H__

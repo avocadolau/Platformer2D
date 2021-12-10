@@ -1,8 +1,16 @@
 #include "Log.h"
 
+#include "App.h"
+#include "Map.h"
+#include "Render.h"
 #include "SceneElements.h"
+#include "PathFinding.h"
+#include "DynArray.h"
+#include "Point.h"
+#include "Player.h"
+#include "Render.h"
 
-
+#include "SDL/include/SDL_Rect.h"
 SceneElements::SceneElements() :Module()
 {
 	name.Create("elements");
@@ -20,7 +28,7 @@ bool SceneElements::Awake(pugi::xml_node& config)
 	LOG("Loading Scene Elements");
 	bool ret = true;
 
-	platformPath = config.attribute("platformPath").as_string();
+	platformPath = config.child("platform").attribute("platformPath").as_string();
 
 	return ret;
 }
@@ -58,6 +66,8 @@ bool SceneElements::Update(float dt)
 bool SceneElements::PostUpdate()
 {
 	
+	if (app->debug == true) DrawPaths();
+
 	return true;
 }
 
@@ -69,3 +79,7 @@ bool SceneElements::CleanUp()
 	return true;
 }
 
+void SceneElements::DrawPaths()
+{
+	
+}

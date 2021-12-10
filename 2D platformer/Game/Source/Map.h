@@ -6,7 +6,7 @@
 #include "Point.h"
 
 #include "PugiXml\src\pugixml.hpp"
-
+#include "SDL_image/include/SDL_image.h"
 // L03: DONE 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
 struct TileSet
@@ -139,6 +139,9 @@ public:
 	// L05: DONE 2: Add orthographic world to map coordinates
 	iPoint WorldToMap(int x, int y) const;
 
+	bool CreateWalkabilityMap(uchar** buffer) const;
+	bool CreateFlyabilityMap(uchar** buffer) const;
+
 	bool LoadCollisions();
 	bool LoadElements();
 	bool LoadPositions();
@@ -165,6 +168,8 @@ public:
 
     // L03: DONE 1: Add your struct for map info
 	MapData mapData;
+	uchar* walkMap;
+	uchar* flyMap;
 	//MapData mapData2;
 
 private:

@@ -29,6 +29,7 @@ class Map;
 class Collisions;
 class Physics;
 class Player;
+class PathFinding;
 
 class App
 {
@@ -96,12 +97,14 @@ public:
 	SceneElements* elements;
 	Map* map1;
 	Map* map2;
+	PathFinding* pathfinding;
 	Collisions* collisions;
 	Physics* physics;
 	Player* player;
 
 	float dt = 0.0f;
 	bool cap30fps = false;
+	bool debug = false;
 
 private:
 
