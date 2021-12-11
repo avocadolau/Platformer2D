@@ -162,10 +162,13 @@ void Collisions::DebugDraw()
 		case Collider::Type::NONE: // white
 			app->render->DrawRectangle(col->data->rect, 255, 255, 255, alpha, true, true);
 			break;
-		case Collider::Type::LISTENER: // blue
-			app->render->DrawRectangle(col->data->rect, 0, 0, 255, alpha, true, true);
+		case Collider::Type::DETECTOR: // CLEAR BLUE
+			app->render->DrawRectangle(col->data->rect, 119, 224, 231, alpha, true, true);
 			break;
-		case Collider::Type::GROUND: // yellow
+		case Collider::Type::GROUND: // RED
+			app->render->DrawRectangle(col->data->rect, 255, 0, 0, alpha, true, true);
+			break;
+		case Collider::Type::ENEMY: // RED
 			app->render->DrawRectangle(col->data->rect, 255, 0, 0, alpha, true, true);
 			break;
 		case Collider::Type::PLAYER: // purple

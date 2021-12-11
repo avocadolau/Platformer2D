@@ -143,7 +143,7 @@ public:
 	bool CreateFlyabilityMap(uchar** buffer) const;
 
 	bool LoadCollisions();
-	bool LoadElements();
+	bool LoadPlatforms();
 	bool LoadPositions();
 
 private:

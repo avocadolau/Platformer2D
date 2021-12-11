@@ -8,8 +8,6 @@
 #include "Player.h"
 #include "SceneGame.h"
 #include "Platform.h"
-#include "SceneElements.h"
-
 #include "Defs.h"
 #include "Log.h"
 
@@ -64,8 +62,8 @@ void Map::Draw()
 	{
 		mapLayerItem = mapData.layers.start;
 
-		while (mapLayerItem != NULL) {
-
+		while (mapLayerItem != NULL)
+		{
 			if (mapLayerItem->data->properties.GetProperty("Draw") == i) {
 
 				for (int x = 0; x < mapLayerItem->data->width; x++)
@@ -252,13 +250,10 @@ bool Map::Load(const char* filename)
 	if (ret == true)
 	{
 		ret = LoadAllLayers(mapFile.child("map"));
+		CreateWalkabilityMap(&walkMap);
+		CreateFlyabilityMap(&flyMap);
 	}
 
-	if (ret==true)
-	{
-		ret = CreateWalkabilityMap(&walkMap);
-		ret = CreateFlyabilityMap(&flyMap);
-	}
 
     if(ret == true)
     {
@@ -485,7 +480,7 @@ bool Map::LoadCollisions()
 	return true;
 }
 
-bool Map::LoadElements()
+bool Map::LoadPlatforms()
 {
 	ListItem<MapLayer*>* mapLayerItem;
 	mapLayerItem = mapData.layers.start;
@@ -502,11 +497,12 @@ bool Map::LoadElements()
 					iPoint p = MapToWorld(x - 1, y);
 					Platform* newPlatform = new Platform(p);
 					newPlatform->col->listeners[0] = app->sceneGame;
-					app->elements->platforms.add(newPlatform);
+					app->sceneGame->platforms.add(newPlatform);
 					
 				}
 			}
 		}
+
 
 		mapLayerItem = mapLayerItem->next;
 	}
@@ -527,40 +523,32 @@ bool Map::LoadPositions()
 bool Map::CreateWalkabilityMap(uchar** buffer) const
 {
 	bool ret = false;
-	ListItem<MapLayer*>* item;
-	item = mapData.layers.start;
+	ListItem<MapLayer*>* mapLayerItem;
+	mapLayerItem = mapData.layers.start;
 
-	for (item = mapData.layers.start; item != NULL; item = item->next)
-	{
-		MapLayer* layer = item->data;
+	while (mapLayerItem != NULL) {
 
-		if (layer->properties.GetProperty("Navigation", 0) == 3)
-			continue;
+		if (mapLayerItem->data->properties.GetProperty("Navigation", 0) == 3) {
 
-		uchar* map = new uchar[layer->width * layer->height];
-		memset(map, 1, layer->width * layer->height);
+			uchar* map = new uchar[mapLayerItem->data->width * mapLayerItem->data->height];
+			memset(map, 0, mapLayerItem->data->width * mapLayerItem->data->height);
 
-		for (int y = 0; y < mapData.height; ++y)
-		{
-			for (int x = 0; x < mapData.width; ++x)
+			for (int x = 0; x < mapLayerItem->data->width; x++)
 			{
-				int i = (y * layer->width) + x;
-
-				int tileId = layer->Get(x, y);
-				TileSet* tileset = (tileId > 0) ? GetTilesetFromTileId(tileId) : NULL;
-
-				if (tileset != NULL)
+				for (int y = 0; y < mapLayerItem->data->height; y++)
 				{
-					map[i] = (tileId - tileset->firstgid) > 0 ? 0 : 1;
+					if (mapLayerItem->data->Get(x, y) == NULL)continue;
+					map[(y * mapLayerItem->data->width) + x] = 1;
 				}
 			}
+
+			*buffer = map;
+			ret = true;
 		}
 
-		*buffer = map;
-		ret = true;
+		mapLayerItem = mapLayerItem->next;
+	} 
 
-		break;
-	}
 
 	return ret;
 }
@@ -576,28 +564,19 @@ bool Map::CreateFlyabilityMap(uchar** buffer) const
 		if (mapLayerItem->data->properties.GetProperty("Navigation",0) == 4) {
 			
 			uchar* map = new uchar[mapLayerItem->data->width * mapLayerItem->data->height];
-			memset(map, 1, mapLayerItem->data->width * mapLayerItem->data->height);
+			memset(map, 0, mapLayerItem->data->width * mapLayerItem->data->height);
 
 			for (int x = 0; x < mapLayerItem->data->width; x++)
 			{
 				for (int y = 0; y < mapLayerItem->data->height; y++)
 				{
 					if (mapLayerItem->data->Get(x, y) == NULL)continue;
-					else
-					{
-						map[(y * mapLayerItem->data->width) + x] = 0;
-					}
-
-					int tileId = mapLayerItem->data->Get(x, y);
-					TileSet* tileset = (tileId > 0) ? GetTilesetFromTileId(tileId) : NULL;
-					if (tileset == NULL)
-						map[(y * mapLayerItem->data->width) + x] = 1;
-			
+					map[(y * mapLayerItem->data->width) + x] = 1;
 				}
 			}
 			
-			
 			*buffer = map;
+			ret = true;
 		}
 
 		mapLayerItem = mapLayerItem->next;

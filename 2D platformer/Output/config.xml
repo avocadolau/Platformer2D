@@ -34,16 +34,18 @@
 		</animations>
 	</player>
 
-  <elements>
-    <platform platformPath="Assets/Textures/platform.png"/>
-  </elements>
+  
 
 	<fade time="2000"/>
 
 	<start img="Assets/Textures/start.png"/>
 
 	<game backgroundPath="Assets/Textures/background.png"
-			parallax="0.45"/>
+			parallax="0.45">
+		<elements>
+			<platform platformPath="Assets/Textures/platform.png"/>
+		</elements>
+	</game>
 
 	<win img="Assets/Textures/win.png"/>
 

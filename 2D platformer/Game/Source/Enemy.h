@@ -5,10 +5,27 @@
 #include "Collider.h"
 #include "Point.h"
 #include "DynArray.h"
+#include "Animation.h"
+
+#include "SDL_image/include/SDL_image.h"
 
 class Enemy : public Module
 {
-	Enemy();
+public:
+
+	enum Type
+	{
+		FLY,
+		WALK
+	};
+
+	enum State
+	{
+		ALIVE,
+		DEATH
+	};
+
+	Enemy(iPoint dim_, SDL_Rect pDetector, iPoint lim1, iPoint lim2, Type type);
 	~Enemy();
 
 	bool Awake();
@@ -17,22 +34,45 @@ class Enemy : public Module
 	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
+
+
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&) const;
+	bool DrawPath();
 
+	void SetPosition(iPoint pos);
 	void OnCollision(Collider* c1, Collider* c2);
 
-public:
+	void Fly(float dt);
+	void Walk(float dt);
 
-	iPoint pos;
+public:
+	int tileDim;
+
+	fPoint pos;
 	iPoint dim;
+	iPoint coord;
 
 	Collider* col;
 	Collider* up;
 	Collider* down;
 	Collider* detector;
 
-	DynArray<iPoint> path;
+	Animation idleAnim, death;
+	Animation* currentAnim;
+
+	// MOVEMENT LIMITS
+	iPoint lim1;
+	iPoint lim2;
+	iPoint lastLim;
+
+	State state = ALIVE;
+	Type type;
+
+	const DynArray<iPoint>* path;
+	//DynArray<iPoint> path;
+	bool pNear = false;
 };
 
-#endif // !__ENEMY_H__
+
+#endif

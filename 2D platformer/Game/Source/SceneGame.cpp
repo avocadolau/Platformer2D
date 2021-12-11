@@ -1,4 +1,5 @@
 #include "App.h"
+#include "Module.h"
 #include "Input.h"
 #include "Textures.h"
 #include "Audio.h"
@@ -10,7 +11,6 @@
 #include "Collider.h"
 #include "Map.h"
 #include "Player.h"
-#include "SceneElements.h"
 #include "PathFinding.h"
 
 #include "Defs.h"
@@ -33,6 +33,8 @@ bool SceneGame::Awake(pugi::xml_node& config)
 	
 	backgroundPath = config.attribute("backgroundPath").as_string();
 	parallax = config.attribute("parallax").as_float();
+	platformPath = config.child("elements").child("platform").attribute("platformPath").as_string();
+
 
 	return ret;
 }
@@ -45,6 +47,7 @@ bool SceneGame::Start()
 	app->map2->Load("level2.tmx");
 	app->player->active = true;
 	background = app->tex->Load(backgroundPath.GetString());
+	platformImg = app->tex->Load(platformPath.GetString());
 
 	return true;
 }
@@ -85,16 +88,8 @@ bool SceneGame::Update(float dt)
 	SString title("I see the light");
 
 	//app->win->SetTitle(title.GetString());
-
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN)
-	{
-		int mouseX, mouseY;
-		app->input->GetMousePosition(mouseX, mouseY);
-		iPoint origin = currentMap->WorldToMap(mouseX - app->render->camera.x, mouseY - app->render->camera.y);
-		iPoint destination = currentMap->WorldToMap(app->player->pos.x - app->render->camera.x, app->player->pos.y - app->render->camera.y);
-
-		app->pathfinding->CreatePath(origin, destination, false);
-	}
+	
+	
 	
 
 	return true;
@@ -153,9 +148,9 @@ bool SceneGame::CleanUp()
 
 bool SceneGame::ChangeMap()
 {
-
-	app->elements->CleanUp();
+	// hay q revisar esto
 	app->collisions->collidersList.clear();
+	platforms.clear();
 
 	if (app->player->level == 1) currentMap = app->map1;
 	if (app->player->level == 2) currentMap = app->map2;
@@ -164,7 +159,7 @@ bool SceneGame::ChangeMap()
 
 	if (app->GetLoadGameRequested() == false)currentMap->LoadPositions();
 	currentMap->LoadCollisions();
-	currentMap->LoadElements();
+	currentMap->LoadPlatforms();
 
 	borders->listeners[0] = this;
 	winCol->listeners[0] = this;

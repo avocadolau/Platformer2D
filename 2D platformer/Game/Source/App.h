@@ -18,7 +18,6 @@ class Input;
 class Render;
 class Textures;
 class Audio;
-class SceneElements;
 class SceneStart;
 class SceneGame;
 class SceneWin;
@@ -94,7 +93,6 @@ public:
 	SceneWin* sceneWin;
 	SceneLose* sceneLose;
 	FadeToBlack* fade;
-	SceneElements* elements;
 	Map* map1;
 	Map* map2;
 	PathFinding* pathfinding;

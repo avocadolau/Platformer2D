@@ -164,6 +164,9 @@ int PathFinding::CreatePath(const iPoint& origin, const iPoint& destination, boo
 	if (walk == true) map = app->sceneGame->currentMap->walkMap;
 	else map = app->sceneGame->currentMap->flyMap;
 
+	height = app->sceneGame->currentMap->mapData.height;
+	width = app->sceneGame->currentMap->mapData.width;
+
 	// L12b: TODO 1: if origin or destination are not walkable, return -1
 	if (IsWalkable(origin) && IsWalkable(destination))
 	{

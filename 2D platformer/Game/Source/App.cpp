@@ -9,7 +9,6 @@
 #include "SceneWin.h"
 #include "SceneLose.h"
 #include "FadeToBlack.h"
-#include "SceneElements.h"
 #include "Map.h"
 #include "PathFinding.h"
 #include "Collisions.h"
@@ -35,7 +34,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	sceneGame = new SceneGame();
 	sceneWin = new SceneWin();
 	sceneLose = new SceneLose();
-	elements = new SceneElements();
 	fade = new FadeToBlack();
 	map1 = new Map();
 	map2 = new Map();
@@ -57,7 +55,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneWin);
 	AddModule(sceneLose);
 	AddModule(player);
-	AddModule(elements);
 	AddModule(collisions);
 	AddModule(fade);
 

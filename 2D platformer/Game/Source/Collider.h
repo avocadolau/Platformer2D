@@ -13,9 +13,10 @@ struct Collider
 	enum Type
 	{
 		NONE,
-		LISTENER,
+		DETECTOR,
 		GROUND,
 		PLAYER,
+		ENEMY,
 		WIN,
 		BORDER,
 		MAX

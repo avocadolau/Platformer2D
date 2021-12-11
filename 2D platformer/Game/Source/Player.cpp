@@ -138,13 +138,13 @@ bool Player::Update(float dt)
 			currentAnim = &jump;
 
 			// horizontal movement
-			if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && left == true) {
+			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && left == true) {
 				pos.x -= vel.x * dt*2;
 				if (currentAnim == &idle) currentAnim = &run;
 				currentAnim->mustFlip = true;
 			}
 
-			if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT && right == true) {
+			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && right == true) {
 				pos.x += vel.x * dt*2;
 				if (currentAnim == &idle) currentAnim = &run;
 				currentAnim->mustFlip = false;
@@ -161,7 +161,6 @@ bool Player::Update(float dt)
 					down = true;
 
 			}
-
 
 			if (jumps > 0)
 				if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
@@ -185,13 +184,13 @@ bool Player::Update(float dt)
 			}
 
 			// horizontal movement
-			if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT && left == true) {
+			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && left == true) {
 				pos.x -= vel.x * dt;
 				if (currentAnim == &idle) currentAnim = &run;
 				currentAnim->mustFlip = true;
 			}
 
-			if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT && right == true) {
+			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && right == true) {
 				pos.x += vel.x * dt;
 				if (currentAnim == &idle) currentAnim = &run;
 				currentAnim->mustFlip = false;
@@ -407,6 +406,9 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 				colRight->rect.x = pos.x + dim.x - 4;
 			}
 		}
+
+		app->render->camera.x = (int)-pos.x + (app->win->GetWidth() / 2);
+		app->render->camera.y = (int)-pos.y + (app->win->GetHeight() / 2);
 	}
 
 	

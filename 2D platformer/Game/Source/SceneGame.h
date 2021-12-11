@@ -3,8 +3,9 @@
 
 #include "Module.h"
 #include "List.h"
-#include "Platform.h"
 #include "Map.h"
+#include "Enemy.h"
+#include "Platform.h"
 
 struct SDL_Texture;
 
@@ -22,7 +23,9 @@ public:
 	bool PostUpdate();
 	
 	bool ChangeMap();
+	
 	bool CreateCollisions();
+
 	bool CleanUp();
 
 public:
@@ -33,13 +36,20 @@ public:
 	Collider* borders;
 
 	Map* currentMap = nullptr;
-
+	
+	List<Platform*> platforms;
+	List<Collider*> groundColliders;
+	List<Enemy*> enemies;
 
 private:
+
+	pugi::xml_node& node;
 
 	bool mapLoaded = false;
 	SDL_Texture* img;
 	SString backgroundPath;
+	SDL_Texture* platformImg;
+	SString platformPath;
 
 	float parallax;
 };
