@@ -94,6 +94,9 @@ bool App::Awake()
 
 	// L01: DONE 3: Load config from XML
 	config = LoadConfig(configFile);
+	
+	map1->name.Create("map1");
+	map2->name.Create("map2");
 
 	if (config.empty() == false)
 	{

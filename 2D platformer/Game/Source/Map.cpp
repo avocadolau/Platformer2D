@@ -15,7 +15,7 @@
 
 Map::Map() : Module(), mapLoaded(false)
 {
-    name.Create("map");
+	name.Create("map");
 }
 
 // Destructor
@@ -44,6 +44,30 @@ bool Map::Awake(pugi::xml_node& config)
     bool ret = true;
 
     folder.Create(config.child("folder").child_value());
+
+	for (pugi::xml_node enemyNode = config.child("enemies").child("enemy"); enemyNode && ret; enemyNode = enemyNode.next_sibling("enemy"))
+	{
+		ret = true;
+
+		EnemyData* newEnemy = new EnemyData();
+
+		newEnemy->id= enemyNode.attribute("id").as_int();
+
+		if (enemyNode.attribute("type").as_string() == "fly") newEnemy->type = Enemy::Type::FLY;
+		if (enemyNode.attribute("type").as_string() == "walk") newEnemy->type = Enemy::Type::WALK;
+
+		newEnemy->dim= { enemyNode.attribute("w").as_int(),enemyNode.attribute("h").as_int() };
+
+		newEnemy->detector= { enemyNode.child("detector").attribute("x").as_int(), enemyNode.child("detector").attribute("y").as_int(),
+							enemyNode.child("detector").attribute("w").as_int(), enemyNode.child("detector").attribute("h").as_int() };
+
+		newEnemy->lim1 = { enemyNode.child("lim1").attribute("x").as_int(),enemyNode.child("lim1").attribute("y").as_int() };
+		newEnemy->lim2 = { enemyNode.child("lim2").attribute("x").as_int(),enemyNode.child("lim2").attribute("y").as_int() };
+
+
+		enemyData.add(newEnemy);
+
+	}
 
     return ret;
 }
@@ -517,6 +541,27 @@ bool Map::LoadPositions()
 
 
 	return true;
+}
+
+bool Map::LoadEnemies()
+{
+	bool ret = false;
+	
+	ListItem<EnemyData*>* item;
+	item = enemyData.start;
+
+	while (item != NULL)
+	{
+		ret = true;
+
+		Enemy* newEnemy = new Enemy(item->data->id, item->data->dim, item->data->detector, item->data->lim1, item->data->lim2, item->data->type);
+		app->sceneGame->enemies.add(newEnemy);
+
+		item = item->next;
+	}
+
+
+	return ret;
 }
 
 // L12b: Create walkability map for pathfinding

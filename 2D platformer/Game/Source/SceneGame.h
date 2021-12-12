@@ -7,14 +7,23 @@
 #include "Enemy.h"
 #include "Platform.h"
 
+#include "SDL_image/include/SDL_image.h"
+
 struct SDL_Texture;
+
+struct EnemyInfo
+{
+	SString spritePath;
+	SDL_Texture* spriteSheet;
+	Animation anim, death;
+};
 
 class SceneGame : public Module
 {
 public:
 
 	SceneGame();
-	virtual ~SceneGame();
+	~SceneGame();
 
 	bool Awake(pugi::xml_node& config);
 	bool Start();
@@ -41,9 +50,11 @@ public:
 	List<Collider*> groundColliders;
 	List<Enemy*> enemies;
 
-private:
+	EnemyInfo flyInfo;
+	EnemyInfo walkInfo;
+	
 
-	pugi::xml_node& node;
+private:
 
 	bool mapLoaded = false;
 	SDL_Texture* img;
@@ -52,6 +63,7 @@ private:
 	SString platformPath;
 
 	float parallax;
+
 };
 
 #endif // __SCENE_H__

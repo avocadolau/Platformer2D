@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "List.h"
 #include "Point.h"
+#include "Enemy.h"
 
 #include "PugiXml\src\pugixml.hpp"
 #include "SDL_image/include/SDL_image.h"
@@ -112,6 +113,16 @@ struct MapData
 	List<MapLayer*> layers;
 };
 
+struct EnemyData
+{
+	int id;
+	Enemy::Type type;
+	iPoint dim;
+	SDL_Rect detector;
+	iPoint lim1;
+	iPoint lim2;
+};
+
 class Map : public Module
 {
 public:
@@ -145,6 +156,7 @@ public:
 	bool LoadCollisions();
 	bool LoadPlatforms();
 	bool LoadPositions();
+	bool LoadEnemies();
 
 private:
 
@@ -170,6 +182,7 @@ public:
 	MapData mapData;
 	uchar* walkMap;
 	uchar* flyMap;
+	List<EnemyData*> enemyData;
 	//MapData mapData2;
 
 private:

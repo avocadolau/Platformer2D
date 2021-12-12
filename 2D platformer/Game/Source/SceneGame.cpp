@@ -1,5 +1,4 @@
 #include "App.h"
-#include "Module.h"
 #include "Input.h"
 #include "Textures.h"
 #include "Audio.h"
@@ -34,7 +33,8 @@ bool SceneGame::Awake(pugi::xml_node& config)
 	backgroundPath = config.attribute("backgroundPath").as_string();
 	parallax = config.attribute("parallax").as_float();
 	platformPath = config.child("elements").child("platform").attribute("platformPath").as_string();
-
+	walkInfo.spritePath = config.child("elements").child("walkEnemy").attribute("path").as_string();
+	flyInfo.spritePath = config.child("elements").child("flyEnemy").attribute("path").as_string();
 
 	return ret;
 }
@@ -48,6 +48,11 @@ bool SceneGame::Start()
 	app->player->active = true;
 	background = app->tex->Load(backgroundPath.GetString());
 	platformImg = app->tex->Load(platformPath.GetString());
+	
+	walkInfo.spriteSheet = app->tex->Load(walkInfo.spritePath.GetString());
+	flyInfo.spriteSheet= app->tex->Load(flyInfo.spritePath.GetString());
+
+	//pues a crear las animaciones
 
 	return true;
 }
@@ -75,6 +80,22 @@ bool SceneGame::Update(float dt)
 
 	iPoint map = currentMap->MapToWorld(currentMap->mapData.width,currentMap->mapData.height);
 
+
+	ListItem<Platform*>* pItem = platforms.start;
+	while (pItem != NULL)
+	{
+		pItem->data->Update(dt);
+		app->render->DrawTexture(platformImg, pItem->data->pos.x, pItem->data->pos.y, NULL);
+
+		pItem = pItem->next;
+	}
+
+	ListItem<Enemy*>* eItem = enemies.start;
+	while (eItem != NULL)
+	{
+		eItem->data->Update(dt);
+		eItem = eItem->next;
+	}
 	
 	app->render->DrawRectangle({ -win.x,-win.y,map.x + win.x,win.y }, 0, 0, 0, 255, true, true);
 	app->render->DrawRectangle({ 0,map.y,map.x + win.x,win.y }, 0, 0, 0, 255, true, true);
@@ -100,6 +121,16 @@ bool SceneGame::PostUpdate()
 {
 	bool ret = true;
 
+
+	ListItem<Enemy*>* eItem = enemies.start;
+	while (eItem != NULL)
+	{
+		eItem->data->PostUpdate();
+		eItem = eItem->next;
+	}
+
+
+
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
 		app->player->level = 1;
@@ -120,10 +151,9 @@ bool SceneGame::PostUpdate()
 
 	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) app->cap30fps = !app->cap30fps;
 
-	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 
-	
 
 	return ret;
 }
@@ -151,6 +181,7 @@ bool SceneGame::ChangeMap()
 	// hay q revisar esto
 	app->collisions->collidersList.clear();
 	platforms.clear();
+	enemies.clear();
 
 	if (app->player->level == 1) currentMap = app->map1;
 	if (app->player->level == 2) currentMap = app->map2;
@@ -160,6 +191,7 @@ bool SceneGame::ChangeMap()
 	if (app->GetLoadGameRequested() == false)currentMap->LoadPositions();
 	currentMap->LoadCollisions();
 	currentMap->LoadPlatforms();
+	currentMap->LoadEnemies();
 
 	borders->listeners[0] = this;
 	winCol->listeners[0] = this;
@@ -168,3 +200,4 @@ bool SceneGame::ChangeMap()
 
 	return true;
 }
+

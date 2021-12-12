@@ -11,17 +11,21 @@
 
 #include "Point.h"
 
-Enemy::Enemy(iPoint dim_ ,SDL_Rect pDetector, iPoint lim1_, iPoint lim2_, Type type_)
+Enemy::Enemy(int id_, iPoint dim_ ,SDL_Rect pDetector, iPoint lim1_, iPoint lim2_, Type type_)
 {
-	name.Create("flyingEnemy");
+	id = id_;
 	active = true;
 	dim = dim_;
 	lim1 = lim1_;
 	lim2 = lim2_;
 	type = type_;
 
-	pos = { (float)lim1.x,(float)lim1.y };
 	tileDim = app->sceneGame->currentMap->mapData.tileHeight;
+
+	iPoint ipos = app->sceneGame->currentMap->MapToWorld((float)lim1.x, (float)lim1.y);
+	ipos.x = ipos.x + tileDim / 2 - dim.x / 2;
+	ipos.y = ipos.y + tileDim / 2 - dim.y / 2;
+	pos = { (float)ipos.x,(float)ipos.y };
 
 	SDL_Rect rec = { (int)pos.x,(int)pos.y,dim.x,dim.y };
 	col = app->collisions->AddCollider(rec, Collider::Type::ENEMY, this);
@@ -31,7 +35,7 @@ Enemy::Enemy(iPoint dim_ ,SDL_Rect pDetector, iPoint lim1_, iPoint lim2_, Type t
 	down = app->collisions->AddCollider(rec, Collider::Type::ENEMY, this);
 	detector = app->collisions->AddCollider(pDetector, Collider::Type::DETECTOR, this);
 
-	//pasar tambien las texturas T_T
+	//pasar tambien las texturas T_T y animaciones
 }
 
 Enemy::~Enemy()
@@ -74,7 +78,7 @@ bool Enemy::Update(float dt)
 		SetPosition({ (int)pos.x, (int)pos.y });
 	}
 
-	if (state == DEATH)
+	/*if (state == DEATH)
 	{
 		death.mustFlip = currentAnim->mustFlip;
 		if (currentAnim != &death) currentAnim = &death;
@@ -83,9 +87,9 @@ bool Enemy::Update(float dt)
 			active = false;
 		}
 
-	}
+	}*/
 
-	currentAnim->Update();
+	//currentAnim->Update();
 	
 	
 
@@ -97,8 +101,16 @@ bool Enemy::PostUpdate()
 	bool ret = false;
 
 	//app->render->DrawTexture(sprites, pos.x, pos.y, &currAnim->GetCurrentFrame(), 1.0f, 0, -1, NULL, currAnim->mustFlip);
+	SDL_Rect rec = { pos.x,pos.y,dim.x,dim.y };
+	app->render->DrawRectangle(rec, 255, 181, 221, 200, true, true); //PINK
 
 	if (app->debug == true) DrawPath();
+	if (app->debug == true)
+	{
+		SDL_Rect rect = { pos.x,pos.y,dim.x,dim.y };
+		app->render->DrawRectangle(detector->rect, 0, 0, 0, 60, true, true); //BLACK
+		app->render->DrawRectangle(rect, 255, 181, 221, 200, true, true); //PINK
+	}
 
 	return ret;
 }
@@ -120,16 +132,21 @@ bool Enemy::DrawPath()
 {
 	bool ret = false;
 
-	if (path != NULL) ret = true;
-	Uint8 alpha = 150;
-	for (uint i = 0; i < path->Count(); ++i)
+	if (path != NULL)
 	{
-		iPoint pos = app->sceneGame->currentMap->MapToWorld(path->At(i)->x, path->At(i)->y);
-		SDL_Rect rec = { pos.x,pos.y,64,64 };
+		ret = true;
 
-		app->render->DrawRectangle(rec, 255, 181, 221, alpha, true, true); //PINK
-		if (alpha > 15)alpha -= 5;
+		Uint8 alpha = 150;
+		for (uint i = 0; i < path->Count(); ++i)
+		{
+			iPoint pos = app->sceneGame->currentMap->MapToWorld(path->At(i)->x, path->At(i)->y);
+			SDL_Rect rec = { pos.x,pos.y,64,64 };
+
+			app->render->DrawRectangle(rec, 255, 181, 221, alpha, true, true); //PINK
+			if (alpha > 15)alpha -= 5;
+		}
 	}
+	
 
 	return ret;
 }
@@ -159,12 +176,13 @@ void Enemy::SetPosition(iPoint pos)
 
 void Enemy::Fly(float dt)
 {
-	currentAnim = &idleAnim;
-	int offset = 5;
+	//currentAnim = &idleAnim;
+	int offset = 20;
 
-	coord = app->sceneGame->currentMap->WorldToMap(pos.x + (dim.x / 2), pos.y + (dim.y / 2));
+	coord = app->sceneGame->currentMap->WorldToMap((int)(pos.x + (dim.x / 2)), (int)(pos.y + (dim.y / 2)));
 
-	if ((int)pos.x % tileDim > (tileDim / 2) - offset && (int)pos.y % tileDim < (tileDim / 2) + offset)
+	if ((int)pos.x % tileDim > (tileDim / 2) - offset && (int)pos.x % tileDim < (tileDim / 2) + offset)
+		if ((int)pos.y % tileDim > (tileDim / 2) - offset && (int)pos.y % tileDim < (tileDim / 2) + offset)
 	{
 
 		if (pNear == true)
@@ -188,22 +206,28 @@ void Enemy::Fly(float dt)
 				else lastLim = lim2;
 			}
 
-			if (app->pathfinding->CreatePath(coord, lastLim, false))
+			if (app->pathfinding->CreatePath(coord, lastLim, false) == true)
 				path = app->pathfinding->GetLastPath();
 		}
 
 	}
 
-	iPoint nextTile = { path->At(0)->x, path->At(0)->y };
-	float vel = app->player->maxVel.x;
+	if (path != NULL)
+	{
+		
+		iPoint nextTile = app->sceneGame->currentMap->MapToWorld(path->At(0)->x, path->At(0)->y);
+		float vel = app->player->maxVel.x;
 
 
-	// meterle el must flim en la animacion T_T
+		// meterle el must flim en la animacion T_T
 
-	if (nextTile.x < coord.x) pos.x -= vel * dt;
-	if (nextTile.x > coord.x) pos.x += vel * dt;
-	if (nextTile.y < coord.y) pos.y -= vel * dt;
-	if (nextTile.y > coord.y) pos.y += vel * dt;
+		if (nextTile.x < coord.x) pos.x -= vel * dt;
+		if (nextTile.x > coord.x) pos.x += vel * dt;
+		if (nextTile.y < coord.y) pos.y -= vel * dt;
+		if (nextTile.y > coord.y) pos.y += vel * dt;
+
+	}
+	
 }
 
 void Enemy::Walk(float dt)
@@ -242,7 +266,7 @@ void Enemy::Walk(float dt)
 
 	}
 
-	iPoint nextTile = { path->At(0)->x, path->At(0)->y };
+	iPoint nextTile = app->sceneGame->currentMap->MapToWorld(path->At(0)->x, path->At(0)->y);
 	float vel = app->player->maxVel.x;
 
 

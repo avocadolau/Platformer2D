@@ -7,8 +7,7 @@
 #include "Animation.h"
 #include "Textures.h"
 
-class Player :
-    public Module
+class Player : public Module
 {
 public:
 	

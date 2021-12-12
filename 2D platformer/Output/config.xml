@@ -44,6 +44,8 @@
 			parallax="0.45">
 		<elements>
 			<platform platformPath="Assets/Textures/platform.png"/>
+			<walkEnemy path=""/>
+			<flyEnemy path=""/>
 		</elements>
 	</game>
 
@@ -52,7 +54,20 @@
 	<lose img="Assets/Textures/lose.png"/>
 	
     <!-- L03: Added maps folder as config option -->
-    <map>
+	
+	<map1>
         <folder>Assets/maps/</folder>
-    </map>
+		<enemies>
+			<enemy id="1" type="fly" w="32" h="32">
+				<detector x="1792" y="576" w="512" h="384"/>
+				<lim1 x="29" y="13"/>
+				<lim2 x="35" y="13"/>
+			</enemy>
+		</enemies>
+    </map1>
+
+	<map2>
+		<folder>Assets/maps/</folder>
+	</map2>
+	
 </config>

@@ -125,28 +125,26 @@ bool Player::Update(float dt)
 	{
 		if (godMode == true)
 		{
-			if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT&&up==true)
-			{
-				vel.y = -maxVel.y / 2;
+			
+			currentAnim = &jump;
+
+			// vertical movement
+			if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && left == true) {
+				pos.y -= vel.x * dt * 2;
 			}
 
-			vel.y += gravity * dt * 0.5;
-			if (vel.y > maxVel.y / 2) vel.y = maxVel.y / 2;
-			if (vel.y < -maxVel.y)vel.y = -maxVel.y;
-			pos.y += vel.y * dt;
-			jump.mustFlip = currentAnim->mustFlip;
-			currentAnim = &jump;
+			if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && left == true) {
+				pos.y += vel.x * dt * 2;
+			}
 
 			// horizontal movement
 			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && left == true) {
 				pos.x -= vel.x * dt*2;
-				if (currentAnim == &idle) currentAnim = &run;
 				currentAnim->mustFlip = true;
 			}
 
 			if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT && right == true) {
 				pos.x += vel.x * dt*2;
-				if (currentAnim == &idle) currentAnim = &run;
 				currentAnim->mustFlip = false;
 			}
 		}

@@ -16,6 +16,7 @@ struct Collider
 		DETECTOR,
 		GROUND,
 		PLAYER,
+		PATACK,
 		ENEMY,
 		WIN,
 		BORDER,

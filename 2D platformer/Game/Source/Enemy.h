@@ -25,7 +25,7 @@ public:
 		DEATH
 	};
 
-	Enemy(iPoint dim_, SDL_Rect pDetector, iPoint lim1, iPoint lim2, Type type);
+	Enemy(int id,iPoint dim_, SDL_Rect pDetector, iPoint lim1, iPoint lim2, Type type);
 	~Enemy();
 
 	bool Awake();
@@ -48,6 +48,7 @@ public:
 
 public:
 	int tileDim;
+	int id;
 
 	fPoint pos;
 	iPoint dim;
