@@ -30,7 +30,7 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::GROUND][Collider::Type::BORDER] = false;
 
 	matrix[Collider::Type::PLAYER][Collider::Type::NONE] = true;
-	matrix[Collider::Type::PLAYER][Collider::Type::DETECTOR] = false;
+	matrix[Collider::Type::PLAYER][Collider::Type::DETECTOR] = true;
 	matrix[Collider::Type::PLAYER][Collider::Type::GROUND] = true;
 	matrix[Collider::Type::PLAYER][Collider::Type::PLAYER] = false;
 	matrix[Collider::Type::PLAYER][Collider::Type::PATACK] = false;

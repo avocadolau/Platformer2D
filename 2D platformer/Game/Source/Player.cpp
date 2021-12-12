@@ -136,7 +136,7 @@ bool Player::Update(float dt)
 			if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && left == true) {
 				pos.y += vel.x * dt * 2;
 			}
-
+			 
 			// horizontal movement
 			if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT && left == true) {
 				pos.x -= vel.x * dt*2;

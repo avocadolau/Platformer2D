@@ -13,6 +13,14 @@ class Enemy : public Module
 {
 public:
 
+	enum Direction
+	{
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT
+	};
+
 	enum Type
 	{
 		FLY,
@@ -40,7 +48,7 @@ public:
 	bool SaveState(pugi::xml_node&) const;
 	bool DrawPath();
 
-	void SetPosition(iPoint pos);
+	void SetPosition(fPoint pos);
 	void OnCollision(Collider* c1, Collider* c2);
 
 	void Fly(float dt);
@@ -49,6 +57,7 @@ public:
 public:
 	int tileDim;
 	int id;
+	float vel;
 
 	fPoint pos;
 	iPoint dim;
@@ -69,6 +78,7 @@ public:
 
 	State state = ALIVE;
 	Type type;
+	Direction dir;
 
 	const DynArray<iPoint>* path;
 	//DynArray<iPoint> path;

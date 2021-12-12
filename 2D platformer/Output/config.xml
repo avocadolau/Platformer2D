@@ -59,8 +59,8 @@
         <folder>Assets/maps/</folder>
 		<enemies>
 			<enemy id="1" type="fly" w="32" h="32">
-				<detector x="1792" y="576" w="512" h="384"/>
-				<lim1 x="29" y="13"/>
+				<detector x="1792" y="576" w="512" h="896"/>
+				<lim1 x="29" y="21"/>
 				<lim2 x="35" y="13"/>
 			</enemy>
 		</enemies>
