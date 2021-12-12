@@ -1,5 +1,6 @@
 # I see the light
 
+Developed by Laura Isidro and Sofia Liles
 This 2D platformer is a Videogame Development assigment
 
 
