@@ -93,8 +93,23 @@ bool SceneGame::Update(float dt)
 	ListItem<Enemy*>* eItem = enemies.start;
 	while (eItem != NULL)
 	{
-		eItem->data->Update(dt);
-		eItem = eItem->next;
+		if (eItem->data->active == true)
+		{
+			eItem->data->Update(dt);
+			eItem = eItem->next;
+		}
+		else
+		{
+
+			ListItem<Enemy*>* del = eItem;
+			eItem = del->next;
+
+			//bool cleaned = del->data->CleanUp();
+
+
+
+			enemies.del(del);
+		}
 	}
 	
 	app->render->DrawRectangle({ -win.x,-win.y,map.x + win.x,win.y }, 0, 0, 0, 255, true, true);

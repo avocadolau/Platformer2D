@@ -34,8 +34,6 @@
 		</animations>
 	</player>
 
-  
-
 	<fade time="2000"/>
 
 	<start img="Assets/Textures/start.png"/>

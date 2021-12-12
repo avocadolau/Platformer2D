@@ -24,20 +24,20 @@ Enemy::Enemy(int id_, iPoint dim_ ,SDL_Rect pDetector, iPoint lim1_, iPoint lim2
 
 	tileDim = app->sceneGame->currentMap->mapData.tileHeight;
 
-	iPoint ipos = app->sceneGame->currentMap->MapToWorld((float)lim1.x, (float)lim1.y);
-	ipos.x = ipos.x + tileDim / 2 - dim.x / 2;
-	ipos.y = ipos.y + tileDim / 2 - dim.y / 2;
+	iPoint ipos = app->sceneGame->currentMap->MapToWorld(lim1.x, lim1.y);
+	ipos.x = ipos.x + (tileDim / 2) - (dim.x / 2);
+	ipos.y = ipos.y + (tileDim / 2) - (dim.y / 2);
 	pos = { (float)ipos.x,(float)ipos.y };
 
 	SDL_Rect rec = { (int)pos.x,(int)pos.y,dim.x,dim.y };
 	col = app->collisions->AddCollider(rec, Collider::Type::ENEMY, this);
-	rec = { (int)pos.x,(int)pos.y,dim.x,2 };
+	rec = { (int)pos.x,(int)pos.y,dim.x,5 };
 	up = app->collisions->AddCollider(rec, Collider::Type::ENEMY, this);
 	rec = { (int)pos.x,(int)pos.y + dim.y - 2,dim.x,2 };
 	down = app->collisions->AddCollider(rec, Collider::Type::ENEMY, this);
 	detector = app->collisions->AddCollider(pDetector, Collider::Type::DETECTOR, this);
 
-	vel = app->player->maxVel.x / 2;
+	vel = app->player->maxVel.x * 0.7;
 
 	//pasar tambien las texturas T_T y animaciones
 }
@@ -82,16 +82,18 @@ bool Enemy::Update(float dt)
 		SetPosition(pos);
 	}
 
-	/*if (state == DEATH)
+	if (state == DEATH)
 	{
-		death.mustFlip = currentAnim->mustFlip;
+		/*death.mustFlip = currentAnim->mustFlip;
 		if (currentAnim != &death) currentAnim = &death;
 		if (currentAnim->HasFinished() == true)
 		{
 			active = false;
-		}
+		}*/
 
-	}*/
+		active = false;
+
+	}
 
 	//currentAnim->Update();
 	
@@ -120,7 +122,6 @@ bool Enemy::PostUpdate()
 
 bool Enemy::CleanUp()
 {
-	bool ret = false;
 
 	app->collisions->RemoveCollider(col);
 	app->collisions->RemoveCollider(up);
@@ -128,7 +129,8 @@ bool Enemy::CleanUp()
 	app->collisions->RemoveCollider(detector);
 
 
-	return ret;
+
+	return true;
 }
 
 bool Enemy::DrawPath()
@@ -180,7 +182,7 @@ void Enemy::SetPosition(fPoint pos)
 void Enemy::Fly(float dt)
 {
 	//currentAnim = &idleAnim;
-	int offset = 20;
+	int offset = 5;
 
 	coord = app->sceneGame->currentMap->WorldToMap((int)(pos.x + (dim.x / 2)), (int)(pos.y + (dim.y / 2)));
 
@@ -190,8 +192,10 @@ void Enemy::Fly(float dt)
 		else if (lastLim == lim2) lastLim = lim1;
 	}
 
-	if ((int)pos.x % tileDim > (tileDim / 2) - offset && (int)pos.x % tileDim < (tileDim / 2) + offset)
-	if ((int)pos.y % tileDim > (tileDim / 2) - offset && (int)pos.y % tileDim < (tileDim / 2) + offset)
+	iPoint center = { (int)pos.x + (dim.x / 2),(int)pos.y + (dim.y / 2) };
+
+	if (center.x % tileDim > (tileDim / 2) - offset && center.x % tileDim < (tileDim / 2) + offset)
+	if (center.y % tileDim > (tileDim / 2) - offset && center.y % tileDim < (tileDim / 2) + offset)
 	{
 		if (pNear == true)
 		{
@@ -229,13 +233,6 @@ void Enemy::Fly(float dt)
 				if (nextTile.x > coord.x) dir = RIGHT;
 			}
 		}
-
-		
-			
-		//else nextTile = { path->At(0)->x, path->At(0)->y };
-
-		
-
 	}
 
 	if (path != NULL)
@@ -259,55 +256,79 @@ void Enemy::Fly(float dt)
 		default:
 			break;
 		}
-		SetPosition(pos);
 	}
 	
 }
 
 void Enemy::Walk(float dt)
 {
-	currentAnim = &idleAnim;
+	//currentAnim = &idleAnim;
 	int offset = 5;
 
-	coord = app->sceneGame->currentMap->WorldToMap(pos.x + (dim.x / 2), pos.y + (dim.y / 2));
+	coord = app->sceneGame->currentMap->WorldToMap((int)(pos.x + (dim.x / 2)), (int)(pos.y + (dim.y / 2)));
 
-	if ((int)pos.x % tileDim > (tileDim / 2) - offset)
+	if (coord == lastLim)
+	{
+		if (lastLim == lim1) lastLim = lim2;
+		else if (lastLim == lim2) lastLim = lim1;
+	}
+
+	iPoint center = { (int)pos.x + (dim.x / 2),(int)pos.y + (dim.y / 2) };
+
+	if (center.y % tileDim > (tileDim / 2) - offset && center.y % tileDim < (tileDim / 2) + offset)
 	{
 		if (pNear == true)
 		{
-			SDL_Rect pRect = app->player->collider->rect;
-			iPoint pCoord = app->sceneGame->currentMap->WorldToMap(app->player->pos.x + (app->player->dim.x / 2), app->player->pos.y + (app->player->pos.y / 2));
+			iPoint pPos = { (int)(app->player->pos.x + (app->player->dim.x / 2)) ,(int)(app->player->pos.y + (app->player->dim.y / 2)) };
+			iPoint pCoord = app->sceneGame->currentMap->WorldToMap(pPos.x, pPos.y);
 
-			if (detector->Intersects(pRect) && app->pathfinding->IsWalkable(pCoord))
+			if (pPos.x > detector->rect.x && pPos.x<detector->rect.x + detector->rect.w
+				&& pPos.y>detector->rect.y && pPos.y < detector->rect.y + detector->rect.h)
 			{
-				if (app->pathfinding->CreatePath(coord, pCoord,true) > 0)
+				if (app->pathfinding->CreatePath(coord, pCoord, false) > 0)
 					path = app->pathfinding->GetLastPath();
+				else pNear = false;
 			}
 			else pNear = false;
+
 		}
 
-		else
+		if (pNear == false)
 		{
-			if (coord == lastLim)
-			{
-				if (lastLim == lim1) lastLim = lim2;
-				else lastLim = lim2;
-			}
 
-			if (app->pathfinding->CreatePath(coord, lastLim, false))
-				path = app->pathfinding->GetLastPath();
+			bool pathCreated = app->pathfinding->CreatePath(coord, lastLim, false);
+			path = app->pathfinding->GetLastPath();
+
 		}
 
+		if (path != NULL)
+		{
+			if (path->Count() > 1)
+			{
+				iPoint nextTile;
+				nextTile = { path->At(1)->x, path->At(1)->y };
+				if (nextTile.x < coord.x) dir = LEFT;
+				if (nextTile.x > coord.x) dir = RIGHT;
+			}
+		}
 	}
 
-	iPoint nextTile = app->sceneGame->currentMap->MapToWorld(path->At(0)->x, path->At(0)->y);
-	float vel = app->player->maxVel.x;
+	if (path != NULL)
+	{
+		// meterle el must flim en la animacion T_T
 
-
-	// meterle el must flim en la animacion T_T
-
-	if (nextTile.x < coord.x) pos.x -= vel * dt;
-	if (nextTile.x > coord.x) pos.x += vel * dt;
+		switch (dir)
+		{
+		case Enemy::LEFT:
+			pos.x -= vel * dt;
+			break;
+		case Enemy::RIGHT:
+			pos.x += vel * dt;
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 bool Enemy::LoadState(pugi::xml_node& node)
