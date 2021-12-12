@@ -99,12 +99,14 @@ bool Player::Start()
 	CreateColliders();
 	
 	currentAnim = &idle;
+	shotCoolDown.Start();
 	
 	return true;
 }
 
 bool Player::PreUpdate()
 {
+
 	return true;
 }
 
@@ -221,7 +223,22 @@ bool Player::PostUpdate()
 
 	if (currentAnim == nullptr) currentAnim = &idle;
 
-	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) godMode = !godMode;
+	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	{
+		if (shotCoolDown.Read() >= COOLDOWN)
+		{
+			float velocity = vel.x;
+			if (currentAnim->mustFlip == true) velocity = 0 - velocity;
+			PlayerAtack* atack = new PlayerAtack(pos, velocity);
+			Module* listener = app->sceneGame;
+			atack->col->listeners[0] = listener;
+			app->sceneGame->atacks.add(atack);
+			shotCoolDown.Start();
+		}
+		
+	}
+
+
 
 	return true;
 }
@@ -407,8 +424,5 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 		app->render->camera.x = (int)-pos.x + (app->win->GetWidth() / 2);
 		app->render->camera.y = (int)-pos.y + (app->win->GetHeight() / 2);
 	}
-
-	
-
 
 }

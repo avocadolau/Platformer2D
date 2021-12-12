@@ -117,8 +117,10 @@
     <ClInclude Include="Source\Map.h" />
     <ClInclude Include="Source\PathFinding.h" />
     <ClInclude Include="Source\PerfTimer.h" />
+    <ClInclude Include="Source\PickUp.h" />
     <ClInclude Include="Source\Platform.h" />
     <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\PlayerAtack.h" />
     <ClInclude Include="Source\PQueue.h" />
     <ClInclude Include="Source\Queue.h" />
     <ClInclude Include="Source\SceneGame.h" />

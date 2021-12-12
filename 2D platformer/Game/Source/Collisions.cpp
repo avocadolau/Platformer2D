@@ -19,6 +19,7 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::DETECTOR][Collider::Type::ENEMY] = false;
 	matrix[Collider::Type::DETECTOR][Collider::Type::WIN] = false;
 	matrix[Collider::Type::DETECTOR][Collider::Type::BORDER] = false;
+	matrix[Collider::Type::DETECTOR][Collider::Type::PICKUP] = false;
 
 	matrix[Collider::Type::GROUND][Collider::Type::NONE] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::DETECTOR] = false;
@@ -28,6 +29,7 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::GROUND][Collider::Type::ENEMY] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::WIN] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::BORDER] = false;
+	matrix[Collider::Type::GROUND][Collider::Type::PICKUP] = false;
 
 	matrix[Collider::Type::PLAYER][Collider::Type::NONE] = true;
 	matrix[Collider::Type::PLAYER][Collider::Type::DETECTOR] = true;
@@ -37,6 +39,7 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::PLAYER][Collider::Type::ENEMY] = true;
 	matrix[Collider::Type::PLAYER][Collider::Type::WIN] = true;
 	matrix[Collider::Type::PLAYER][Collider::Type::BORDER] = true;
+	matrix[Collider::Type::PLAYER][Collider::Type::PICKUP] = true;
 
 	matrix[Collider::Type::PATACK][Collider::Type::NONE] = false;
 	matrix[Collider::Type::PATACK][Collider::Type::DETECTOR] = false;
@@ -46,6 +49,8 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::PATACK][Collider::Type::ENEMY] = true;
 	matrix[Collider::Type::PATACK][Collider::Type::WIN] = false;
 	matrix[Collider::Type::PATACK][Collider::Type::BORDER] = false;
+	matrix[Collider::Type::PATACK][Collider::Type::BORDER] = false;
+
 
 	matrix[Collider::Type::ENEMY][Collider::Type::NONE] = false;
 	matrix[Collider::Type::ENEMY][Collider::Type::DETECTOR] = false;
@@ -55,6 +60,8 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::ENEMY][Collider::Type::ENEMY] = false;
 	matrix[Collider::Type::ENEMY][Collider::Type::WIN] = false;
 	matrix[Collider::Type::ENEMY][Collider::Type::BORDER] = false;
+	matrix[Collider::Type::ENEMY][Collider::Type::PICKUP] = false;
+
 
 	matrix[Collider::Type::WIN][Collider::Type::NONE] = false;
 	matrix[Collider::Type::WIN][Collider::Type::DETECTOR] = false;
@@ -64,6 +71,7 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::WIN][Collider::Type::ENEMY] = false;
 	matrix[Collider::Type::WIN][Collider::Type::WIN] = false;
 	matrix[Collider::Type::WIN][Collider::Type::BORDER] = false;
+	matrix[Collider::Type::WIN][Collider::Type::PICKUP] = false;
 
 	matrix[Collider::Type::BORDER][Collider::Type::NONE] = false;
 	matrix[Collider::Type::BORDER][Collider::Type::DETECTOR] = false;
@@ -73,6 +81,17 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::BORDER][Collider::Type::ENEMY] = false;
 	matrix[Collider::Type::BORDER][Collider::Type::WIN] = false;
 	matrix[Collider::Type::BORDER][Collider::Type::BORDER] = false;
+	matrix[Collider::Type::BORDER][Collider::Type::PICKUP] = false;
+
+	matrix[Collider::Type::PICKUP][Collider::Type::NONE] = false;
+	matrix[Collider::Type::PICKUP][Collider::Type::DETECTOR] = false;
+	matrix[Collider::Type::PICKUP][Collider::Type::GROUND] = false;
+	matrix[Collider::Type::PICKUP][Collider::Type::PLAYER] = true;
+	matrix[Collider::Type::PICKUP][Collider::Type::PATACK] = false;
+	matrix[Collider::Type::PICKUP][Collider::Type::ENEMY] = false;
+	matrix[Collider::Type::PICKUP][Collider::Type::WIN] = false;
+	matrix[Collider::Type::PICKUP][Collider::Type::BORDER] = false;
+	matrix[Collider::Type::PICKUP][Collider::Type::PICKUP] = false;
 
 }
 

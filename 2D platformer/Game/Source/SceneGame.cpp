@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "PathFinding.h"
 #include "PlayerAtack.h"
+#include "PickUp.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -137,7 +138,19 @@ bool SceneGame::PostUpdate()
 		eItem = eItem->next;
 	}
 
+	ListItem<PickUp*>* p = coins.start;
+	while (p != NULL)
+	{
+		bool drawn = p->data->Draw();
+		p = p->next;
+	}
 
+	ListItem<PlayerAtack*>* atack = atacks.start;
+	while (atack != NULL)
+	{
+		atack->data->Draw();
+		atack = atack->next;
+	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
@@ -182,7 +195,6 @@ bool SceneGame::CleanUp()
 {
 	platforms.clear();
 	enemies.clear();
-	atacks.clear();
 	
 
 	LOG("Freeing scene");
@@ -195,6 +207,7 @@ bool SceneGame::ChangeMap()
 	// hay q revisar esto
 	RemoveGroundColliders();
 	platforms.clear();
+	coins.clear();
 	app->collisions->RemoveCollider(winCol);
 	app->collisions->RemoveCollider(borders);
 
@@ -214,6 +227,7 @@ bool SceneGame::ChangeMap()
 	currentMap->LoadCollisions();
 	currentMap->LoadPlatforms();
 	currentMap->LoadEnemies();
+	currentMap->LoadCoins();
 
 	borders->listeners[0] = this;
 	winCol->listeners[0] = this;
@@ -311,3 +325,32 @@ bool SceneGame::SaveState(pugi::xml_node& node) const
 	return true;
 }
 
+void SceneGame::OnCollision(Collider* c1, Collider* c2)
+{
+	if (c1->type == Collider::Type::PICKUP)
+	{
+		ListItem<PickUp*>* c = coins.start;
+		while (c != NULL)
+		{
+			if (c1 == c->data->col)
+			{
+				coins.del(c);
+				break;
+			}
+			c = c->next;
+		}
+	}
+	if (c1->type == Collider::Type::PATACK)
+	{
+		ListItem<PlayerAtack*>* a = atacks.start;
+		while (a != NULL)
+		{
+			if (c1 == a->data->col)
+			{
+				atacks.del(a);
+				break;
+			}
+			a = a->next;
+		}
+	}
+}

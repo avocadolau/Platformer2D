@@ -103,6 +103,7 @@ public:
 	float dt = 0.0f;
 	bool cap30fps = false;
 	bool debug = false;
+	Module* currentScene;
 
 private:
 

@@ -127,6 +127,10 @@
     <ClInclude Include="Source\Enemy.h">
       <Filter>Elements</Filter>
     </ClInclude>
+    <ClInclude Include="Source\PlayerAtack.h">
+      <Filter>Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PickUp.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
