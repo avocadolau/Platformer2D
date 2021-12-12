@@ -553,13 +553,14 @@ bool Map::LoadEnemies()
 	while (item != NULL)
 	{
 		ret = true;
-
+		
 		Enemy* newEnemy = new Enemy(item->data->id, item->data->dim, item->data->detector, item->data->lim1, item->data->lim2, item->data->type);
 		app->sceneGame->enemies.add(newEnemy);
 
 		item = item->next;
 	}
 
+	
 
 	return ret;
 }

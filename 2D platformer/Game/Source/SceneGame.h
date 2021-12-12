@@ -34,8 +34,11 @@ public:
 	bool ChangeMap();
 	
 	bool CreateCollisions();
-
+	bool RemoveGroundColliders();
 	bool CleanUp();
+
+	bool LoadState(pugi::xml_node&);
+	bool SaveState(pugi::xml_node&) const;
 
 public:
 
@@ -47,12 +50,12 @@ public:
 	Map* currentMap = nullptr;
 	
 	List<Platform*> platforms;
-	List<Collider*> groundColliders;
 	List<Enemy*> enemies;
 
 	EnemyInfo flyInfo;
 	EnemyInfo walkInfo;
-	
+	List<int*> deadEnemies;
+
 
 private:
 

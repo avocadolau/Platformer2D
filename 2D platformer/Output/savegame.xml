@@ -4,19 +4,20 @@
 	<input />
 	<textures />
 	<audio />
-	<map />
-	<map />
+	<map1 />
+	<map2 />
 	<start />
-	<game />
+	<game>
+		<enemies />
+	</game>
 	<win />
 	<lose />
 	<player level="1">
-		<position x="631.940002" y="1421" />
+		<position x="1610.94751" y="1229" />
 	</player>
-	<elements />
 	<collisions />
 	<fade />
 	<renderer>
-		<camera x="9" y="-1061" />
+		<camera x="-970" y="-869" />
 	</renderer>
 </game_state>

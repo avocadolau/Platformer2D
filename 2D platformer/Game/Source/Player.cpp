@@ -238,7 +238,6 @@ bool Player::LoadState(pugi::xml_node& node)
 	pos.x = node.child("position").attribute("x").as_float();
 	pos.y = node.child("position").attribute("y").as_float();
 
-	app->sceneGame->ChangeMap();
 	return true;
 }
 

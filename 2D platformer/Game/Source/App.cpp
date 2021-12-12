@@ -369,7 +369,7 @@ bool App::LoadGame()
 		//ret = item->data->LoadState(moduleNode);
 		item = item->next;
 	}
-
+	sceneGame->ChangeMap();
 
 	loadGameRequested = false;
 

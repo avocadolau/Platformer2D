@@ -31,7 +31,7 @@ Enemy::Enemy(int id_, iPoint dim_ ,SDL_Rect pDetector, iPoint lim1_, iPoint lim2
 
 	SDL_Rect rec = { (int)pos.x,(int)pos.y,dim.x,dim.y };
 	col = app->collisions->AddCollider(rec, Collider::Type::ENEMY, this);
-	rec = { (int)pos.x,(int)pos.y,dim.x,5 };
+	rec = { (int)pos.x,(int)pos.y,dim.x,10 };
 	up = app->collisions->AddCollider(rec, Collider::Type::ENEMY, this);
 	rec = { (int)pos.x,(int)pos.y + dim.y - 2,dim.x,2 };
 	down = app->collisions->AddCollider(rec, Collider::Type::ENEMY, this);
@@ -44,7 +44,9 @@ Enemy::Enemy(int id_, iPoint dim_ ,SDL_Rect pDetector, iPoint lim1_, iPoint lim2
 
 Enemy::~Enemy()
 {
-
+	CleanUp();
+	
+	app->sceneGame->deadEnemies.add(&id);
 }
 
 bool Enemy::Awake()
@@ -122,13 +124,10 @@ bool Enemy::PostUpdate()
 
 bool Enemy::CleanUp()
 {
-
 	app->collisions->RemoveCollider(col);
 	app->collisions->RemoveCollider(up);
 	app->collisions->RemoveCollider(down);
 	app->collisions->RemoveCollider(detector);
-
-
 
 	return true;
 }
@@ -165,6 +164,8 @@ void Enemy::OnCollision(Collider* c1, Collider* c2)
 	if (c1 == up && c2 == app->player->colDown)
 	{
 		state = DEATH;
+		app->player->vel.y = -app->player->maxVel.y / 2;
+		app->player->jumps = 1;
 	}
 }
 

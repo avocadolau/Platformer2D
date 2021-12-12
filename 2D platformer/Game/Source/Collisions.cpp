@@ -160,21 +160,18 @@ Collider* Collisions::AddCollider(SDL_Rect rect, Collider::Type type, Module* li
 
 void Collisions::RemoveCollider(Collider* collider)
 {
-	/*for (uint i = 0; i < MAX_COLLIDERS; ++i)
-	{
-		if (colliders[i] == collider)
-		{
-			delete colliders[i];
-			colliders[i] = nullptr;
-		}
-	}*/
 
 	ListItem<Collider*>* item;
 	item = collidersList.start;
 
 	while (item != NULL)
 	{
-		if (item->data == collider) collidersList.del(item);
+		if (item->data == collider)
+		{
+			collidersList.del(item);
+			break;
+		}
+		item = item->next;
 	}
 
 	

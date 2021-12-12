@@ -98,16 +98,13 @@ bool SceneGame::Update(float dt)
 			eItem->data->Update(dt);
 			eItem = eItem->next;
 		}
+		
 		else
 		{
 
 			ListItem<Enemy*>* del = eItem;
 			eItem = del->next;
-
-			//bool cleaned = del->data->CleanUp();
-
-
-
+			del->data->CleanUp();
 			enemies.del(del);
 		}
 	}
@@ -170,6 +167,10 @@ bool SceneGame::PostUpdate()
 		ret = false;
 
 
+	if (app->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN)
+		if (enemies.start != NULL)enemies.start->data->active = false;
+
+
 	return ret;
 }
 
@@ -194,14 +195,16 @@ bool SceneGame::CleanUp()
 bool SceneGame::ChangeMap()
 {
 	// hay q revisar esto
-	app->collisions->collidersList.clear();
+	RemoveGroundColliders();
 	platforms.clear();
 	enemies.clear();
+	app->collisions->RemoveCollider(winCol);
+	app->collisions->RemoveCollider(borders);
 
 	if (app->player->level == 1) currentMap = app->map1;
 	if (app->player->level == 2) currentMap = app->map2;
 
-	app->player->CreateColliders();
+	//app->player->CreateColliders();
 
 	if (app->GetLoadGameRequested() == false)currentMap->LoadPositions();
 	currentMap->LoadCollisions();
@@ -211,8 +214,68 @@ bool SceneGame::ChangeMap()
 	borders->listeners[0] = this;
 	winCol->listeners[0] = this;
 
+	if (app->GetLoadGameRequested()==true)
+	{
+		ListItem<int*>* id = deadEnemies.start;
+		while (id != NULL)
+		{
+			ListItem<Enemy*>* enemy = enemies.start;
+			while (enemy!=NULL)
+			{
+				if (&enemy->data->id == id->data)
+				{
+					enemies.del(enemy);
+					break;
+				}
+				enemy = enemy->next;
+			}
+			id = id->next;
+		}
+	}
+
 	app->player->alive = true;
 
 	return true;
 }
 
+bool SceneGame::RemoveGroundColliders()
+{
+	ListItem<Collider*>* p = app->collisions->collidersList.start;
+
+	while (p != NULL)
+	{
+		if (p->data->type == Collider::Type::GROUND)
+		{
+			ListItem<Collider*>* del = p;
+			p = p->next;
+			app->collisions->RemoveCollider(del->data);
+		}
+		else p = p->next;
+	}
+	return true;
+}
+
+bool SceneGame::LoadState(pugi::xml_node& node)
+{
+	deadEnemies.clear();
+	for (pugi::xml_node eNode = node.child("enemies").child("id"); eNode ; eNode = eNode.next_sibling("id"))
+	{
+		int id= eNode.attribute("value").as_int();
+		deadEnemies.add(&id);
+	}
+	return true;
+}
+
+bool SceneGame::SaveState(pugi::xml_node& node) const
+{
+	pugi::xml_node enemies = node.append_child("enemies");
+
+	ListItem<int*>* item = deadEnemies.start;
+	while (item != NULL)
+	{
+		pugi::xml_node id = enemies.append_child("id");
+		id.append_attribute("value").set_value(item->data);
+		item = item->next;
+	}
+	return true;
+}
