@@ -67,5 +67,9 @@
 	<map2>
 		<folder>Assets/maps/</folder>
 	</map2>
+	<checkpoint>
+		<sprite width="160" height="160" path="Assets/textures/checkpoint.png"/>
+		<state x="35" y="69" activated="false"/>
+	</checkpoint>
 	
 </config>

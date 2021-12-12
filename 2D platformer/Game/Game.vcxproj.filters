@@ -49,6 +49,9 @@
     <ClCompile Include="Source\Enemy.cpp">
       <Filter>Elements</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Checkpoint.cpp">
+      <Filter>Elements</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -125,6 +128,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
+      <Filter>Elements</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Checkpoint.h">
       <Filter>Elements</Filter>
     </ClInclude>
   </ItemGroup>

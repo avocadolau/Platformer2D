@@ -13,6 +13,7 @@
 #include "PathFinding.h"
 #include "Collisions.h"
 #include "Player.h"
+#include "Checkpoint.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -40,6 +41,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	pathfinding = new PathFinding();
 	collisions = new Collisions();
 	player = new Player();
+	checkpoint = new Checkpoint();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -54,6 +56,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneGame);
 	AddModule(sceneWin);
 	AddModule(sceneLose);
+	AddModule(checkpoint);
 	AddModule(player);
 	AddModule(collisions);
 	AddModule(fade);
