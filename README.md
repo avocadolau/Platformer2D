@@ -2,11 +2,12 @@
 
 Developed by Laura Isidro and Sofia Liles
 This is an improved assignment for a class project, new and improved features include:
--Enimies
--Checkpoint
--Improved intro screen
--Load/Save
--Defeat enemies
+
+-Enemies  
+-Checkpoint  
+-Improved intro screen  
+-Load/Save  
+-Defeat enemies  
 
 
 ## Assets
