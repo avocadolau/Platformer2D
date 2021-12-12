@@ -24,6 +24,7 @@ public:
 	bool SaveState(pugi::xml_node&) const;
 	bool CreateColliders();
 	void OnCollision(Collider* c1, Collider* c2);
+	void Atack();
 
 public:
 

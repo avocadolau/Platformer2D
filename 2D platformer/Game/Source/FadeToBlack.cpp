@@ -60,6 +60,7 @@ bool FadeToBlack::Update(float dt)
 				app->player->death.Reset();
 			}
 			moduleToEnable->active=true;
+			app->currentScene = moduleToEnable;
 			if (moduleToEnable == app->sceneLose)app->audio->PlayFx(3);
 			if (moduleToEnable == app->sceneWin)app->audio->PlayFx(2);
 			currentStep = Fade_Step::FROM_BLACK;

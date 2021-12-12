@@ -6,6 +6,7 @@
 #include "Map.h"
 #include "Enemy.h"
 #include "Platform.h"
+#include "PlayerAtack.h"
 
 #include "SDL_image/include/SDL_image.h"
 
@@ -52,6 +53,7 @@ public:
 	
 	List<Platform*> platforms;
 	List<Enemy*> enemies;
+	List<PlayerAtack*> atacks;
 
 	EnemyInfo flyInfo;
 	EnemyInfo walkInfo;

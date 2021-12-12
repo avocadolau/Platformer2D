@@ -11,6 +11,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "PathFinding.h"
+#include "PlayerAtack.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -96,6 +97,13 @@ bool SceneGame::Update(float dt)
 		eItem->data->Update(dt);
 		eItem = eItem->next;
 	}
+
+	ListItem<PlayerAtack*>* atack = atacks.start;
+	while (atack != NULL)
+	{
+		atack->data->Update(dt);
+		atack = atack->next;
+	}
 	
 	app->render->DrawRectangle({ -win.x,-win.y,map.x + win.x,win.y }, 0, 0, 0, 255, true, true);
 	app->render->DrawRectangle({ 0,map.y,map.x + win.x,win.y }, 0, 0, 0, 255, true, true);
@@ -172,7 +180,9 @@ bool SceneGame::CreateCollisions()
 // Called before quitting
 bool SceneGame::CleanUp()
 {
-
+	platforms.clear();
+	enemies.clear();
+	atacks.clear();
 	
 
 	LOG("Freeing scene");
