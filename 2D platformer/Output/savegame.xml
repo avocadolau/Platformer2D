@@ -8,16 +8,24 @@
 	<map2 />
 	<start />
 	<game>
-		<enemies />
+		<enemies>
+			<id value="true" />
+			<id value="true" />
+			<id value="true" />
+			<id value="true" />
+			<id value="true" />
+			<id value="true" />
+			<id value="true" />
+		</enemies>
 	</game>
 	<win />
 	<lose />
 	<player level="1">
-		<position x="1625.88794" y="1229" />
+		<position x="6430.18018" y="525" />
 	</player>
 	<collisions />
 	<fade />
 	<renderer>
-		<camera x="-985" y="-869" />
+		<camera x="-5790" y="-165" />
 	</renderer>
 </game_state>
