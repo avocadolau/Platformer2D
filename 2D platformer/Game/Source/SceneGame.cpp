@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "PathFinding.h"
 #include "PlayerAtack.h"
+#include "Checkpoint.h"
 #include "PickUp.h"
 
 #include "Defs.h"
@@ -63,6 +64,7 @@ bool SceneGame::Start()
 bool SceneGame::PreUpdate()
 {
 	app->player->active = true;
+	app->checkpoint->active = true;
 	return true;
 }
 

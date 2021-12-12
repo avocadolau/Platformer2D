@@ -29,6 +29,7 @@ class Collisions;
 class Physics;
 class Player;
 class PathFinding;
+class Checkpoint;
 
 class App
 {
@@ -99,6 +100,7 @@ public:
 	Collisions* collisions;
 	Physics* physics;
 	Player* player;
+	Checkpoint* checkpoint;
 
 	float dt = 0.0f;
 	bool cap30fps = false;
@@ -112,7 +114,7 @@ private:
 	SString title;
 	SString organization;
 
-	List<Module *> modules;
+	List<Module*> modules;
 
 	pugi::xml_document gameStateFile;
 
