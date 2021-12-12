@@ -13,11 +13,11 @@
 	<win />
 	<lose />
 	<player level="1">
-		<position x="1610.94751" y="1229" />
+		<position x="1625.88794" y="1229" />
 	</player>
 	<collisions />
 	<fade />
 	<renderer>
-		<camera x="-970" y="-869" />
+		<camera x="-985" y="-869" />
 	</renderer>
 </game_state>

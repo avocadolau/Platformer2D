@@ -93,20 +93,8 @@ bool SceneGame::Update(float dt)
 	ListItem<Enemy*>* eItem = enemies.start;
 	while (eItem != NULL)
 	{
-		if (eItem->data->active == true)
-		{
-			eItem->data->Update(dt);
-			eItem = eItem->next;
-		}
-		
-		else
-		{
-
-			ListItem<Enemy*>* del = eItem;
-			eItem = del->next;
-			del->data->CleanUp();
-			enemies.del(del);
-		}
+		eItem->data->Update(dt);
+		eItem = eItem->next;
 	}
 	
 	app->render->DrawRectangle({ -win.x,-win.y,map.x + win.x,win.y }, 0, 0, 0, 255, true, true);
@@ -197,9 +185,15 @@ bool SceneGame::ChangeMap()
 	// hay q revisar esto
 	RemoveGroundColliders();
 	platforms.clear();
-	enemies.clear();
 	app->collisions->RemoveCollider(winCol);
 	app->collisions->RemoveCollider(borders);
+
+	ListItem<Enemy*>* eItem = enemies.start;
+	while (eItem != NULL)
+	{
+		RemoveEnemy(eItem->data);
+		eItem = enemies.start;
+	}
 
 	if (app->player->level == 1) currentMap = app->map1;
 	if (app->player->level == 2) currentMap = app->map2;
@@ -214,23 +208,24 @@ bool SceneGame::ChangeMap()
 	borders->listeners[0] = this;
 	winCol->listeners[0] = this;
 
-	if (app->GetLoadGameRequested()==true)
+	if (destroyDeadEnemies == true)
 	{
 		ListItem<int*>* id = deadEnemies.start;
 		while (id != NULL)
 		{
 			ListItem<Enemy*>* enemy = enemies.start;
-			while (enemy!=NULL)
+			while (enemy != NULL)
 			{
 				if (&enemy->data->id == id->data)
 				{
-					enemies.del(enemy);
+					RemoveEnemy(enemy->data);
 					break;
 				}
 				enemy = enemy->next;
 			}
 			id = id->next;
 		}
+		destroyDeadEnemies = false;
 	}
 
 	app->player->alive = true;
@@ -255,6 +250,31 @@ bool SceneGame::RemoveGroundColliders()
 	return true;
 }
 
+bool SceneGame::RemoveEnemy(Enemy* enemy)
+{
+	bool ret = false;
+
+	ListItem<Enemy*>* p;
+	p = enemies.start;
+
+	while (p != NULL)
+	{
+		if (p->data == enemy)
+		{
+			ret = true;
+			app->sceneGame->deadEnemies.add(&enemy->id);
+			p->data->CleanUp();
+			enemies.del(p);
+			break;
+		}
+		p = p->next;
+	}
+
+
+	return ret;
+}
+
+
 bool SceneGame::LoadState(pugi::xml_node& node)
 {
 	deadEnemies.clear();
@@ -263,6 +283,7 @@ bool SceneGame::LoadState(pugi::xml_node& node)
 		int id= eNode.attribute("value").as_int();
 		deadEnemies.add(&id);
 	}
+	destroyDeadEnemies = true;
 	return true;
 }
 
@@ -279,3 +300,4 @@ bool SceneGame::SaveState(pugi::xml_node& node) const
 	}
 	return true;
 }
+

@@ -46,7 +46,7 @@ Enemy::~Enemy()
 {
 	CleanUp();
 	
-	app->sceneGame->deadEnemies.add(&id);
+	
 }
 
 bool Enemy::Awake()
@@ -94,6 +94,11 @@ bool Enemy::Update(float dt)
 		}*/
 
 		active = false;
+
+		if (active == false)
+		{
+			app->sceneGame->RemoveEnemy(this);
+		}
 
 	}
 

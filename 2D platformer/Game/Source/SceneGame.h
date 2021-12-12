@@ -35,6 +35,7 @@ public:
 	
 	bool CreateCollisions();
 	bool RemoveGroundColliders();
+	bool RemoveEnemy(Enemy* enemy);
 	bool CleanUp();
 
 	bool LoadState(pugi::xml_node&);
@@ -56,6 +57,7 @@ public:
 	EnemyInfo walkInfo;
 	List<int*> deadEnemies;
 
+	bool destroyDeadEnemies = false;
 
 private:
 
@@ -66,7 +68,6 @@ private:
 	SString platformPath;
 
 	float parallax;
-
 };
 
 #endif // __SCENE_H__
