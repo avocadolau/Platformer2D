@@ -565,6 +565,40 @@ bool Map::LoadEnemies()
 	return ret;
 }
 
+bool Map::LoadCoins()
+{
+	bool ret = false;
+
+	ListItem<MapLayer*>* mapLayerItem;
+	mapLayerItem = mapData.layers.start;
+
+	while (mapLayerItem != NULL) {
+
+		if (mapLayerItem->data->properties.GetProperty("Navigation") == 5) {
+
+			for (int x = 0; x < mapLayerItem->data->width; x++)
+			{
+				for (int y = 0; y < mapLayerItem->data->height; y++)
+				{
+					if (mapLayerItem->data->Get(x, y) == NULL)continue;
+					ret = true;
+
+					iPoint p = MapToWorld(x , y);
+
+					PickUp* coin = new PickUp(p);
+					coin->col->listeners[0] = app->sceneGame;
+					app->sceneGame->coins.add(coin);
+				}
+			}
+		}
+
+
+		mapLayerItem = mapLayerItem->next;
+	}
+
+	return ret;
+}
+
 // L12b: Create walkability map for pathfinding
 bool Map::CreateWalkabilityMap(uchar** buffer) const
 {

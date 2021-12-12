@@ -17,6 +17,7 @@ struct Collider
 		GROUND,
 		PLAYER,
 		PATACK,
+		PICKUP,
 		ENEMY,
 		WIN,
 		BORDER,

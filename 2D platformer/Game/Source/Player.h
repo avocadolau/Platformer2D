@@ -6,6 +6,9 @@
 #include "Collider.h"
 #include "Animation.h"
 #include "Textures.h"
+#include "Timer.h"
+
+#define COOLDOWN 500
 
 class Player : public Module
 {
@@ -24,7 +27,6 @@ public:
 	bool SaveState(pugi::xml_node&) const;
 	bool CreateColliders();
 	void OnCollision(Collider* c1, Collider* c2);
-	void Atack();
 
 public:
 
@@ -55,6 +57,8 @@ public:
 	Animation* currentAnim;
 	Animation idle, run, jump, death;
 	float animSpeed;
+
+	Timer shotCoolDown;
 
 };
 

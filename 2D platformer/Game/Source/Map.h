@@ -157,6 +157,7 @@ public:
 	bool LoadPlatforms();
 	bool LoadPositions();
 	bool LoadEnemies();
+	bool LoadCoins();
 
 private:
 

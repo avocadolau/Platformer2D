@@ -166,11 +166,23 @@ void Enemy::OnCollision(Collider* c1, Collider* c2)
 	{
 		pNear = true;
 	}
-	if (c1 == up && c2 == app->player->colDown)
+	
+	if (c2->type == Collider::Type::PATACK)
 	{
 		state = DEATH;
-		app->player->vel.y = -app->player->maxVel.y / 2;
-		app->player->jumps = 1;
+	}
+	if (c2->type == Collider::Type::PLAYER)
+	{
+		if (c1 == up && c2 == app->player->colDown)
+		{
+			state = DEATH;
+			app->player->vel.y = -app->player->maxVel.y / 2;
+			app->player->jumps = 1;
+		}
+		else if (c1 == col)
+		{
+			app->player->alive = false;
+		}
 	}
 }
 

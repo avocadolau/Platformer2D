@@ -7,6 +7,7 @@
 #include "Enemy.h"
 #include "Platform.h"
 #include "PlayerAtack.h"
+#include "PickUp.h"
 
 #include "SDL_image/include/SDL_image.h"
 
@@ -39,6 +40,8 @@ public:
 	bool RemoveEnemy(Enemy* enemy);
 	bool CleanUp();
 
+	void OnCollision(Collider* c1, Collider* c2);
+
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&) const;
 
@@ -53,7 +56,9 @@ public:
 	
 	List<Platform*> platforms;
 	List<Enemy*> enemies;
+	List<PickUp*> coins;
 	List<PlayerAtack*> atacks;
+
 
 	EnemyInfo flyInfo;
 	EnemyInfo walkInfo;
