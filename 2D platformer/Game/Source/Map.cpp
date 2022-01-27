@@ -10,7 +10,8 @@
 #include "Platform.h"
 #include "Defs.h"
 #include "Log.h"
-
+#include "EntityManager.h"
+#include "Entity.h"
 #include <math.h>
 
 Map::Map() : Module(), mapLoaded(false)
@@ -478,7 +479,7 @@ bool Map::LoadCollisions()
 					if (mapLayerItem->data->Get(x, y) == NULL)continue;
 					iPoint p = MapToWorld(x, y);
 					SDL_Rect rect = { (p.x + mapLayerItem->data->offset.x) - offset,(p.y + mapLayerItem->data->offset.y) - offset,mapData.tileWidth + (offset * 2),mapData.tileHeight + (offset * 2) };
-					Collider* newCol = app->collisions->AddCollider(rect, Collider::Type::GROUND, app->sceneGame);
+					Collider* newCol = app->collisions->AddCollider(rect, Collider::Type::GROUND, app->sceneGame, NULL);
 					//app->render->DrawTexture(mapData.tilesets.start->data->texture, p.x, p.y, &rect);
 				}
 			}
@@ -494,13 +495,13 @@ bool Map::LoadCollisions()
 	rect.h = mapData.tileHeight;
 
 
-	app->sceneGame->winCol = app->collisions->AddCollider(rect, Collider::Type::WIN, NULL);
+	app->sceneGame->winCol = app->collisions->AddCollider(rect, Collider::Type::WIN, NULL, NULL);
 
 
 	iPoint dim = MapToWorld(mapData.width, mapData.height);
 	rect = { 0,0,dim.x,dim.y };
 
-	app->sceneGame->borders = app->collisions->AddCollider(rect, Collider::Type::BORDER, NULL);
+	app->sceneGame->borders = app->collisions->AddCollider(rect, Collider::Type::BORDER, NULL, NULL);
 	return true;
 }
 
@@ -585,9 +586,8 @@ bool Map::LoadCoins()
 
 					iPoint p = MapToWorld(x , y);
 
-					PickUp* coin = new PickUp(p);
-					coin->col->listeners[0] = app->sceneGame;
-					app->sceneGame->coins.add(coin);
+					Coin* coin = new Coin(0, { p.x,p.y,0,0 });
+					app->entityManager->AddEntity(coin);
 				}
 			}
 		}

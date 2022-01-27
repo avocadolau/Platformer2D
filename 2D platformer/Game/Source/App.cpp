@@ -13,6 +13,7 @@
 #include "PathFinding.h"
 #include "Collisions.h"
 #include "Player.h"
+#include "EntityManager.h"
 #include "Checkpoint.h"
 
 #include "Defs.h"
@@ -40,8 +41,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	map2 = new Map();
 	pathfinding = new PathFinding();
 	collisions = new Collisions();
-	player = new Player();
-	checkpoint = new Checkpoint();
+	entityManager = new EntityManager();
+	//checkpoint = new Checkpoint();
+	player = new Player;
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -51,13 +53,13 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	AddModule(map1);
 	AddModule(map2);
+	AddModule(entityManager);
 
 	AddModule(sceneStart);
 	AddModule(sceneGame);
 	AddModule(sceneWin);
 	AddModule(sceneLose);
-	AddModule(checkpoint);
-	AddModule(player);
+	//AddModule(checkpoint);
 	AddModule(collisions);
 	AddModule(fade);
 
@@ -89,8 +91,7 @@ void App::AddModule(Module* module)
 // Called before render is available
 bool App::Awake()
 {
-	pugi::xml_document configFile;
-	pugi::xml_node config;
+	
 	pugi::xml_node configApp;
 
 	bool ret = false;
@@ -127,6 +128,10 @@ bool App::Awake()
 		}
 	}
 
+	entityManager->AddEntity(player);
+	player->Awake(config.child("player"));
+	player->Start();
+
 	return ret;
 }
 
@@ -142,7 +147,7 @@ bool App::Start()
 		ret = item->data->Start();
 		item = item->next;
 	}
-
+	player->Start();
 	return ret;
 }
 

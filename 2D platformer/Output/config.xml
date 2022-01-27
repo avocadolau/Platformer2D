@@ -21,9 +21,9 @@
 	<audio>
 		<music path="Assets/audio/music/icdalight.ogg"/>.
 		<fx jump="Assets/audio/fx/jumpfx.wav" win="Assets/audio/fx/winfx.wav" lose="Assets/audio/fx/losefx.wav"/>
-	</audio>   
-	
-  <player>
+	</audio>
+
+	<player>
 		<physics maxVelX="0.18f" maxVelY="0.72f" gravity="0.0017f"/>
 		<dimensions x="35" y="64"/>
 		<animations speed="0.15" path="Assets/Textures/playerSprites.png">
@@ -34,12 +34,35 @@
 		</animations>
 	</player>
 
+	<entityManager>
+		<player>
+			<physics maxVelX="0.18f" maxVelY="0.72f" gravity="0.0017f"/>
+			<dimensions x="35" y="64"/>
+			<animations speed="0.15" path="Assets/Textures/playerSprites.png">
+				<idle width="35" height="64" sprites="20"/>
+				<run width="38" height="64" sprites="20"/>
+				<jump width="37" height="64" sprites="8"/>
+				<death width="64" height="64" sprites="8"/>
+			</animations>
+		</player>
+		
+		<checkpoint>
+			<sprite width="160" height="160" path="Assets/textures/checkpoint.png"/>
+			<state x="35" y="69" activated="false"/>
+		</checkpoint>
+		
+		<flyenemy>
+			
+		</flyenemy>
+	</entityManager>
+
 	<fade time="2000"/>
 
 	<start img="Assets/Textures/start.png"/>
 
 	<game backgroundPath="Assets/Textures/background.png"
-			parallax="0.45">
+			parallax="0.45"
+			level="1">
 		<elements>
 			<platform platformPath="Assets/Textures/platform.png"/>
 			<walkEnemy path=""/>
@@ -72,9 +95,6 @@
 	<map2>
 		<folder>Assets/maps/</folder>
 	</map2>
-	<checkpoint>
-		<sprite width="160" height="160" path="Assets/textures/checkpoint.png"/>
-		<state x="35" y="69" activated="false"/>
-	</checkpoint>
+	
 	
 </config>

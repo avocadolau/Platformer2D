@@ -5,11 +5,10 @@ Collider::Collider()
 
 }
 
-Collider::Collider(SDL_Rect rectangle, Type type, Module* listener) : rect(rectangle), type(type)
+Collider::Collider(SDL_Rect rectangle, Type type, Module* listener, Entity* entity) : rect(rectangle), type(type), entity(entity)
 {
 	listeners[0] = listener;
 	rect = rectangle;
-	level = 0;
 }
 
 Collider::~Collider()

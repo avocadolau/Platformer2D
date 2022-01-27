@@ -28,6 +28,7 @@ class Map;
 class Collisions;
 class Physics;
 class Player;
+class EntityManager;
 class PathFinding;
 class Checkpoint;
 
@@ -100,12 +101,16 @@ public:
 	Collisions* collisions;
 	Physics* physics;
 	Player* player;
+	EntityManager* entityManager;
 	Checkpoint* checkpoint;
 
 	float dt = 0.0f;
 	bool cap30fps = false;
 	bool debug = false;
 	Module* currentScene;
+
+	pugi::xml_document configFile;
+	pugi::xml_node config;
 
 private:
 

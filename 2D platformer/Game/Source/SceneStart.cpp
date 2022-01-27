@@ -37,7 +37,7 @@ bool SceneStart::Start()
 {
 	img= app->tex->Load(imgPath.GetString());
 	app->audio->PlayMusic(app->audio->soundtrack.GetString());
-	app->player->level = 1;
+	app->sceneGame->level = 1;
 	
 	return true;
 }
@@ -61,13 +61,13 @@ bool SceneStart::Update(float dt)
 	if ((app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 		|| (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN))
 	{
-		app->player->level = 1;
+		app->sceneGame->level = 1;
 		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
-		app->player->level = 2;
+		app->sceneGame->level = 2;
 		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
 	}
 

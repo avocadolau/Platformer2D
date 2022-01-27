@@ -24,7 +24,7 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::GROUND][Collider::Type::NONE] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::DETECTOR] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::GROUND] = false;
-	matrix[Collider::Type::GROUND][Collider::Type::PLAYER] = false;
+	matrix[Collider::Type::GROUND][Collider::Type::PLAYER] = true;
 	matrix[Collider::Type::GROUND][Collider::Type::PATACK] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::ENEMY] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::WIN] = false;
@@ -66,7 +66,7 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::WIN][Collider::Type::NONE] = false;
 	matrix[Collider::Type::WIN][Collider::Type::DETECTOR] = false;
 	matrix[Collider::Type::WIN][Collider::Type::GROUND] = false;
-	matrix[Collider::Type::WIN][Collider::Type::PLAYER] = false;
+	matrix[Collider::Type::WIN][Collider::Type::PLAYER] = true;
 	matrix[Collider::Type::WIN][Collider::Type::PATACK] = false;
 	matrix[Collider::Type::WIN][Collider::Type::ENEMY] = false;
 	matrix[Collider::Type::WIN][Collider::Type::WIN] = false;
@@ -76,7 +76,7 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::BORDER][Collider::Type::NONE] = false;
 	matrix[Collider::Type::BORDER][Collider::Type::DETECTOR] = false;
 	matrix[Collider::Type::BORDER][Collider::Type::GROUND] = false;
-	matrix[Collider::Type::BORDER][Collider::Type::PLAYER] = false;
+	matrix[Collider::Type::BORDER][Collider::Type::PLAYER] = true;
 	matrix[Collider::Type::BORDER][Collider::Type::PATACK] = false;
 	matrix[Collider::Type::BORDER][Collider::Type::ENEMY] = false;
 	matrix[Collider::Type::BORDER][Collider::Type::WIN] = false;
@@ -138,6 +138,7 @@ bool Collisions::Update(float dt)
 			if (matrix[c1->data->type][c2->data->type])
 				if (c1->data->Intersects(c2->data->rect))
 				{
+
 					for (uint i = 0; i < MAX_LISTENERS; ++i)
 						if (c1->data->listeners[i] != nullptr) c1->data->listeners[i]->OnCollision(c1->data, c2->data);
 
@@ -169,9 +170,9 @@ bool Collisions::CleanUp()
 	return true;
 }
 
-Collider* Collisions::AddCollider(SDL_Rect rect, Collider::Type type, Module* listener)
+Collider* Collisions::AddCollider(SDL_Rect rect, Collider::Type type, Module* listener, Entity*entity)
 {
-	Collider* newCol = new Collider(rect, type, listener);
+	Collider* newCol = new Collider(rect, type, listener, entity);
 	collidersList.add(newCol);
 
 	return newCol;

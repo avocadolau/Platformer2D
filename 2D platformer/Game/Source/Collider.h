@@ -7,6 +7,7 @@
 #define MAX_LISTENERS 5
 
 class Module;
+class Entity;
 
 struct Collider
 {
@@ -26,7 +27,7 @@ struct Collider
 
 	//Methods
 	Collider();
-	Collider(SDL_Rect rectangle, Type type, Module* listener = nullptr);
+	Collider(SDL_Rect rectangle, Type type, Module* listener = nullptr, Entity* entity=nullptr);
 
 	~Collider();
 
@@ -44,7 +45,7 @@ struct Collider
 	bool pendingToDelete = false;
 	Type type;
 	Module* listeners[MAX_LISTENERS] = { nullptr };
-	int level;
+	Entity* entity = nullptr;
 };
 
 #endif // !__COLLIDER_H__

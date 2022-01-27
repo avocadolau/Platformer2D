@@ -13,7 +13,7 @@
 #include "PathFinding.h"
 #include "PlayerAtack.h"
 #include "Checkpoint.h"
-#include "PickUp.h"
+#include "Coin.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -38,6 +38,7 @@ bool SceneGame::Awake(pugi::xml_node& config)
 	platformPath = config.child("elements").child("platform").attribute("platformPath").as_string();
 	walkInfo.spritePath = config.child("elements").child("walkEnemy").attribute("path").as_string();
 	flyInfo.spritePath = config.child("elements").child("flyEnemy").attribute("path").as_string();
+	level = config.attribute("level").as_int();
 
 	return ret;
 }
@@ -64,7 +65,7 @@ bool SceneGame::Start()
 bool SceneGame::PreUpdate()
 {
 	app->player->active = true;
-	app->checkpoint->active = true;
+	//app->checkpoint->active = true;
 	return true;
 }
 
@@ -140,12 +141,6 @@ bool SceneGame::PostUpdate()
 		eItem = eItem->next;
 	}
 
-	ListItem<PickUp*>* p = coins.start;
-	while (p != NULL)
-	{
-		bool drawn = p->data->Draw();
-		p = p->next;
-	}
 
 	ListItem<PlayerAtack*>* atack = atacks.start;
 	while (atack != NULL)
@@ -156,13 +151,13 @@ bool SceneGame::PostUpdate()
 
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
-		app->player->level = 1;
+		level = 1;
 		app->fade->Fade(this, app->sceneGame, app->fade->time / app->dt);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
-		app->player->level = 2;
+		level = 2;
 		app->fade->Fade(this, app->sceneGame, app->fade->time / app->dt);
 	}
 
@@ -171,6 +166,9 @@ bool SceneGame::PostUpdate()
 
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->LoadGameRequest();
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->SaveGameRequest();
+
+	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) app->player->godMode = !app->player->godMode;
+	if (app->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN) app->player->godMode = !app->player->godMode;
 
 	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) app->cap30fps = !app->cap30fps;
 
@@ -207,12 +205,12 @@ bool SceneGame::CleanUp()
 bool SceneGame::ChangeMap()
 {
 	// hay q revisar esto
+	app->player->Disable();
 	RemoveGroundColliders();
 	platforms.clear();
-	coins.clear();
 	app->collisions->RemoveCollider(winCol);
 	app->collisions->RemoveCollider(borders);
-
+	
 	ListItem<Enemy*>* eItem = enemies.start;
 	while (eItem != NULL)
 	{
@@ -220,12 +218,14 @@ bool SceneGame::ChangeMap()
 		eItem = enemies.start;
 	}
 
-	if (app->player->level == 1) currentMap = app->map1;
-	if (app->player->level == 2) currentMap = app->map2;
+	if (level == 1) currentMap = app->map1;
+	if (level == 2) currentMap = app->map2;
 
 	//app->player->CreateColliders();
 
-	if (app->GetLoadGameRequested() == false)currentMap->LoadPositions();
+	if (app->GetLoadGameRequested() == false)
+		currentMap->LoadPositions();
+
 	currentMap->LoadCollisions();
 	currentMap->LoadPlatforms();
 	currentMap->LoadEnemies();
@@ -254,7 +254,7 @@ bool SceneGame::ChangeMap()
 		destroyDeadEnemies = false;
 	}
 
-	app->player->alive = true;
+	app->player->Enable();
 
 	return true;
 }
@@ -303,6 +303,7 @@ bool SceneGame::RemoveEnemy(Enemy* enemy)
 
 bool SceneGame::LoadState(pugi::xml_node& node)
 {
+	level = node.attribute("level").as_int();
 	deadEnemies.clear();
 	for (pugi::xml_node eNode = node.child("enemies").child("id"); eNode ; eNode = eNode.next_sibling("id"))
 	{
@@ -316,7 +317,9 @@ bool SceneGame::LoadState(pugi::xml_node& node)
 bool SceneGame::SaveState(pugi::xml_node& node) const
 {
 	pugi::xml_node enemies = node.append_child("enemies");
-
+	
+	node.append_attribute("level").set_value(level);
+	
 	ListItem<int*>* item = deadEnemies.start;
 	while (item != NULL)
 	{
@@ -329,19 +332,7 @@ bool SceneGame::SaveState(pugi::xml_node& node) const
 
 void SceneGame::OnCollision(Collider* c1, Collider* c2)
 {
-	if (c1->type == Collider::Type::PICKUP)
-	{
-		ListItem<PickUp*>* c = coins.start;
-		while (c != NULL)
-		{
-			if (c1 == c->data->col)
-			{
-				coins.del(c);
-				break;
-			}
-			c = c->next;
-		}
-	}
+	
 	if (c1->type == Collider::Type::PATACK)
 	{
 		ListItem<PlayerAtack*>* a = atacks.start;
@@ -355,4 +346,15 @@ void SceneGame::OnCollision(Collider* c1, Collider* c2)
 			a = a->next;
 		}
 	}
+}
+
+bool LoadState(pugi::xml_node&)
+{
+
+	return true;
+}
+
+bool SaveState(pugi::xml_node&)
+{
+	return true;
 }

@@ -1,4 +1,6 @@
 #include "Player.h"
+#include "Entity.h"
+#include "EntityManager.h"
 #include "App.h"
 #include "Input.h"
 #include "Textures.h"
@@ -17,7 +19,7 @@
 #include "Defs.h"
 #include "Log.h"
 
-Player::Player() : Module()
+Player::Player() : Entity(EntityType::PLAYER)
 {
 	name.Create("player");
 	active = false;
@@ -25,7 +27,7 @@ Player::Player() : Module()
 
 Player::~Player()
 {
-
+	CleanUp();
 }
 
 bool Player::Awake(pugi::xml_node& config)
@@ -101,12 +103,6 @@ bool Player::Start()
 	currentAnim = &idle;
 	shotCoolDown.Start();
 	
-	return true;
-}
-
-bool Player::PreUpdate()
-{
-
 	return true;
 }
 
@@ -212,17 +208,6 @@ bool Player::Update(float dt)
 		left = true;
 	}
 
-	currentAnim->Update();
-
-	return true;
-}
-
-bool Player::PostUpdate()
-{
-	app->render->DrawTexture(sprites, pos.x, pos.y, &currentAnim->GetCurrentFrame(), 1.0f, 0, -1, NULL, currentAnim->mustFlip);
-
-	if (currentAnim == nullptr) currentAnim = &idle;
-
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		if (shotCoolDown.Read() >= COOLDOWN)
@@ -235,37 +220,41 @@ bool Player::PostUpdate()
 			app->sceneGame->atacks.add(atack);
 			shotCoolDown.Start();
 		}
-		
+
 	}
 
-
+	currentAnim->Update();
 
 	return true;
 }
+
+bool Player::Draw(Render* render)
+{
+	if (currentAnim == nullptr) currentAnim = &idle;
+
+	return render->DrawTexture(sprites, pos.x, pos.y, &currentAnim->GetCurrentFrame(), 1.0f, 0, -1, NULL, currentAnim->mustFlip);
+}
+
 
 bool Player::CleanUp()
 {
-
 	return true;
 }
 
-bool Player::LoadState(pugi::xml_node& node)
+bool Player::Load(pugi::xml_node& node)
 {
-	level = node.attribute("level").as_int();
 	pos.x = node.child("position").attribute("x").as_float();
 	pos.y = node.child("position").attribute("y").as_float();
 
 	return true;
 }
 
-bool Player::SaveState(pugi::xml_node& node) const
+bool Player::Save(pugi::xml_node& node) const
 {
 	pugi::xml_node position = node.append_child("position");
 	position.append_attribute("x").set_value(pos.x);
 	position.append_attribute("y").set_value(pos.y);
-	node.append_attribute("level").set_value(level);
 
-	
 	return true;
 }
 
@@ -281,23 +270,20 @@ bool Player::CreateColliders()
 
 
 	//up
-	rec = { 5,-1,dim.x - 8,1 };
-	colUp = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
+	rec = { (int)pos.x + 4,(int)pos.y - 1,dim.x - 8,1 };
+	colUp = app->collisions->AddCollider(rec, Collider::Type::PLAYER, app->entityManager, this);
 	//down
-	rec = { 5,dim.y,dim.x - 8,1 };
-	colDown = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
+	rec = { (int)pos.x + 4,(int)pos.y + dim.y,dim.x - 8,1 };
+	colDown = app->collisions->AddCollider(rec, Collider::Type::PLAYER, app->entityManager, this);
 	//left
-	rec = { -1,1,3,dim.y - 2 };
-	colLeft = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
+	rec = { (int)pos.x - 1,(int)pos.y + 1,3,dim.y - 2 };
+	colLeft = app->collisions->AddCollider(rec, Collider::Type::PLAYER, app->entityManager, this);
 	//right
-	rec = { dim.x - 4,1,5,dim.y - 2 };
-	colRight = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
+	rec = { (int)pos.x + dim.x - 4,(int)pos.y + 1,5,dim.y - 2 };
+	colRight = app->collisions->AddCollider(rec, Collider::Type::PLAYER, app->entityManager, this);
 	//body
-	rec = { 0,0,dim.x,dim.y };
-	collider = app->collisions->AddCollider(rec, Collider::Type::PLAYER, this);
-
-
-
+	rec = { (int)pos.x,(int)pos.y,dim.x,dim.y };
+	collider = app->collisions->AddCollider(rec, Collider::Type::PLAYER, app->entityManager, this);
 
 	return true;
 }
@@ -306,12 +292,12 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 {
 	if (c2==app->sceneGame->winCol)
 	{
-		if (level == 1)
+		if (app->sceneGame->level == 1)
 		{
-			level = 2;
+			app->sceneGame->level = 2;
 			app->fade->Fade(app->sceneGame, app->sceneGame, app->fade->time / app->dt);
 		}
-		if(level==2)app->fade->Fade(app->sceneGame, app->sceneWin, app->fade->time / app->dt);
+		if(app->sceneGame->level==2)app->fade->Fade(app->sceneGame, app->sceneWin, app->fade->time / app->dt);
 	}
 
 	if (godMode == true)
@@ -425,4 +411,21 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 		app->render->camera.y = (int)-pos.y + (app->win->GetHeight() / 2);
 	}
 
+}
+
+void Player::Enable()
+{
+	active = true;
+	CreateColliders();
+}
+
+void Player::Disable()
+{
+	active = false;
+
+	if (colUp != NULL) app->collisions->RemoveCollider(colUp);
+	if (colDown != NULL) app->collisions->RemoveCollider(colDown);
+	if (colLeft != NULL) app->collisions->RemoveCollider(colLeft);
+	if (colRight != NULL) app->collisions->RemoveCollider(colRight);
+	if (collider != NULL) app->collisions->RemoveCollider(collider);
 }

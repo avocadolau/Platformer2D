@@ -20,7 +20,7 @@ public:
 
 	bool CleanUp();
 
-	Collider* AddCollider(SDL_Rect rect, Collider::Type type, Module* listener = nullptr);
+	Collider* AddCollider(SDL_Rect rect, Collider::Type type, Module* listener = nullptr, Entity* entity=nullptr);
 	void RemoveCollider(Collider* collider);
 	void DebugDraw();
 

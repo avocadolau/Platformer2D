@@ -7,7 +7,7 @@
 #include "Enemy.h"
 #include "Platform.h"
 #include "PlayerAtack.h"
-#include "PickUp.h"
+#include "Coin.h"
 
 #include "SDL_image/include/SDL_image.h"
 
@@ -56,7 +56,6 @@ public:
 	
 	List<Platform*> platforms;
 	List<Enemy*> enemies;
-	List<PickUp*> coins;
 	List<PlayerAtack*> atacks;
 
 
@@ -65,6 +64,7 @@ public:
 	List<int*> deadEnemies;
 
 	bool destroyDeadEnemies = false;
+	int level;
 
 private:
 

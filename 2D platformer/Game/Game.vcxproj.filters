@@ -40,17 +40,24 @@
       <Filter>Time</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player.cpp">
-      <Filter>Elements</Filter>
+      <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="Source\FadeToBlack.cpp">
       <Filter>Time</Filter>
     </ClCompile>
     <ClCompile Include="Source\PathFinding.cpp" />
     <ClCompile Include="Source\Enemy.cpp">
-      <Filter>Elements</Filter>
+      <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="Source\Checkpoint.cpp">
-      <Filter>Elements</Filter>
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EntityManager.cpp" />
+    <ClCompile Include="Source\Entity.cpp">
+      <Filter>Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Coin.cpp">
+      <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,10 +119,10 @@
       <Filter>Time</Filter>
     </ClInclude>
     <ClInclude Include="Source\Player.h">
-      <Filter>Elements</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Source\Platform.h">
-      <Filter>Elements</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Source\FadeToBlack.h">
       <Filter>Time</Filter>
@@ -128,15 +135,21 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
-      <Filter>Elements</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Source\Checkpoint.h">
-      <Filter>Elements</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerAtack.h">
-      <Filter>Elements</Filter>
+      <Filter>Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PickUp.h" />
+    <ClInclude Include="Source\EntityManager.h" />
+    <ClInclude Include="Source\Entity.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Coin.h">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -157,7 +170,7 @@
     <Filter Include="Time">
       <UniqueIdentifier>{51c59564-e6f2-4d66-9100-4a409343d1e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Elements">
+    <Filter Include="Entities">
       <UniqueIdentifier>{5e8dcc73-6da4-47fd-ae71-28f7a7988d61}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

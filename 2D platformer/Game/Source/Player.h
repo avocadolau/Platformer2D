@@ -2,7 +2,7 @@
 #define __PLAYER_H
 
 #pragma once
-#include "Module.h"
+#include "Entity.h"
 #include "Collider.h"
 #include "Animation.h"
 #include "Textures.h"
@@ -10,23 +10,29 @@
 
 #define COOLDOWN 500
 
-class Player : public Module
+class Player : public Entity
 {
 public:
 	
 	Player();
 	~Player();
 
-	bool Awake(pugi::xml_node& config);
+	//bool Awake(pugi::xml_node& config);
+	bool Awake(pugi::xml_node&);
 	bool Start();
-	bool PreUpdate();
 	bool Update(float dt);
-	bool PostUpdate();
+	bool Draw(Render* render);
 	bool CleanUp();
-	bool LoadState(pugi::xml_node&);
-	bool SaveState(pugi::xml_node&) const;
+	
+	void Enable();
+	void Disable();
+
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
+
 	bool CreateColliders();
 	void OnCollision(Collider* c1, Collider* c2);
+
 
 public:
 
@@ -38,7 +44,6 @@ public:
 
 	float gravity;
 	int jumps;
-	int level;
 	bool alive = true;
 
 	Collider* colUp;
@@ -54,7 +59,7 @@ public:
 
 	SDL_Texture* sprites;
 	SString spritesPath;
-	Animation* currentAnim;
+	Animation* currentAnim = nullptr;
 	Animation idle, run, jump, death;
 	float animSpeed;
 
