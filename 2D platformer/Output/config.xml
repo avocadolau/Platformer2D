@@ -35,7 +35,7 @@
 	</player>
 
 	<entityManager>
-		<player>
+		<player lives="3">
 			<physics maxVelX="0.18f" maxVelY="0.72f" gravity="0.0017f"/>
 			<dimensions x="35" y="64"/>
 			<animations speed="0.15" path="Assets/Textures/playerSprites.png">
@@ -45,6 +45,9 @@
 				<death width="64" height="64" sprites="8"/>
 			</animations>
 		</player>
+
+		<platform path="Assets/Textures/platform.png"/>
+		<coin r="8" path=""/>
 		
 		<checkpoint>
 			<sprite width="160" height="160" path="Assets/textures/checkpoint.png"/>

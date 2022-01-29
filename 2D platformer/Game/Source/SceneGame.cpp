@@ -11,8 +11,9 @@
 #include "Map.h"
 #include "Player.h"
 #include "PathFinding.h"
-#include "PlayerAtack.h"
 #include "Checkpoint.h"
+#include "EntityManager.h"
+#include "Entity.h"
 #include "Coin.h"
 
 #include "Defs.h"
@@ -49,6 +50,12 @@ bool SceneGame::Start()
 	active = false;
 	app->map1->Load("level1.tmx");
 	app->map2->Load("level2.tmx");
+
+	if (app->player == NULL) {
+		SDL_Rect rec = { 0,0,0,0 };
+		app->entityManager->CreateEntity(EntityType::PLAYER, 0, rec);
+	}
+
 	app->player->active = true;
 	background = app->tex->Load(backgroundPath.GetString());
 	platformImg = app->tex->Load(platformPath.GetString());
@@ -86,29 +93,6 @@ bool SceneGame::Update(float dt)
 	iPoint map = currentMap->MapToWorld(currentMap->mapData.width,currentMap->mapData.height);
 
 
-	ListItem<Platform*>* pItem = platforms.start;
-	while (pItem != NULL)
-	{
-		pItem->data->Update(dt);
-		app->render->DrawTexture(platformImg, pItem->data->pos.x, pItem->data->pos.y, NULL);
-
-		pItem = pItem->next;
-	}
-
-	ListItem<Enemy*>* eItem = enemies.start;
-	while (eItem != NULL)
-	{
-		eItem->data->Update(dt);
-		eItem = eItem->next;
-	}
-
-	ListItem<PlayerAtack*>* atack = atacks.start;
-	while (atack != NULL)
-	{
-		atack->data->Update(dt);
-		atack = atack->next;
-	}
-	
 	app->render->DrawRectangle({ -win.x,-win.y,map.x + win.x,win.y }, 0, 0, 0, 255, true, true);
 	app->render->DrawRectangle({ 0,map.y,map.x + win.x,win.y }, 0, 0, 0, 255, true, true);
 	app->render->DrawRectangle({ -win.x,0,win.x ,win.y + map.y }, 0, 0, 0, 255, true, true);
@@ -133,22 +117,6 @@ bool SceneGame::PostUpdate()
 {
 	bool ret = true;
 
-
-	ListItem<Enemy*>* eItem = enemies.start;
-	while (eItem != NULL)
-	{
-		eItem->data->PostUpdate();
-		eItem = eItem->next;
-	}
-
-
-	ListItem<PlayerAtack*>* atack = atacks.start;
-	while (atack != NULL)
-	{
-		atack->data->Draw();
-		atack = atack->next;
-	}
-
 	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
 		level = 1;
@@ -168,16 +136,11 @@ bool SceneGame::PostUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->SaveGameRequest();
 
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) app->player->godMode = !app->player->godMode;
-	if (app->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN) app->player->godMode = !app->player->godMode;
 
 	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) app->cap30fps = !app->cap30fps;
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
-
-
-	if (app->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN)
-		if (enemies.start != NULL)enemies.start->data->active = false;
 
 
 	return ret;
@@ -193,8 +156,6 @@ bool SceneGame::CreateCollisions()
 // Called before quitting
 bool SceneGame::CleanUp()
 {
-	platforms.clear();
-	enemies.clear();
 	
 
 	LOG("Freeing scene");
@@ -205,19 +166,12 @@ bool SceneGame::CleanUp()
 bool SceneGame::ChangeMap()
 {
 	// hay q revisar esto
+	
 	app->player->Disable();
 	RemoveGroundColliders();
-	platforms.clear();
 	app->collisions->RemoveCollider(winCol);
 	app->collisions->RemoveCollider(borders);
 	
-	ListItem<Enemy*>* eItem = enemies.start;
-	while (eItem != NULL)
-	{
-		RemoveEnemy(eItem->data);
-		eItem = enemies.start;
-	}
-
 	if (level == 1) currentMap = app->map1;
 	if (level == 2) currentMap = app->map2;
 
@@ -228,31 +182,11 @@ bool SceneGame::ChangeMap()
 
 	currentMap->LoadCollisions();
 	currentMap->LoadPlatforms();
-	currentMap->LoadEnemies();
+	//currentMap->LoadEnemies();
 	currentMap->LoadCoins();
 
 	borders->listeners[0] = this;
 	winCol->listeners[0] = this;
-
-	if (destroyDeadEnemies == true)
-	{
-		ListItem<int*>* id = deadEnemies.start;
-		while (id != NULL)
-		{
-			ListItem<Enemy*>* enemy = enemies.start;
-			while (enemy != NULL)
-			{
-				if (&enemy->data->id == id->data)
-				{
-					RemoveEnemy(enemy->data);
-					break;
-				}
-				enemy = enemy->next;
-			}
-			id = id->next;
-		}
-		destroyDeadEnemies = false;
-	}
 
 	app->player->Enable();
 
@@ -276,47 +210,22 @@ bool SceneGame::RemoveGroundColliders()
 	return true;
 }
 
-bool SceneGame::RemoveEnemy(Enemy* enemy)
-{
-	bool ret = false;
-
-	ListItem<Enemy*>* p;
-	p = enemies.start;
-
-	while (p != NULL)
-	{
-		if (p->data == enemy)
-		{
-			ret = true;
-			app->sceneGame->deadEnemies.add(&enemy->id);
-			p->data->CleanUp();
-			enemies.del(p);
-			break;
-		}
-		p = p->next;
-	}
-
-
-	return ret;
-}
-
-
 bool SceneGame::LoadState(pugi::xml_node& node)
 {
 	level = node.attribute("level").as_int();
-	deadEnemies.clear();
+	/*deadEnemies.clear();
 	for (pugi::xml_node eNode = node.child("enemies").child("id"); eNode ; eNode = eNode.next_sibling("id"))
 	{
 		int id= eNode.attribute("value").as_int();
 		deadEnemies.add(&id);
 	}
-	destroyDeadEnemies = true;
+	destroyDeadEnemies = true;*/
 	return true;
 }
 
 bool SceneGame::SaveState(pugi::xml_node& node) const
 {
-	pugi::xml_node enemies = node.append_child("enemies");
+	/*pugi::xml_node enemies = node.append_child("enemies");
 	
 	node.append_attribute("level").set_value(level);
 	
@@ -326,26 +235,14 @@ bool SceneGame::SaveState(pugi::xml_node& node) const
 		pugi::xml_node id = enemies.append_child("id");
 		id.append_attribute("value").set_value(item->data);
 		item = item->next;
-	}
+	}*/
 	return true;
 }
 
 void SceneGame::OnCollision(Collider* c1, Collider* c2)
 {
 	
-	if (c1->type == Collider::Type::PATACK)
-	{
-		ListItem<PlayerAtack*>* a = atacks.start;
-		while (a != NULL)
-		{
-			if (c1 == a->data->col)
-			{
-				atacks.del(a);
-				break;
-			}
-			a = a->next;
-		}
-	}
+
 }
 
 bool LoadState(pugi::xml_node&)

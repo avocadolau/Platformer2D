@@ -43,7 +43,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	collisions = new Collisions();
 	entityManager = new EntityManager();
 	//checkpoint = new Checkpoint();
-	player = new Player;
+	//player = new Player;
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -128,9 +128,9 @@ bool App::Awake()
 		}
 	}
 
-	entityManager->AddEntity(player);
+	/*entityManager->AddEntity(player);
 	player->Awake(config.child("player"));
-	player->Start();
+	player->Start();*/
 
 	return ret;
 }
@@ -147,7 +147,7 @@ bool App::Start()
 		ret = item->data->Start();
 		item = item->next;
 	}
-	player->Start();
+	//player->Start();
 	return ret;
 }
 

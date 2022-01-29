@@ -37,7 +37,6 @@ public:
 	
 	bool CreateCollisions();
 	bool RemoveGroundColliders();
-	bool RemoveEnemy(Enemy* enemy);
 	bool CleanUp();
 
 	void OnCollision(Collider* c1, Collider* c2);
@@ -53,11 +52,6 @@ public:
 	Collider* borders;
 
 	Map* currentMap = nullptr;
-	
-	List<Platform*> platforms;
-	List<Enemy*> enemies;
-	List<PlayerAtack*> atacks;
-
 
 	EnemyInfo flyInfo;
 	EnemyInfo walkInfo;

@@ -25,7 +25,7 @@ Collisions::Collisions() :Module()
 	matrix[Collider::Type::GROUND][Collider::Type::DETECTOR] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::GROUND] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::PLAYER] = true;
-	matrix[Collider::Type::GROUND][Collider::Type::PATACK] = false;
+	matrix[Collider::Type::GROUND][Collider::Type::PATACK] = true;
 	matrix[Collider::Type::GROUND][Collider::Type::ENEMY] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::WIN] = false;
 	matrix[Collider::Type::GROUND][Collider::Type::BORDER] = false;

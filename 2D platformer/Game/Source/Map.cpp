@@ -54,8 +54,8 @@ bool Map::Awake(pugi::xml_node& config)
 
 		newEnemy->id= enemyNode.attribute("id").as_int();
 
-		if (enemyNode.attribute("type").as_string() == "fly") newEnemy->type = Enemy::Type::FLY;
-		if (enemyNode.attribute("type").as_string() == "walk") newEnemy->type = Enemy::Type::WALK;
+		if (enemyNode.attribute("type").as_string() == "fly") newEnemy->type = EntityType::FLY_ENEMY;
+		if (enemyNode.attribute("type").as_string() == "walk") newEnemy->type = EntityType::WALK_ENEMY;
 
 		newEnemy->dim= { enemyNode.attribute("w").as_int(),enemyNode.attribute("h").as_int() };
 
@@ -520,10 +520,7 @@ bool Map::LoadPlatforms()
 				{
 					if (mapLayerItem->data->Get(x, y) == NULL)continue;
 					iPoint p = MapToWorld(x - 1, y);
-					Platform* newPlatform = new Platform(p);
-					newPlatform->col->listeners[0] = app->sceneGame;
-					app->sceneGame->platforms.add(newPlatform);
-					
+					app->entityManager->CreateEntity(EntityType::PLATFORM, 0, { p.x,p.y,0,0 });
 				}
 			}
 		}
@@ -556,8 +553,7 @@ bool Map::LoadEnemies()
 		ret = true;
 		
 		Enemy* newEnemy = new Enemy(item->data->id, item->data->dim, item->data->detector, item->data->lim1, item->data->lim2, item->data->type);
-		app->sceneGame->enemies.add(newEnemy);
-
+		app->entityManager->AddEntity(newEnemy);
 		item = item->next;
 	}
 
@@ -586,7 +582,7 @@ bool Map::LoadCoins()
 
 					iPoint p = MapToWorld(x , y);
 
-					Coin* coin = new Coin(0, { p.x,p.y,0,0 });
+					Coin* coin = new Coin(0, { p.x,p.y,8,8 });
 					app->entityManager->AddEntity(coin);
 				}
 			}

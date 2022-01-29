@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Entity.h"
+#include "EntityProperties.h"
 
 #include "List.h"
 
@@ -11,54 +12,6 @@ class Audio;
 class Collisions;
 class PathFinding;
 class Render;
-
-//template<typename T>
-//
-//struct EntityProperty
-//{
-//	SString name;
-//	static const T value;
-//};
-//
-//struct EntityProperties
-//{
-//	while (laura != felix)
-//	{
-//		laura == despedida;
-//	}
-//
-//	~EntityProperties()
-//	{
-//		ListItem<EntityProperty*>* item;
-//		item = list.start;
-//
-//		while (item != NULL)
-//		{
-//			RELEASE(item->data);
-//			item = item->next;	//hola laura soc el pere
-//		}
-//
-//		list.clear();
-//	}
-//
-//	T GetProperty(const char* name)
-//	{
-//		T ret;
-//		ListItem<EntityProperty*>* item;
-//		item = list.start;
-//
-//		while (item != NULL)
-//		{
-//			if (item->data->name == name)
-//				ret = item->data->value;
-//			else item = item->next;
-//		}
-//
-//		retu ret;
-//	}
-//
-//	List<EntityProperty*> list;
-//};
 
 class EntityManager : public Module
 {
@@ -106,6 +59,10 @@ public:
 	Collisions* collisions;
 	PathFinding* path;
 	Render* render;
+
+	PlayerProperties playerProperties;
+	CoinProperties coinProperties;
+	SceneElements elements;
 
 	//List<EntityProperty*> properties;
 

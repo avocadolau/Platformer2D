@@ -30,13 +30,41 @@ bool EntityManager::Awake(pugi::xml_node& config)
 	// player
 	node = config.child("player");
 
+	playerProperties.lives = node.attribute("lives").as_int();
+	playerProperties.maxVel.x = node.child("physics").attribute("maxVelX").as_float();
+	playerProperties.maxVel.y = node.child("physics").attribute("maxVelY").as_float();
+	playerProperties.gravity = node.child("physics").attribute("gravity").as_float();
+	playerProperties.dim.x = node.child("dimensions").attribute("x").as_int();
+	playerProperties.dim.y = node.child("dimensions").attribute("y").as_int();
+
+	playerProperties.animSpeed = node.child("animations").attribute("speed").as_float();
+	playerProperties.spritePath = ("%s", node.child("animations").attribute("path").as_string());
+
+	playerProperties.idleW = node.child("animations").child("idle").attribute("width").as_int();
+	playerProperties.idleH = node.child("animations").child("idle").attribute("height").as_int();
+	playerProperties.idleN = node.child("animations").child("idle").attribute("sprites").as_int();
+
+	playerProperties.runW = node.child("animations").child("run").attribute("width").as_int();
+	playerProperties.runH = node.child("animations").child("run").attribute("height").as_int();
+	playerProperties.runN = node.child("animations").child("run").attribute("sprites").as_int();
+
+	playerProperties.jumpW = node.child("animations").child("jump").attribute("width").as_int();
+	playerProperties.jumpH = node.child("animations").child("jump").attribute("height").as_int();
+	playerProperties.jumpN = node.child("animations").child("jump").attribute("sprites").as_int();
+
+	playerProperties.deathW = node.child("animations").child("death").attribute("width").as_int();
+	playerProperties.deathH = node.child("animations").child("death").attribute("height").as_int();
+	playerProperties.deathN = node.child("animations").child("death").attribute("sprites").as_int();
 
 	// enemies
 
 
 	// platforms
+	elements.platformPath = config.child("platform").attribute("path").as_string();
 
 	// coins
+	node = config.child("coin");
+	coinProperties.dim= node.attribute("r").as_int();
 
 	// shot
 
@@ -51,6 +79,9 @@ bool EntityManager::Awake(pugi::xml_node& config)
 bool EntityManager::Start()
 {
 	render = app->render;
+
+	app->entityManager->coinProperties.sprite = app->tex->Load(app->entityManager->coinProperties.path.GetString());
+	app->entityManager->elements.platformImg = app->tex->Load(app->entityManager->elements.platformPath.GetString());
 
 	return true;
 }
@@ -81,14 +112,13 @@ Entity* EntityManager::CreateEntity(EntityType type, int id, SDL_Rect bounds)
 	switch (type)
 	{
 	case EntityType::PLAYER:		entity = new Player(); break;
-	case EntityType::FLY_ENEMY:		break;
-	case EntityType::WALK_ENEMY:	break;
 	case EntityType::COIN:			entity = new Coin(id, bounds); break;
-	case EntityType::PLATFORM:		break;
-
-	default:
-		break;
+	case EntityType::PLATFORM:		entity = new Platform({ bounds.x, bounds.y }); break;
+	case EntityType::ATACK:			entity = new PlayerAtack(bounds); break;
+	default:						break;
 	}
+
+	AddEntity(entity);
 
 	return entity;
 }
@@ -106,6 +136,7 @@ void EntityManager::DestroyEntity(Entity* entity)
 void EntityManager::AddEntity(Entity* entity)
 {
 	if (entity != nullptr) entities.add(entity);
+	entity->Start();
 }
 
 bool EntityManager::Update(float dt)
@@ -138,17 +169,22 @@ bool EntityManager::UpdateAll(float dt, bool doLogic)
 		{
 			pEntity = item->data;
 
-			if (pEntity->active == false)
-			{
-				if (pEntity != app->player)
-				{
-					item = item->prev;
-					DestroyEntity(pEntity);
-				}
-			}
-				
-			else ret = item->data->Update(dt);
+			if (pEntity->active == true)
+				item->data->Update(dt);
 		}
+	}
+
+	item = entities.start;
+	while (item != NULL)
+	{
+		pEntity = item->data;
+		
+		if (pEntity->toDestroy == true)
+		{
+			item = item->next;
+			DestroyEntity(pEntity);
+		}
+		else item = item->next;
 	}
 
 	return ret;
@@ -196,8 +232,9 @@ bool EntityManager::SaveState(pugi::xml_node& data)
 
 	while (item != NULL && ret == true)
 	{
-		data.append_child(item->data->name.GetString());
-		ret = item->data->Save(data.child(item->data->name.GetString()));
+		pugi::xml_node node = data.append_child("position");
+		//data.append_child(item->data->name.GetString());
+		ret = item->data->Save(node);
 		item = item->next;
 	}
 
@@ -224,10 +261,6 @@ bool EntityManager::Draw() {
 
 void EntityManager::OnCollision(Collider* c1, Collider* c2)
 {
-	ListItem<Entity*>* item;
-	Entity* pEntity = NULL;
-
-	app->debug = true;
 
 	if (c1->entity != nullptr)
 		if (c1->entity->active==true)

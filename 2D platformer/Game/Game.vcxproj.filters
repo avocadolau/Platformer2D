@@ -53,10 +53,10 @@
       <Filter>Entities</Filter>
     </ClCompile>
     <ClCompile Include="Source\EntityManager.cpp" />
-    <ClCompile Include="Source\Entity.cpp">
+    <ClCompile Include="Source\Coin.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Coin.cpp">
+    <ClCompile Include="Source\EntityProperties.h">
       <Filter>Entities</Filter>
     </ClCompile>
   </ItemGroup>

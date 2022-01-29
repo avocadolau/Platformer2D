@@ -11,14 +11,13 @@
 
 #include "Point.h"
 
-Enemy::Enemy(int id_, iPoint dim_ ,SDL_Rect pDetector, iPoint lim1_, iPoint lim2_, Type type_)
+Enemy::Enemy(int id_, iPoint dim_ ,SDL_Rect pDetector, iPoint lim1_, iPoint lim2_, EntityType type_): Entity(type_)
 {
 	id = id_;
 	active = true;
 	dim = dim_;
 	lim1 = lim1_;
 	lim2 = lim2_;
-	type = type_;
 
 	lastLim = lim2;
 
@@ -30,12 +29,12 @@ Enemy::Enemy(int id_, iPoint dim_ ,SDL_Rect pDetector, iPoint lim1_, iPoint lim2
 	pos = { (float)ipos.x,(float)ipos.y };
 
 	SDL_Rect rec = { (int)pos.x,(int)pos.y,dim.x,dim.y };
-	col = app->collisions->AddCollider(rec, Collider::Type::ENEMY, this);
+	col = app->collisions->AddCollider(rec, Collider::Type::ENEMY, app->entityManager, this);
 	rec = { (int)pos.x,(int)pos.y,dim.x,10 };
-	up = app->collisions->AddCollider(rec, Collider::Type::ENEMY, this);
+	up = app->collisions->AddCollider(rec, Collider::Type::ENEMY, app->entityManager, this);
 	rec = { (int)pos.x,(int)pos.y + dim.y - 2,dim.x,2 };
-	down = app->collisions->AddCollider(rec, Collider::Type::ENEMY, this);
-	detector = app->collisions->AddCollider(pDetector, Collider::Type::DETECTOR, this);
+	down = app->collisions->AddCollider(rec, Collider::Type::ENEMY, app->entityManager, this);
+	detector = app->collisions->AddCollider(pDetector, Collider::Type::DETECTOR, app->entityManager, this);
 
 	vel = app->player->maxVel.x * 0.7;
 
@@ -49,27 +48,10 @@ Enemy::~Enemy()
 	
 }
 
-bool Enemy::Awake()
-{
-	bool ret = false;
-
-	return ret;
-}
-
 bool Enemy::Start()
 {
 	
-
 	return true;
-}
-
-bool Enemy::PreUpdate()
-{
-	bool ret = false;
-
-	
-
-	return ret;
 }
 
 bool Enemy::Update(float dt)
@@ -78,8 +60,8 @@ bool Enemy::Update(float dt)
 
 	if (state == ALIVE)
 	{
-		if (type == WALK) Walk(dt);
-		if (type == FLY) Fly(dt);
+		if (type == EntityType::WALK_ENEMY) Walk(dt);
+		if (type == EntityType::FLY_ENEMY) Fly(dt);
 
 		SetPosition(pos);
 	}
@@ -95,10 +77,7 @@ bool Enemy::Update(float dt)
 
 		active = false;
 
-		if (active == false)
-		{
-			app->sceneGame->RemoveEnemy(this);
-		}
+		toDestroy = false;
 
 	}
 
@@ -109,7 +88,7 @@ bool Enemy::Update(float dt)
 	return ret;
 }
 
-bool Enemy::PostUpdate()
+bool Enemy::Draw(Render* render)
 {
 	bool ret = false;
 

@@ -8,15 +8,12 @@
 	<map2 />
 	<entityManager />
 	<start />
-	<game level="1">
-		<enemies />
-	</game>
+	<game />
 	<win />
 	<lose />
-	<checkpoint />
 	<collisions />
 	<fade />
 	<renderer>
-		<camera x="640" y="360" />
+		<camera x="331" y="-1061" />
 	</renderer>
 </game_state>

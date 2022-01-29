@@ -115,8 +115,8 @@ struct MapData
 
 struct EnemyData
 {
-	int id;
-	Enemy::Type type;
+	uint32 id;
+	EntityType type;
 	iPoint dim;
 	SDL_Rect detector;
 	iPoint lim1;

@@ -1,7 +1,7 @@
 #ifndef __ENEMY_H__
 #define __ENEMY_H__
 
-#include "Module.h"
+#include "Entity.h"
 #include "Collider.h"
 #include "Point.h"
 #include "DynArray.h"
@@ -9,7 +9,7 @@
 
 #include "SDL_image/include/SDL_image.h"
 
-class Enemy : public Module
+class Enemy : public Entity
 {
 public:
 
@@ -21,26 +21,18 @@ public:
 		RIGHT
 	};
 
-	enum Type
-	{
-		FLY,
-		WALK
-	};
-
 	enum State
 	{
 		ALIVE,
 		DEATH
 	};
 
-	Enemy(int id,iPoint dim_, SDL_Rect pDetector, iPoint lim1, iPoint lim2, Type type);
+	Enemy(int id,iPoint dim_, SDL_Rect pDetector, iPoint lim1, iPoint lim2, EntityType type);
 	~Enemy();
 
-	bool Awake();
 	bool Start();
-	bool PreUpdate();
 	bool Update(float dt);
-	bool PostUpdate();
+	bool Draw(Render* render);
 	bool CleanUp();
 
 
@@ -56,7 +48,6 @@ public:
 
 public:
 	int tileDim;
-	int id;
 	float vel;
 
 	fPoint pos;
@@ -77,7 +68,6 @@ public:
 	iPoint lastLim;
 
 	State state = ALIVE;
-	Type type;
 	Direction dir;
 
 	const DynArray<iPoint>* path;

@@ -16,6 +16,7 @@ enum class EntityType
 	COIN,
 	PLATFORM,
 	LIFE,
+	ATACK,
 	UNKNOWN
 };
 
@@ -54,6 +55,7 @@ public:
 public:
 	SString name;
 	bool active = false;
+	bool toDestroy = false;
 
 	EntityType type;
 	//SString name;         // Entity name identifier?

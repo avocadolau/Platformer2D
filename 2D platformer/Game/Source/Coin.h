@@ -31,7 +31,6 @@ public:
 	int dim = 16;
 
 	SDL_Texture* texture;
-	bool isPicked = false;
 	unsigned int fx;
 
 	

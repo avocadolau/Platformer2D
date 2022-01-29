@@ -44,6 +44,7 @@ public:
 
 	float gravity;
 	int jumps;
+	int lives;
 	bool alive = true;
 
 	Collider* colUp;
@@ -58,7 +59,6 @@ public:
 	bool godMode = false;
 
 	SDL_Texture* sprites;
-	SString spritesPath;
 	Animation* currentAnim = nullptr;
 	Animation idle, run, jump, death;
 	float animSpeed;

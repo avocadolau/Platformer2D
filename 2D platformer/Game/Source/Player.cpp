@@ -35,6 +35,7 @@ bool Player::Awake(pugi::xml_node& config)
 	LOG("Loading Player");
 	bool ret = true;
 
+	lives = config.attribute("lives").as_int();
 	maxVel.x = config.child("physics").attribute("maxVelX").as_float();
 	maxVel.y = config.child("physics").attribute("maxVelY").as_float();
 	gravity = config.child("physics").attribute("gravity").as_float();
@@ -42,7 +43,6 @@ bool Player::Awake(pugi::xml_node& config)
 	dim.y = config.child("dimensions").attribute("y").as_int();
 	
 	animSpeed = config.child("animations").attribute("speed").as_float();
-	spritesPath=("%s", config.child("animations").attribute("path").as_string());
 	
 	int width, height, sprites;
 
@@ -94,15 +94,66 @@ bool Player::Start()
 {
 	active = false;
 
-	vel = { maxVel.x,0 };
+	lives = app->entityManager->playerProperties.lives;
+	maxVel.x = app->entityManager->playerProperties.maxVel.x;
+	maxVel.y = app->entityManager->playerProperties.maxVel.y;
+	gravity = app->entityManager->playerProperties.gravity;
+	dim.x = app->entityManager->playerProperties.dim.x;
+	dim.y = app->entityManager->playerProperties.dim.y;
 
-	sprites = app->tex->Load(spritesPath.GetString());
+	animSpeed = app->entityManager->playerProperties.animSpeed;
+	sprites = app->tex->Load(app->entityManager->playerProperties.spritePath.GetString());
+
+	int width, height, sprites;
+
+	width = app->entityManager->playerProperties.idleW;
+	height = app->entityManager->playerProperties.idleH;
+	sprites = app->entityManager->playerProperties.idleN;
+
+	for (int i = 0; i < sprites; i++)
+		idle.PushBack({ width * i,0,width,height });
+	idle.loop = true;
+	idle.mustFlip = false;
+	idle.speed = animSpeed;
+
+	width = app->entityManager->playerProperties.runW;
+	height = app->entityManager->playerProperties.runH;
+	sprites = app->entityManager->playerProperties.runN;
+
+	for (int i = 0; i < sprites; i++)
+		run.PushBack({ width * i,height * 1,width,height });
+	run.loop = true;
+	run.mustFlip = false;
+	run.speed = animSpeed;
+
+	width = app->entityManager->playerProperties.jumpW;
+	height = app->entityManager->playerProperties.jumpH;
+	sprites = app->entityManager->playerProperties.jumpN;
+
+	for (int i = 0; i < sprites; i++)
+		jump.PushBack({ width * i,height * 2,width,height });
+	jump.loop = true;
+	jump.mustFlip = false;
+	jump.speed = animSpeed;
+
+	width = app->entityManager->playerProperties.deathW;
+	height = app->entityManager->playerProperties.deathH;
+	sprites = app->entityManager->playerProperties.deathN;
+
+	for (int i = 0; i < sprites; i++)
+		death.PushBack({ width * i,height * 3,width,height });
+	death.loop = false;
+	death.mustFlip = false;
+	death.speed = animSpeed;
+
+	vel = { maxVel.x,0 };
 
 	CreateColliders();
 	
 	currentAnim = &idle;
+	app->player = this;
 	shotCoolDown.Start();
-	
+
 	return true;
 }
 
@@ -214,10 +265,8 @@ bool Player::Update(float dt)
 		{
 			float velocity = vel.x;
 			if (currentAnim->mustFlip == true) velocity = 0 - velocity;
-			PlayerAtack* atack = new PlayerAtack(pos, velocity);
-			Module* listener = app->sceneGame;
-			atack->col->listeners[0] = listener;
-			app->sceneGame->atacks.add(atack);
+			// arreglar
+			app->entityManager->CreateEntity(EntityType::ATACK, 0, { (int)pos.x, (int)pos.y,0,0 });
 			shotCoolDown.Start();
 		}
 
@@ -416,6 +465,7 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 void Player::Enable()
 {
 	active = true;
+	alive = true;
 	CreateColliders();
 }
 
