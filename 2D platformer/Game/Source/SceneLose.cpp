@@ -11,6 +11,7 @@
 #include "Map.h"
 #include "Player.h"
 
+
 #include "Defs.h"
 #include "Log.h"
 
@@ -60,16 +61,22 @@ bool SceneLose::Update(float dt)
 		app->sceneGame->level = 1;
 		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
 		app->player->death.Reset();
+		app->player->score = 0;
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
 	{
 		app->sceneGame->level = 2;
+		app->player->score = 0;
 		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-		app->fade->Fade(this, app->sceneStart, app->fade->time / dt);
+	{
+		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
+		app->player->score = 0;
+	}
+		
 
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
 

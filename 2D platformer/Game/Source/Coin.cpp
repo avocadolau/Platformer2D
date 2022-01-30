@@ -13,6 +13,7 @@ Coin::Coin(uint32 id, SDL_Rect bounds) : Entity(EntityType::COIN)
 {
 	name.Create("Coin");
 	active = true;
+	id = 0;
 	dim = app->entityManager->coinProperties.dim;
 	SDL_Rect rec = { bounds.x,bounds.y,bounds.w,bounds.h };
 	col = app->collisions->AddCollider(rec, Collider::Type::PICKUP, app->entityManager, this);

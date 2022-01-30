@@ -15,6 +15,7 @@
 #include "EntityManager.h"
 #include "Render.h"
 #include "EntityProperties.h"
+#include "App.h"
 
 #include "SDL/include/SDL_Rect.h"
 
@@ -30,7 +31,7 @@ public:
 		this->pos = { (float)pos.x,(float)pos.y };
 		SDL_Rect rec = { pos.x + 16,pos.y + 16,64 + 32,64 + 32 };
 		col = app->collisions->AddCollider(rec, Collider::Type::GROUND, app->entityManager, this);
-		
+		id = 0;
 	}
 	~Platform() {
 		app->collisions->RemoveCollider(col);
@@ -44,6 +45,7 @@ public:
 			else
 			{
 				col->type = Collider::Type::NONE;
+				app->collisions->RemoveCollider(col);
 				//vel += app->player->gravity * dt;
 				vel = app->player->maxVel.y;
 				if (vel > app->player->maxVel.y) vel = app->player->maxVel.y;

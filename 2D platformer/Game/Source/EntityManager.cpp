@@ -228,7 +228,7 @@ bool EntityManager::LoadState(pugi::xml_node& data)
 	return ret;
 }
 
-bool EntityManager::SaveState(pugi::xml_node& data)
+bool EntityManager::SaveState(pugi::xml_node& data) const
 {
 	bool ret = true;
 
@@ -237,9 +237,8 @@ bool EntityManager::SaveState(pugi::xml_node& data)
 
 	while (item != NULL && ret == true)
 	{
-		pugi::xml_node node = data.append_child("position");
-		//data.append_child(item->data->name.GetString());
-		ret = item->data->Save(node);
+		pugi::xml_node node = data.append_child(item->data->name.GetString());
+		item->data->Save(node);
 		item = item->next;
 	}
 
@@ -274,4 +273,28 @@ void EntityManager::OnCollision(Collider* c1, Collider* c2)
 			c1->entity->OnCollision(c1, c2);
 
 	
+}
+
+
+// except player
+void EntityManager::RemoveEntities()
+{
+	ListItem<Entity*>* item;
+	Entity* pEntity = entities.start->data;
+
+	while (pEntity != app->player)
+	{
+		pEntity->CleanUp();
+		DestroyEntity(pEntity);
+		pEntity=entities.start->data;
+	}
+	pEntity = entities.end->data;
+	while (pEntity != app->player)
+	{
+		pEntity->CleanUp();
+		DestroyEntity(pEntity);
+		pEntity = entities.end->data;
+	}
+
+
 }

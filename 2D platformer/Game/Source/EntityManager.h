@@ -43,11 +43,13 @@ public:
 
 	bool UpdateAll(float dt, bool doLogic);
 
-	bool LoadState(pugi::xml_node& data);
+	bool LoadState(pugi::xml_node&);
 
-	bool SaveState(pugi::xml_node& data);
+	bool SaveState(pugi::xml_node&) const;
 
 	void OnCollision(Collider* c1, Collider* c2);
+
+	void RemoveEntities();
 
 public:
 

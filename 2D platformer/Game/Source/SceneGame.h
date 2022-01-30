@@ -66,6 +66,8 @@ public:
 	float timer = 0;
 	bool saved = false;
 
+	int maxScoreLvl1, maxScoreLvl2;
+
 private:
 
 	bool mapLoaded = false;

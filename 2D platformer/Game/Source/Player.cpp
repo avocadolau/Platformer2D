@@ -22,6 +22,7 @@
 Player::Player() : Entity(EntityType::PLAYER)
 {
 	name.Create("player");
+	id = 0;
 	active = false;
 }
 
@@ -162,14 +163,17 @@ bool Player::Update(float dt)
 	// vertical movement
 	if (alive == false)
 	{
+		score = 0;
 		death.mustFlip = currentAnim->mustFlip;
 		if (currentAnim != &death) currentAnim = &death;
 		if (currentAnim->HasFinished() == true)
 		{
-			app->player->lives--;
 			app->fade->Fade(app->sceneGame, app->sceneLose, app->fade->time / dt);
+			lifeSubstract = true;
 		}
 	}
+
+	if (currentAnim == &death)alive = false;
 
 	else
 	{
@@ -260,18 +264,17 @@ bool Player::Update(float dt)
 		left = true;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-	{
-		if (shotCoolDown.Read() >= COOLDOWN)
-		{
-			float velocity = vel.x;
-			if (currentAnim->mustFlip == true) velocity = 0 - velocity;
-			// arreglar
-			app->entityManager->CreateEntity(EntityType::ATACK, 0, { (int)pos.x, (int)pos.y,0,0 });
-			shotCoolDown.Start();
-		}
-
-	}
+	//if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	//{
+	//	if (shotCoolDown.Read() >= COOLDOWN)
+	//	{
+	//		float velocity = vel.x;
+	//		if (currentAnim->mustFlip == true) velocity = 0 - velocity;
+	//		// arreglar
+	//		app->entityManager->CreateEntity(EntityType::ATACK, 0, { (int)pos.x, (int)pos.y,0,0 });
+	//		shotCoolDown.Start();
+	//	}
+	//}
 
 	currentAnim->Update();
 
@@ -459,6 +462,8 @@ void Player::OnCollision(Collider* c1, Collider* c2)
 
 		app->render->camera.x = (int)-pos.x + (app->win->GetWidth() / 2);
 		app->render->camera.y = (int)-pos.y + (app->win->GetHeight() / 2);
+
+		if (c2->type == Collider::Type::ENEMY) alive = false;
 	}
 
 }

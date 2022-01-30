@@ -88,9 +88,26 @@ bool SceneGame::Update(float dt)
 	{
 		app->player->scoreHud += dt / 200;
 		app->guiManager->fontColor = 1;
+		
 	}
 	else app->guiManager->fontColor = 0;
 
+
+	if (currentMap == app->map1)
+	{
+		if (maxScoreLvl1 < app->player->scoreHud) maxScoreLvl1 = app->player->scoreHud;
+		highScore = maxScoreLvl1;
+	}
+		
+	if (currentMap == app->map2)
+	{
+		if (maxScoreLvl2 < app->player->scoreHud) maxScoreLvl2 = app->player->scoreHud;
+		highScore = maxScoreLvl2;
+	}
+
+	if (app->player->alive == false) {
+		app->player->scoreHud = 0;
+	}
 
 	iPoint win;
 	win.x = app->win->GetWidth();
@@ -194,6 +211,8 @@ bool SceneGame::ChangeMap()
 	app->collisions->RemoveCollider(winCol);
 	app->collisions->RemoveCollider(borders);
 	
+	app->entityManager->RemoveEntities();
+
 	if (level == 1) currentMap = app->map1;
 	if (level == 2) currentMap = app->map2;
 

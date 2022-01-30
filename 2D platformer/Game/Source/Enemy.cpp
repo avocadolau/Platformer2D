@@ -8,6 +8,7 @@
 #include "Collisions.h"
 #include "Collider.h"
 #include "Render.h"
+#include "Entity.h"
 
 #include "Point.h"
 
@@ -20,6 +21,9 @@ Enemy::Enemy(int id_, iPoint dim_ ,SDL_Rect pDetector, iPoint lim1_, iPoint lim2
 	lim2 = lim2_;
 
 	lastLim = lim2;
+
+	if (type == EntityType::FLY_ENEMY) name.Create("fly_enemy");
+	if (type == EntityType::WALK_ENEMY) name.Create("walk_enemy");
 
 	tileDim = app->sceneGame->currentMap->mapData.tileHeight;
 
@@ -50,6 +54,28 @@ Enemy::~Enemy()
 
 bool Enemy::Start()
 {
+	iPoint center = { (int)pos.x + (dim.x / 2),(int)pos.y + (dim.y / 2) };
+	int offset = 5;
+
+	active = true;
+
+	//if (center.x % tileDim > (tileDim / 2) - offset && center.x % tileDim < (tileDim / 2) + offset)
+	//{
+	//	if (center.y % tileDim > (tileDim / 2) - offset && center.y % tileDim < (tileDim / 2) + offset)
+	//	{
+	//		bool hehe;
+	//	}
+	//}
+	//else
+	//{
+	//	
+	//	iPoint newP = { (int)pos.x - ((int)pos.x % tileDim), (int)pos.y - ((int)pos.y % tileDim) };
+	//	newP.x += (tileDim / 2) - (dim.x / 2);
+	//	newP.y += (tileDim / 2) - (dim.y / 2);
+	//	
+	//}
+		
+
 	
 	return true;
 }
@@ -60,8 +86,10 @@ bool Enemy::Update(float dt)
 
 	if (state == ALIVE)
 	{
-		if (type == EntityType::WALK_ENEMY) Walk(dt);
-		if (type == EntityType::FLY_ENEMY) Fly(dt);
+		if (type == EntityType::WALK_ENEMY)
+			Walk(dt);
+		if (type == EntityType::FLY_ENEMY)
+			Fly(dt);
 
 		SetPosition(pos);
 	}
@@ -96,10 +124,10 @@ bool Enemy::Draw(Render* render)
 	SDL_Rect rect = { pos.x,pos.y,dim.x,dim.y };
 	app->render->DrawRectangle(rect, 255, 181, 221, 200, true, true); //PINK
 
-
-	if (app->debug == true) DrawPath();
+ 
 	if (app->debug == true)
 	{
+		DrawPath();
 		app->render->DrawRectangle(detector->rect, 255, 255, 255, 60, true, true); //WHITE
 	}
 
@@ -130,7 +158,7 @@ bool Enemy::DrawPath()
 			iPoint pos = app->sceneGame->currentMap->MapToWorld(path->At(i)->x, path->At(i)->y);
 			SDL_Rect rec = { pos.x,pos.y,64,64 };
 
-			app->render->DrawRectangle(rec, 255, 181, 221, alpha, true, true); //PINK
+			app->render->DrawRectangle(rec, 255, 181, 221, alpha); //PINK
 			if (alpha > 15)alpha -= 5;
 		}
 	}
@@ -330,11 +358,38 @@ void Enemy::Walk(float dt)
 
 bool Enemy::LoadState(pugi::xml_node& node)
 {
+	pos.x = node.child("pos").attribute("x").as_int();
+	pos.y = node.child("pos").attribute("y").as_int();
+	int direction = node.attribute("dir").as_int();
+
+	switch (direction)
+	{
+	case 1:		dir = UP;		break;
+	case 2:		dir = DOWN;		break;
+	case 3:		dir = LEFT;		break;
+	case 4:		dir = RIGHT;	break;
+	default:
+		break;
+	}
 	return true;
 }
 
 bool Enemy::SaveState(pugi::xml_node& node) const
 {
-	
+	node.append_attribute("id").set_value(id);
+	node.append_child("pos");
+	node.child("pos").append_attribute("x").set_value((int)pos.x);
+	node.child("pos").append_attribute("y").set_value((int)pos.y);
+	node.append_child("dir");
+	switch (dir)
+	{
+	case Enemy::UP:		node.append_attribute("dir").set_value("1");		break;
+	case Enemy::DOWN:	node.append_attribute("dir").set_value("2");		break;
+	case Enemy::LEFT:	node.append_attribute("dir").set_value("3");		break;
+	case Enemy::RIGHT:	node.append_attribute("dir").set_value("4");		break;
+	default:
+		break;
+	}
+
 	return true;
 }

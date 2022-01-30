@@ -9,6 +9,8 @@
 #include "Module.h"
 #include "SDL\include\SDL_rect.h"
 
+#define TIME 2000
+
 class FadeToBlack : public Module
 {
 public:

@@ -7,7 +7,7 @@
     </app>
 
     <renderer>
-        <vsync value="true"/>
+        <vsync value="false"/>
     </renderer>
 
     <window>
@@ -82,12 +82,12 @@
 	<map1>
         <folder>Assets/maps/</folder>
 		<enemies>
-			<enemy id="1" type="fly" w="32" h="32">
+			<enemy id="1" type="1" w="32" h="32">
 				<detector x="1792" y="576" w="512" h="896"/>
 				<lim1 x="29" y="21"/>
 				<lim2 x="35" y="13"/>
 			</enemy>
-			<enemy id="2" type="walk" w="32" h="32">
+			<enemy id="2" type="2" w="32" h="32">
 				<detector x="6080" y="512" w="704" h="64"/>
 				<lim1 x="95" y="8"/>
 				<lim2 x="105" y="8"/>

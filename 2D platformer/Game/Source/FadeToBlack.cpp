@@ -8,6 +8,7 @@
 #include "SceneLose.h"
 #include "SceneWin.h"
 #include "Audio.h"
+#include "Animation.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -50,7 +51,7 @@ bool FadeToBlack::Update(float dt)
 	// Exit this function if we are not performing a fade
 	if (currentStep == Fade_Step::TO_BLACK)
 	{
-		++frameCount;
+		frameCount += dt;
 		if (frameCount >= maxFadeFrames)
 		{
 			moduleToDisable->active = false;
@@ -67,7 +68,7 @@ bool FadeToBlack::Update(float dt)
 	}
 	else if (currentStep == Fade_Step::FROM_BLACK)
 	{
-		--frameCount;
+		frameCount -= dt;
 		if (frameCount == 0)
 		{
 
@@ -106,7 +107,15 @@ bool FadeToBlack::Fade(Module* moduleToDisable, Module* moduleToEnable, float fr
 	{
 		currentStep = Fade_Step::TO_BLACK;
 		frameCount = 0;
-		maxFadeFrames = frames;
+		maxFadeFrames = TIME;
+
+		app->player->currentAnim = &app->player->idle;
+
+		if (app->player->lifeSubstract == true)
+		{
+			app->player->lives--;
+			app->player->lifeSubstract = false;
+		}
 
 		this->moduleToDisable = moduleToDisable;
 		this->moduleToEnable = moduleToEnable;
