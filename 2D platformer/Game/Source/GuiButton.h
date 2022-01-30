@@ -23,7 +23,7 @@ public:
 
 	bool canClick = true;
 	bool drawBasic = false;
-
+	bool sound = false;
 
 	SDL_Rect normalRec, focusedRec, pressedRec, detector;
 };

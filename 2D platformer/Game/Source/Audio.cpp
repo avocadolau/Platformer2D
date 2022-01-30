@@ -61,6 +61,8 @@ bool Audio::Awake(pugi::xml_node& config)
 	LoadFx(config.child("fx").attribute("win").as_string());
 	LoadFx(config.child("fx").attribute("lose").as_string());
 
+	LoadFx("Assets/audio/fx/continue.resum.wav");
+
 
 	return ret;
 }

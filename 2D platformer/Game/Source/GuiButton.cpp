@@ -85,11 +85,13 @@ bool GuiButton::Draw(Render* render)
 	//L14: TODO 4: Draw the button according the GuiControl State
 	case GuiControlState::FOCUSED:
 	{
-		//render->DrawRectangle(bounds, 255, 255, 255, 160);
+		app->audio->PlayFx(4, 1);
+
 		render->DrawTexture(texture, bounds.x, bounds.y, &focusedRec);
 	} break;
 	case GuiControlState::PRESSED:
 	{
+		sound = false;
 		//render->DrawRectangle(bounds, 255, 255, 255, 255);
 		render->DrawTexture(texture, bounds.x, bounds.y, &pressedRec);
 	} break;
@@ -97,6 +99,7 @@ bool GuiButton::Draw(Render* render)
 	/******/
 
 	case GuiControlState::SELECTED: render->DrawRectangle(bounds, 0, 255, 0, 255);
+		sound = false;
 		break;
 
 	default:
