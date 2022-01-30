@@ -1,6 +1,8 @@
 #include "EntityManager.h"
 #include "App.h"
 #include "Module.h"
+#include "GuiManager.h"
+#include "Fonts.h"
 
 #include "Entity.h"
 #include "Player.h"
@@ -144,6 +146,10 @@ bool EntityManager::Update(float dt)
 	accumulatedTime += dt;
 	if (accumulatedTime >= updateMsCycle) doLogic = true;
 
+
+	if (app->sceneGame->pause == true)doLogic = false;
+	else doLogic = true;
+
 	UpdateAll(dt, doLogic);
 
 	if (doLogic == true)
@@ -202,7 +208,6 @@ bool EntityManager::PostUpdate()
 		if (pEntity->active == false) continue;
 		if (pEntity->Draw(render) == false) ret = false;
 	}
-
 	return ret;
 }
 
@@ -254,6 +259,8 @@ bool EntityManager::Draw() {
 		if (pEntity->active == false) continue;
 		ret = item->data->Draw(app->render);
 	}
+
+	
 
 	return ret;
 

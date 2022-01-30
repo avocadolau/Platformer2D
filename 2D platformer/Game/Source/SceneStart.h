@@ -32,9 +32,15 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool OnGuiMouseClickEvent(GuiControl* control);
+
+public:
+	bool credits;
 private:
 	SDL_Texture* img;
 	SString imgPath;
+
+	bool lvl1, lvl2;
 };
 
 #endif // __SCENE_H__

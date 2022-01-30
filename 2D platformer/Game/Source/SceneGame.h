@@ -44,6 +44,8 @@ public:
 	bool LoadState(pugi::xml_node&);
 	bool SaveState(pugi::xml_node&) const;
 
+	bool OnGuiMouseClickEvent(GuiControl* control);
+
 public:
 
 	SDL_Texture* background;
@@ -58,11 +60,16 @@ public:
 	List<int*> deadEnemies;
 
 	bool destroyDeadEnemies = false;
+	bool pause = false;
+	int highScore = 0;
 	int level;
+	float timer = 0;
+	bool saved = false;
 
 private:
 
 	bool mapLoaded = false;
+	bool mainMenu = false;
 	SDL_Texture* img;
 	SString backgroundPath;
 	SDL_Texture* platformImg;

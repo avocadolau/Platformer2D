@@ -56,7 +56,7 @@ bool Enemy::Start()
 
 bool Enemy::Update(float dt)
 {
-	bool ret = false;
+	bool ret = true;
 
 	if (state == ALIVE)
 	{
@@ -90,7 +90,7 @@ bool Enemy::Update(float dt)
 
 bool Enemy::Draw(Render* render)
 {
-	bool ret = false;
+	bool ret = true;
 
 	//app->render->DrawTexture(sprites, pos.x, pos.y, &currAnim->GetCurrentFrame(), 1.0f, 0, -1, NULL, currAnim->mustFlip);
 	SDL_Rect rect = { pos.x,pos.y,dim.x,dim.y };

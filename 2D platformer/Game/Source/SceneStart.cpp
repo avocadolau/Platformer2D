@@ -8,6 +8,8 @@
 #include "Map.h"
 #include "FadeToBlack.h"
 #include "Player.h"
+#include "GuiManager.h"
+#include "GuiControl.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -57,23 +59,35 @@ bool SceneStart::Update(float dt)
 
 	app->render->DrawTexture(img, 0, 0, NULL);
 
-	// Start level 1
-	if ((app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-		|| (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN))
+	if (credits == true)
 	{
-		app->sceneGame->level = 1;
-		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
+		SDL_Rect rec = { 0,0,1280,720 };
+		app->render->DrawRectangle(rec, 0, 0, 0, 255);
+		if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) credits = false;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	else
 	{
-		app->sceneGame->level = 2;
-		app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
+		// Start level 1
+		if ((app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+			|| (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) || lvl1 == true)
+		{
+			lvl1 = false;
+			app->sceneGame->level = 1;
+			app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+		{
+			app->sceneGame->level = 2;
+			app->fade->Fade(this, app->sceneGame, app->fade->time / dt);
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
+
+		if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) app->cap30fps = !app->cap30fps;
 	}
-
-	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->LoadGameRequest();
-
-	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) app->cap30fps = !app->cap30fps;
+	
 
 
 	SString Start("I see the light");
@@ -82,6 +96,8 @@ bool SceneStart::Update(float dt)
 	// Draw map -- se tiene q cambiar al fondo bonito q hara sofia hehe
 	/*app->map->Draw();
 	app->render->DrawTexture(img, 380, 100);*/
+
+	
 
 	return true;
 }
@@ -120,7 +136,10 @@ bool SceneStart::PostUpdate()
 
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
+	{
+		if (credits == true) credits = false;
+		else ret = false;
+	}
 
 	return ret;
 }
@@ -129,6 +148,22 @@ bool SceneStart::PostUpdate()
 bool SceneStart::CleanUp()
 {
 	LOG("Freeing scene");
+
+	return true;
+}
+
+
+bool SceneStart::OnGuiMouseClickEvent(GuiControl* control)
+{
+
+	switch (control->id)
+	{
+	case 1:		lvl1 = true;				break;
+	case 2:		app->LoadGameRequest();		break;
+	case 4:		credits = true;				break;
+	case 5:		app->exit = true;			break;
+	
+	}
 
 	return true;
 }

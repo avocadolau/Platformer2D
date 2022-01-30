@@ -15,6 +15,10 @@
 #include "EntityManager.h"
 #include "Entity.h"
 #include "Coin.h"
+#include "GuiManager.h"
+#include "GuiControl.h"
+#include "FadeToBlack.h"
+#include "SceneStart.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -79,6 +83,14 @@ bool SceneGame::PreUpdate()
 // Called each loop iteration
 bool SceneGame::Update(float dt)
 {
+	if (pause == false) timer += dt / 1000;
+	if ((int)app->player->scoreHud < app->player->score)
+	{
+		app->player->scoreHud += dt / 200;
+		app->guiManager->fontColor = 1;
+	}
+	else app->guiManager->fontColor = 0;
+
 
 	iPoint win;
 	win.x = app->win->GetWidth();
@@ -100,13 +112,17 @@ bool SceneGame::Update(float dt)
 	
 	
 
-
 	// L03: DONE 7: Set the window title with map/tileset info
 	SString title("I see the light");
 
 	//app->win->SetTitle(title.GetString());
 	
-	
+	if (mainMenu == true)
+	{
+		mainMenu = false;
+		app->fade->Fade(this, app->sceneStart, app->fade->time / dt);
+
+	}
 	
 
 	return true;
@@ -140,7 +156,13 @@ bool SceneGame::PostUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) app->cap30fps = !app->cap30fps;
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
+	{
+		if (pause == false)
+			pause = true;
+
+
+		//else ret = false;
+	}
 
 
 	return ret;
@@ -182,7 +204,7 @@ bool SceneGame::ChangeMap()
 
 	currentMap->LoadCollisions();
 	currentMap->LoadPlatforms();
-	//currentMap->LoadEnemies();
+	currentMap->LoadEnemies();
 	currentMap->LoadCoins();
 
 	borders->listeners[0] = this;
@@ -245,13 +267,21 @@ void SceneGame::OnCollision(Collider* c1, Collider* c2)
 
 }
 
-bool LoadState(pugi::xml_node&)
+bool SceneGame::OnGuiMouseClickEvent(GuiControl* control)
 {
 
-	return true;
-}
+	switch (control->id)
+	{
+	case 6:		pause = false;				break;
+	case 8:		mainMenu = true;			break;
+	case 9:		app->exit = true;			break;
 
-bool SaveState(pugi::xml_node&)
-{
+	default:
+		break;
+	}
+
+
+	
+
 	return true;
 }

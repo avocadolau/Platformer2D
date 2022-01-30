@@ -59,6 +59,15 @@
     <ClCompile Include="Source\EntityProperties.h">
       <Filter>Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Fonts.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiButton.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiManager.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -150,6 +159,18 @@
     <ClInclude Include="Source\Coin.h">
       <Filter>Entities</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Fonts.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiButton.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiControl.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiManager.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -172,6 +193,9 @@
     </Filter>
     <Filter Include="Entities">
       <UniqueIdentifier>{5e8dcc73-6da4-47fd-ae71-28f7a7988d61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{c1c65b66-2981-47fa-b06a-2ccfd73e4d65}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -45,6 +45,8 @@ public:
 	float gravity;
 	int jumps;
 	int lives;
+	int score = 0;
+	float scoreHud = 0;
 	bool alive = true;
 
 	Collider* colUp;

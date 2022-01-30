@@ -31,6 +31,8 @@ class Player;
 class EntityManager;
 class PathFinding;
 class Checkpoint;
+class Fonts;
+class GuiManager;
 
 class App
 {
@@ -103,10 +105,13 @@ public:
 	Player* player;
 	EntityManager* entityManager;
 	Checkpoint* checkpoint;
+	Fonts* fonts;
+	GuiManager* guiManager;
 
 	float dt = 0.0f;
 	bool cap30fps = false;
 	bool debug = false;
+	bool exit = false;
 	Module* currentScene;
 
 	pugi::xml_document configFile;
@@ -135,6 +140,7 @@ private:
 	Timer lastFrameTime;
 	uint32 lastSecFrameCount = 0;
 	uint32 prevLastSecFrameCount = 0;
+
 };
 
 extern App* app;

@@ -166,6 +166,7 @@ bool Player::Update(float dt)
 		if (currentAnim != &death) currentAnim = &death;
 		if (currentAnim->HasFinished() == true)
 		{
+			app->player->lives--;
 			app->fade->Fade(app->sceneGame, app->sceneLose, app->fade->time / dt);
 		}
 	}
@@ -281,7 +282,7 @@ bool Player::Draw(Render* render)
 {
 	if (currentAnim == nullptr) currentAnim = &idle;
 
-	return render->DrawTexture(sprites, pos.x, pos.y, &currentAnim->GetCurrentFrame(), 1.0f, 0, -1, NULL, currentAnim->mustFlip);
+	return app->render->DrawTexture(sprites, pos.x, pos.y, &currentAnim->GetCurrentFrame(), 1.0f, 0, -1, NULL, currentAnim->mustFlip);
 }
 
 

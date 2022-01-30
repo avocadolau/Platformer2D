@@ -53,7 +53,8 @@ void Coin::OnCollision(Collider* c1, Collider* c2)
 {
 	if (c2->type == Collider::Type::PLAYER)
 	{
-		// sumar puntuaciones y lo q seqa mas
+		app->player->score += 1;
+		app->collisions->RemoveCollider(col);
 		toDestroy = true;
 	}
 }

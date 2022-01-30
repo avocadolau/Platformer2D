@@ -15,6 +15,8 @@
 #include "Player.h"
 #include "EntityManager.h"
 #include "Checkpoint.h"
+#include "Fonts.h"
+#include "GuiManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -42,6 +44,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	pathfinding = new PathFinding();
 	collisions = new Collisions();
 	entityManager = new EntityManager();
+	fonts = new Fonts();
+	guiManager = new GuiManager();
 	//checkpoint = new Checkpoint();
 	//player = new Player;
 
@@ -51,6 +55,8 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(input);
 	AddModule(tex);
 	AddModule(audio);
+	AddModule(fonts);
+
 	AddModule(map1);
 	AddModule(map2);
 	AddModule(entityManager);
@@ -61,6 +67,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(sceneLose);
 	//AddModule(checkpoint);
 	AddModule(collisions);
+	
+	AddModule(guiManager);
+
 	AddModule(fade);
 
 	// Render last to swap buffer
@@ -168,6 +177,8 @@ bool App::Update()
 
 	if(ret == true)
 		ret = PostUpdate();
+
+	if (exit == true) ret = false;
 
 	FinishUpdate();
 	return ret;
@@ -402,6 +413,8 @@ bool App::SaveGame() const
 		item = item->next;
 	}
 	ret = saveDoc->save_file("savegame.xml");
+
+	sceneGame->saved = true;
 
 	saveGameRequested = false;
 
