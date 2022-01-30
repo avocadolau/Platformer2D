@@ -46,8 +46,7 @@ public:
 	virtual void Entity::Disable() {}
 
 	virtual bool Entity::Load(pugi::xml_node&) { return true; }
-	virtual bool Entity::Save(pugi::xml_node&) const
-		{ return true; }
+	virtual bool Entity::Save(pugi::xml_node&) { return true; }
 
 	virtual bool Entity::CleanUp() { return true; }
 

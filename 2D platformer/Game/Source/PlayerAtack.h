@@ -16,10 +16,10 @@ public:
 	{
 		name.Create("playerAtack");
 		active = true;
-		id = 0;
 		vel = app->player->maxVel.x * 2;
 		SDL_Rect rec = { pos.x,pos.y,dim,dim };
 		col = app->collisions->AddCollider(rec, Collider::Type::PATACK, app->entityManager, this);
+
 	}
 
 	~PlayerAtack() {
@@ -32,19 +32,15 @@ public:
 		col->rect.x = (int)pos.x;
 		return true;
 	}
-
 	bool Draw(Render* render)
 	{
 		SDL_Rect rec = col->rect;
-		bool draw = app->render->DrawRectangle(col->rect, 122, 0, 255, 200);
-		
+		app->render->DrawRectangle(col->rect, 122, 0, 255, 200, true, true);
 		return true;
 	}
-
 	void OnCollision(Collider* c1, Collider* c2)
 	{
-		if (c2->type!=Collider::Type::PLAYER)
-			toDestroy = true;
+		toDestroy = true;
 	}
 public:
 	fPoint pos;

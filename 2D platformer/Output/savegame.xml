@@ -4,131 +4,16 @@
 	<input />
 	<textures />
 	<audio />
-	<:anonymous />
 	<map1 />
 	<map2 />
-	<entityManager>
-		<player>
-			<position x="444" y="1421" />
-		</player>
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<platform />
-		<fly_enemy />
-		<walk_enemy />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-		<Coin />
-	</entityManager>
+	<entityManager />
 	<start />
 	<game />
 	<win />
 	<lose />
 	<collisions />
-	<guiManager />
 	<fade />
 	<renderer>
-		<camera x="196" y="-1061" />
+		<camera x="331" y="-1061" />
 	</renderer>
 </game_state>

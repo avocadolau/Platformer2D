@@ -116,7 +116,7 @@ struct MapData
 struct EnemyData
 {
 	uint32 id;
-	int type;
+	EntityType type;
 	iPoint dim;
 	SDL_Rect detector;
 	iPoint lim1;
@@ -190,7 +190,6 @@ private:
 
     SString folder;
     bool mapLoaded;
-	
 };
 
 #endif // __MAP_H__

@@ -60,8 +60,6 @@ public:
 	bool right = true;
 	bool godMode = false;
 
-	bool lifeSubstract = false;
-
 	SDL_Texture* sprites;
 	Animation* currentAnim = nullptr;
 	Animation idle, run, jump, death;

@@ -54,15 +54,8 @@ bool Map::Awake(pugi::xml_node& config)
 
 		newEnemy->id= enemyNode.attribute("id").as_int();
 
-		SString fly, walk;
-		fly.Create("fly");
-		walk.Create("walk");
-
-		newEnemy->type = enemyNode.attribute("type").as_int();
-		/*if (enemyNode.attribute("type").as_int() == ring())
-			newEnemy->type = EntityType::FLY_ENEMY;
-		if (enemyNode.attribute("type").as_string() == walk.GetString())
-			newEnemy->type = EntityType::WALK_ENEMY;*/
+		if (enemyNode.attribute("type").as_string() == "fly") newEnemy->type = EntityType::FLY_ENEMY;
+		if (enemyNode.attribute("type").as_string() == "walk") newEnemy->type = EntityType::WALK_ENEMY;
 
 		newEnemy->dim= { enemyNode.attribute("w").as_int(),enemyNode.attribute("h").as_int() };
 
@@ -559,12 +552,7 @@ bool Map::LoadEnemies()
 	{
 		ret = true;
 		
-		EntityType type;
-		if (item->data->type == 1) type = EntityType::FLY_ENEMY;
-		else type = EntityType::WALK_ENEMY;
-
-
-		Enemy* newEnemy = new Enemy(item->data->id, item->data->dim, item->data->detector, item->data->lim1, item->data->lim2, type);
+		Enemy* newEnemy = new Enemy(item->data->id, item->data->dim, item->data->detector, item->data->lim1, item->data->lim2, item->data->type);
 		app->entityManager->AddEntity(newEnemy);
 		item = item->next;
 	}
